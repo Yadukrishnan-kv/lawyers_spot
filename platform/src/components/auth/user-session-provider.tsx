@@ -47,7 +47,6 @@ export function UserSessionProvider({ children }: { children: ReactNode }) {
       setUser(current);
     } catch {
       setUser(null);
-      return null;
     } finally {
       setLoading(false);
     }
