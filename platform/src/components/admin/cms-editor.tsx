@@ -70,12 +70,14 @@ export function AdminInput({
   onChange,
   type = 'text',
   className,
+  placeholder,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
   className?: string;
+  placeholder?: string;
 }) {
   return (
     <div className={className}>
@@ -85,6 +87,7 @@ export function AdminInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="form-control"
+        placeholder={placeholder}
       />
     </div>
   );
