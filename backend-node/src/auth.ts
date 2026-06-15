@@ -44,7 +44,7 @@ export function setSessionCookie(res: Response, email: string) {
 export function clearSessionCookie(res: Response) {
   res.clearCookie(config.cookieName, {
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'lax',
     path: '/',
     secure: config.isProduction,
   });

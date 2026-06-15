@@ -9,7 +9,7 @@ function isActive(pathname: string, href: string, exact?: boolean) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function AdminSidebar() {
+export function AdminSidebar({ onLogout }: { onLogout?: () => void }) {
   const pathname = usePathname();
 
   return (
@@ -106,6 +106,18 @@ export function AdminSidebar() {
               );
             })}
           </ul>
+          {onLogout && (
+            <div className="sidebar-logout">
+              <button
+                type="button"
+                className="side-menu__item has-link w-100 border-0 bg-transparent d-flex align-items-center"
+                onClick={onLogout}
+              >
+                <i className="side-menu__icon fe fe-power" />
+                <span className="side-menu__label">Sign out</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

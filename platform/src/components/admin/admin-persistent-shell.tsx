@@ -84,7 +84,7 @@ export function AdminPersistentShell({ children }: { children: React.ReactNode }
       <div className="page">
         <div className="page-main">
           <AdminHeader onLogout={logout} />
-          <AdminSidebar />
+          <AdminSidebar onLogout={logout} />
           <div className="main-content app-content mt-0">
             <div className="side-app">
               <div className="main-container container-fluid admin-main-container">{children}</div>
