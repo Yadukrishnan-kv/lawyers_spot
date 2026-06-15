@@ -1,0 +1,16 @@
+ALTER TABLE site_config ADD COLUMN IF NOT EXISTS site_content JSONB DEFAULT '{}'::jsonb;
+ALTER TABLE lawyers ADD COLUMN IF NOT EXISTS city_slug VARCHAR(128);
+ALTER TABLE qa_posts ADD COLUMN IF NOT EXISTS content TEXT;
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS content TEXT;
+
+CREATE TABLE IF NOT EXISTS platform_users (
+  id VARCHAR(64) PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(32) NOT NULL,
+  lawyer_id VARCHAR(128),
+  phone VARCHAR(32),
+  status VARCHAR(32) DEFAULT 'active',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);

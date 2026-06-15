@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: lawyerspot-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lawyerspot
+      POSTGRES_PASSWORD: lawyerspot
+      POSTGRES_DB: lawyerspot
+    ports:
+      - "5432:5432"
+    volumes:
+      - lawyerspot_pgdata:/var/lib/postgresql/data
+
+volumes:
+  lawyerspot_pgdata:

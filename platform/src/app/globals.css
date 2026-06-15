@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+  }
+  .dark {
+    --background: 5 13 26;
+    --foreground: 241 245 249;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-slate-50 text-slate-700 antialiased dark:bg-navy-950 dark:text-slate-300;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out both;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-royal-600 to-emerald-500 bg-clip-text text-transparent;
+  }
+  .glass {
+    @apply border border-white/40 bg-white/70 backdrop-blur-xl dark:border-navy-700/50 dark:bg-navy-900/70;
+  }
+}
+
+/* Long-form article readability */
+.prose-legal {
+  @apply max-w-none text-slate-700 leading-relaxed dark:text-slate-300;
+}
+.prose-legal h2 {
+  @apply mt-10 mb-4 font-display text-2xl font-bold text-navy-900 dark:text-white;
+}
+.prose-legal p {
+  @apply mb-5 text-lg;
+}
+
+/* Lawyer profile — matches lawrato HTML lawyer-profile.html */
+.profile-header {
+  @apply bg-gradient-to-br from-navy-900 to-navy-700 text-white pb-16 pt-28;
+}
+
+.profile-avatar {
+  @apply h-40 w-40 shrink-0 rounded-2xl border-4 border-white/30 object-cover shadow-premium;
+}
+
+.booking-widget {
+  @apply sticky top-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-premium dark:border-navy-700 dark:bg-navy-900;
+}
+
+.timeline-item {
+  @apply relative border-l-2 border-slate-200 pb-6 pl-8 dark:border-navy-700;
+}
+
+.timeline-item::before {
+  content: '';
+  @apply absolute left-[-7px] top-0 h-2.5 w-2.5 rounded-full bg-royal-600;
+}
+
+.timeline-item:last-child {
+  @apply pb-0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.35rem;
+}
+
+.calendar-day {
+  @apply flex aspect-square items-center justify-center rounded-md text-sm transition;
+}
+
+.calendar-day:hover:not(.disabled):not(.empty) {
+  @apply bg-royal-600/10;
+}
+
+.calendar-day.selected {
+  @apply bg-royal-600 text-white;
+}
+
+.calendar-day.disabled {
+  @apply cursor-not-allowed text-slate-300;
+}
+
+.calendar-day.empty {
+  @apply cursor-default;
+}

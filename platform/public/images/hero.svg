@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Legal consultation">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a5f"/>
+      <stop offset="100%" style="stop-color:#0a1628"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" rx="24" fill="url(#bg)"/>
+  <rect x="80" y="120" width="280" height="360" rx="12" fill="#ffffff" opacity="0.08"/>
+  <rect x="420" y="80" width="300" height="200" rx="12" fill="#ffffff" opacity="0.06"/>
+  <circle cx="400" cy="280" r="100" fill="url(#accent)" opacity="0.25"/>
+  <path d="M360 420h80v-20c0-22-18-40-40-40s-40 18-40 40v20z" fill="#d4a853" opacity="0.9"/>
+  <rect x="340" y="200" width="120" height="140" rx="60" fill="#f8fafc" opacity="0.95"/>
+  <rect x="200" y="380" width="400" height="12" rx="6" fill="url(#accent)" opacity="0.6"/>
+  <rect x="160" y="420" width="480" height="8" rx="4" fill="#ffffff" opacity="0.2"/>
+  <rect x="200" y="450" width="400" height="8" rx="4" fill="#ffffff" opacity="0.15"/>
+  <text x="400" y="520" text-anchor="middle" fill="#e2e8f0" font-family="system-ui,sans-serif" font-size="22" font-weight="600">Trusted Legal Consultation</text>
+  <text x="400" y="552" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="14">LawyerSpot — India&apos;s Legal Platform</text>
+</svg>

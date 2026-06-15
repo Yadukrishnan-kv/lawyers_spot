@@ -1,0 +1,664 @@
+{
+  "siteConfig": {
+    "name": "LawyerSpot",
+    "tagline": "Connecting you with the right lawyer",
+    "url": "https://lawyerspot.com",
+    "description": "Find verified lawyers, free legal answers, guides & consultations across 1200+ cities in India."
+  },
+  "stats": [
+    {
+      "label": "Verified Lawyers",
+      "value": "18,500+"
+    },
+    {
+      "label": "Cities Covered",
+      "value": "1,200+"
+    },
+    {
+      "label": "Legal Answers",
+      "value": "2.5M+"
+    },
+    {
+      "label": "Client Satisfaction",
+      "value": "98%"
+    }
+  ],
+  "practiceAreas": [
+    {
+      "slug": "divorce",
+      "name": "Divorce Law",
+      "icon": "HeartCrack",
+      "lawyers": 2400
+    },
+    {
+      "slug": "criminal",
+      "name": "Criminal Law",
+      "icon": "Gavel",
+      "lawyers": 3200
+    },
+    {
+      "slug": "property",
+      "name": "Property Law",
+      "icon": "Building2",
+      "lawyers": 2800
+    },
+    {
+      "slug": "corporate",
+      "name": "Corporate Law",
+      "icon": "Briefcase",
+      "lawyers": 1900
+    },
+    {
+      "slug": "family",
+      "name": "Family Law",
+      "icon": "Users",
+      "lawyers": 2100
+    },
+    {
+      "slug": "cyber",
+      "name": "Cyber Crime",
+      "icon": "Shield",
+      "lawyers": 850
+    },
+    {
+      "slug": "immigration",
+      "name": "Immigration",
+      "icon": "Plane",
+      "lawyers": 1200
+    },
+    {
+      "slug": "startup",
+      "name": "Startup Law",
+      "icon": "Rocket",
+      "lawyers": 980
+    },
+    {
+      "slug": "tax",
+      "name": "GST & Tax",
+      "icon": "Calculator",
+      "lawyers": 1500
+    }
+  ],
+  "cities": [
+    {
+      "slug": "mumbai",
+      "name": "Mumbai",
+      "state": "Maharashtra"
+    },
+    {
+      "slug": "delhi",
+      "name": "Delhi",
+      "state": "Delhi"
+    },
+    {
+      "slug": "bangalore",
+      "name": "Bangalore",
+      "state": "Karnataka"
+    },
+    {
+      "slug": "kochi",
+      "name": "Kochi",
+      "state": "Kerala"
+    },
+    {
+      "slug": "hyderabad",
+      "name": "Hyderabad",
+      "state": "Telangana"
+    },
+    {
+      "slug": "chennai",
+      "name": "Chennai",
+      "state": "Tamil Nadu"
+    },
+    {
+      "slug": "pune",
+      "name": "Pune",
+      "state": "Maharashtra"
+    },
+    {
+      "slug": "kolkata",
+      "name": "Kolkata",
+      "state": "West Bengal"
+    }
+  ],
+  "lawyers": [
+    {
+      "id": "1",
+      "slug": "adv-priya-sharmaa",
+      "name": "Adv. Priya Sharmaa",
+      "image": "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=400&fit=crop",
+      "rating": 4.9,
+      "reviews": 312,
+      "experience": 18,
+      "fee": 2500,
+      "location": "Mumbai",
+      "practice": "family",
+      "specialization": [
+        "Family Law",
+        "Divorce",
+        "Child Custody"
+      ],
+      "online": true,
+      "verified": true,
+      "currency": "INR",
+      "bio": "Renowned family law advocate with 18+ years handling complex divorce and custody matters across Maharashtra."
+    },
+    {
+      "id": "advocate-yuganshu-sharma",
+      "slug": "advocate-yuganshu-sharma",
+      "name": "Advocate Yuganshu Sharma",
+      "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop",
+      "rating": 4.7,
+      "reviews": 50,
+      "experience": 9,
+      "fee": 2500,
+      "currency": "INR",
+      "location": "Lawrence Road, Keshav Puram, Delhi",
+      "address": "Lawrence Road, Keshav Puram, Delhi",
+      "practice": "criminal",
+      "firm": "Sys Law Offices",
+      "phone": "9810981039",
+      "languages": [
+        "English",
+        "Hindi"
+      ],
+      "online": true,
+      "verified": true,
+      "bio": "Delhi-based advocate specializing in Supreme Court litigation, family law, property, and criminal matters.",
+      "specialization": [
+        "Criminal Law",
+        "Family Law",
+        "Property Law",
+        "Supreme Court"
+      ]
+    },
+    {
+      "id": "2",
+      "slug": "adv-rajesh-kumar",
+      "name": "Adv. Rajesh Kumar",
+      "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
+      "rating": 4.8,
+      "reviews": 428,
+      "experience": 25,
+      "fee": 3000,
+      "currency": "INR",
+      "location": "Delhi",
+      "practice": "criminal",
+      "specialization": [
+        "Criminal Law",
+        "Bail",
+        "Supreme Court"
+      ],
+      "online": true,
+      "verified": true,
+      "bio": "Senior criminal defence advocate with extensive Supreme Court experience."
+    },
+    {
+      "id": "3",
+      "slug": "adv-maria-santos",
+      "name": "Adv. Maria Santos",
+      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
+      "rating": 4.6,
+      "reviews": 98,
+      "experience": 10,
+      "fee": 2000,
+      "currency": "INR",
+      "location": "Bangalore",
+      "practice": "property",
+      "specialization": [
+        "Property Law",
+        "RERA",
+        "Real Estate"
+      ],
+      "online": false,
+      "verified": true,
+      "bio": "Property and RERA specialist across Karnataka."
+    },
+    {
+      "id": "4",
+      "slug": "adv-fatima-hassan",
+      "name": "Adv. Fatima Hassan",
+      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
+      "rating": 4.7,
+      "reviews": 201,
+      "experience": 14,
+      "fee": 1800,
+      "currency": "INR",
+      "location": "Hyderabad",
+      "practice": "tax",
+      "specialization": [
+        "GST",
+        "Income Tax",
+        "Tax Appeals"
+      ],
+      "online": true,
+      "verified": true,
+      "bio": "GST and income tax advocate representing businesses before tribunals.",
+      "citySlug": "hyderabad",
+      "firm": "Hassan & Associates",
+      "languages": ["English", "Hindi", "Urdu"],
+      "education": [
+        {
+          "degree": "LL.B.",
+          "institution": "Osmania University",
+          "year": "2010"
+        },
+        {
+          "degree": "LL.M. (Taxation)",
+          "institution": "NALSAR University of Law",
+          "year": "2012"
+        }
+      ],
+      "courts": [
+        "Telangana High Court",
+        "GST Appellate Tribunal",
+        "Income Tax Appellate Tribunal"
+      ],
+      "timeline": [
+        {
+          "year": "2020",
+          "title": "Senior Tax Advocate",
+          "org": "Hassan & Associates"
+        },
+        {
+          "year": "2014",
+          "title": "Associate Advocate",
+          "org": "Hyderabad Tax Chambers"
+        },
+        {
+          "year": "2012",
+          "title": "Junior Advocate",
+          "org": "District Courts, Hyderabad"
+        }
+      ],
+      "clientReviews": [
+        {
+          "author": "Suresh K.",
+          "rating": 5,
+          "text": "Resolved our GST notice efficiently with clear documentation.",
+          "date": "March 2025",
+          "verified": true
+        },
+        {
+          "author": "Meena R.",
+          "rating": 5,
+          "text": "Excellent representation before the tribunal. Highly recommended.",
+          "date": "January 2025",
+          "verified": true
+        }
+      ],
+      "profileFaq": [
+        {
+          "id": "fatima-faq-1",
+          "question": "Do you handle GST appeals?",
+          "answer": "Yes. I represent businesses before the GST Appellate Tribunal and assist with notices, assessments, and appeals."
+        },
+        {
+          "id": "fatima-faq-2",
+          "question": "What documents should I bring to the first consultation?",
+          "answer": "Bring any tax notices, assessment orders, prior filings, and a brief timeline of the dispute so we can advise accurately."
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "slug": "adv-anita-menon",
+      "name": "Adv. Anita Menon",
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
+      "rating": 4.8,
+      "reviews": 156,
+      "experience": 12,
+      "fee": 2200,
+      "currency": "INR",
+      "location": "Kochi",
+      "citySlug": "kochi",
+      "practice": "family",
+      "specialization": ["Family Law", "Divorce", "Kerala High Court"],
+      "online": true,
+      "verified": true,
+      "bio": "Family law advocate practicing before the Kerala High Court and district courts in Kochi.",
+      "courts": ["Kerala High Court", "District Courts, Kochi"]
+    }
+  ],
+  "defaultProfileReviews": [
+    {
+      "author": "Rahul M.",
+      "rating": 5,
+      "text": "Exceptional guidance on my family matter. Highly professional and responsive.",
+      "date": "",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop"
+    },
+    {
+      "author": "Priya S.",
+      "rating": 5,
+      "text": "Clear advice and transparent fee structure. Would recommend to anyone.",
+      "date": "",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=48&h=48&fit=crop"
+    },
+    {
+      "author": "Arjun K.",
+      "rating": 4,
+      "text": "Very knowledgeable. Consultation was worth every penny.",
+      "date": "",
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop"
+    }
+  ],
+  "qaPosts": [
+    {
+      "id": "1",
+      "title": "Can I file divorce without mutual consent?",
+      "excerpt": "Understanding contested divorce procedure and timeline in India...",
+      "category": "Family Law",
+      "answers": 12,
+      "views": 4500,
+      "slug": "divorce-without-mutual-consent",
+      "status": "published"
+    },
+    {
+      "id": "2",
+      "title": "What to do after receiving a GST notice?",
+      "excerpt": "Step-by-step guide to respond within the statutory deadline...",
+      "category": "Tax Law",
+      "answers": 8,
+      "views": 3200,
+      "slug": "gst-notice-response",
+      "status": "published"
+    },
+    {
+      "id": "3",
+      "title": "RERA complaint against delayed possession",
+      "excerpt": "Rights of homebuyers when builder delays project handover...",
+      "category": "Property Law",
+      "answers": 15,
+      "views": 6100,
+      "slug": "rera-delayed-possession",
+      "status": "published"
+    }
+  ],
+  "articles": [
+    {
+      "slug": "divorce-mutual-consent-guide",
+      "title": "Divorce by Mutual Consent: Complete Guide 2026",
+      "excerpt": "Everything you need to know about filing mutual consent divorce in India.",
+      "category": "Family Law",
+      "author": "Legal Team",
+      "date": "May 15, 2026",
+      "readTime": "8 min",
+      "image": "https://images.unsplash.com/photo-1589829545855-d10d557cf95f?w=800&h=500&fit=crop",
+      "trending": true,
+      "status": "published"
+    },
+    {
+      "slug": "gst-notice-response",
+      "title": "Understanding GST Notice: How to Respond",
+      "excerpt": "Types of notices, deadlines, and drafting an effective legal response.",
+      "category": "Tax Law",
+      "author": "Adv. Fatima Hassan",
+      "date": "May 10, 2026",
+      "readTime": "6 min",
+      "image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=500&fit=crop",
+      "trending": true,
+      "status": "published"
+    },
+    {
+      "slug": "startup-funding-legal-checklist",
+      "title": "Startup Funding: Legal Checklist for Founders",
+      "excerpt": "From incorporation to term sheets — essential steps before raising capital.",
+      "category": "Startup Law",
+      "author": "Adv. David Okonkwo",
+      "date": "May 8, 2026",
+      "readTime": "10 min",
+      "image": "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=500&fit=crop",
+      "trending": false,
+      "status": "published"
+    }
+  ],
+  "trendingTopics": [
+    "Mutual Consent Divorce",
+    "GST Notice Reply",
+    "RERA Complaint",
+    "Cyber Crime FIR",
+    "Startup Term Sheet",
+    "Bail Application"
+  ],
+  "adminUsers": [
+    {
+      "id": "1",
+      "name": "Super Admin",
+      "email": "admin@lawyerspot.com",
+      "role": "super_admin"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "b1",
+      "lawyerId": "advocate-yuganshu-sharma",
+      "lawyerName": "Advocate Yuganshu Sharma",
+      "clientName": "Amit Verma",
+      "clientEmail": "amit@email.com",
+      "date": "2026-05-28",
+      "time": "10:00 AM",
+      "type": "Video Call",
+      "status": "confirmed"
+    }
+  ],
+  "updatedAt": "2026-05-26T09:39:08.717Z",
+  "states": [
+    {
+      "slug": "andhra-pradesh",
+      "name": "Andhra Pradesh",
+      "code": "AP",
+      "active": true
+    },
+    {
+      "slug": "arunachal-pradesh",
+      "name": "Arunachal Pradesh",
+      "code": "AR",
+      "active": true
+    },
+    {
+      "slug": "assam",
+      "name": "Assam",
+      "code": "AS",
+      "active": true
+    },
+    {
+      "slug": "bihar",
+      "name": "Bihar",
+      "code": "BR",
+      "active": true
+    },
+    {
+      "slug": "chhattisgarh",
+      "name": "Chhattisgarh",
+      "code": "CG",
+      "active": true
+    },
+    {
+      "slug": "goa",
+      "name": "Goa",
+      "code": "GA",
+      "active": true
+    },
+    {
+      "slug": "gujarat",
+      "name": "Gujarat",
+      "code": "GJ",
+      "active": true
+    },
+    {
+      "slug": "haryana",
+      "name": "Haryana",
+      "code": "HR",
+      "active": true
+    },
+    {
+      "slug": "himachal-pradesh",
+      "name": "Himachal Pradesh",
+      "code": "HP",
+      "active": true
+    },
+    {
+      "slug": "jharkhand",
+      "name": "Jharkhand",
+      "code": "JH",
+      "active": true
+    },
+    {
+      "slug": "karnataka",
+      "name": "Karnataka",
+      "code": "KA",
+      "active": true
+    },
+    {
+      "slug": "kerala",
+      "name": "Kerala",
+      "code": "KL",
+      "active": true
+    },
+    {
+      "slug": "madhya-pradesh",
+      "name": "Madhya Pradesh",
+      "code": "MP",
+      "active": true
+    },
+    {
+      "slug": "maharashtra",
+      "name": "Maharashtra",
+      "code": "MH",
+      "active": true
+    },
+    {
+      "slug": "manipur",
+      "name": "Manipur",
+      "code": "MN",
+      "active": true
+    },
+    {
+      "slug": "meghalaya",
+      "name": "Meghalaya",
+      "code": "ML",
+      "active": true
+    },
+    {
+      "slug": "mizoram",
+      "name": "Mizoram",
+      "code": "MZ",
+      "active": true
+    },
+    {
+      "slug": "nagaland",
+      "name": "Nagaland",
+      "code": "NL",
+      "active": true
+    },
+    {
+      "slug": "odisha",
+      "name": "Odisha",
+      "code": "OD",
+      "active": true
+    },
+    {
+      "slug": "punjab",
+      "name": "Punjab",
+      "code": "PB",
+      "active": true
+    },
+    {
+      "slug": "rajasthan",
+      "name": "Rajasthan",
+      "code": "RJ",
+      "active": true
+    },
+    {
+      "slug": "sikkim",
+      "name": "Sikkim",
+      "code": "SK",
+      "active": true
+    },
+    {
+      "slug": "tamil-nadu",
+      "name": "Tamil Nadu",
+      "code": "TN",
+      "active": true
+    },
+    {
+      "slug": "telangana",
+      "name": "Telangana",
+      "code": "TS",
+      "active": true
+    },
+    {
+      "slug": "tripura",
+      "name": "Tripura",
+      "code": "TR",
+      "active": true
+    },
+    {
+      "slug": "uttar-pradesh",
+      "name": "Uttar Pradesh",
+      "code": "UP",
+      "active": true
+    },
+    {
+      "slug": "uttarakhand",
+      "name": "Uttarakhand",
+      "code": "UK",
+      "active": true
+    },
+    {
+      "slug": "west-bengal",
+      "name": "West Bengal",
+      "code": "WB",
+      "active": true
+    },
+    {
+      "slug": "andaman-nicobar",
+      "name": "Andaman and Nicobar Islands",
+      "code": "AN",
+      "active": true
+    },
+    {
+      "slug": "chandigarh",
+      "name": "Chandigarh",
+      "code": "CH",
+      "active": true
+    },
+    {
+      "slug": "dadra-nagar-haveli-daman-diu",
+      "name": "Dadra and Nagar Haveli and Daman and Diu",
+      "code": "DH",
+      "active": true
+    },
+    {
+      "slug": "delhi",
+      "name": "Delhi",
+      "code": "DL",
+      "active": true
+    },
+    {
+      "slug": "jammu-kashmir",
+      "name": "Jammu and Kashmir",
+      "code": "JK",
+      "active": true
+    },
+    {
+      "slug": "ladakh",
+      "name": "Ladakh",
+      "code": "LA",
+      "active": true
+    },
+    {
+      "slug": "lakshadweep",
+      "name": "Lakshadweep",
+      "code": "LD",
+      "active": true
+    },
+    {
+      "slug": "puducherry",
+      "name": "Puducherry",
+      "code": "PY",
+      "active": true
+    }
+  ]
+}

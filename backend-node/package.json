@@ -1,0 +1,43 @@
+{
+  "name": "lawyerspot-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "db:init": "tsx scripts/init-database.ts",
+    "db:schema": "tsx scripts/run-schema.ts",
+    "db:seed": "tsx scripts/seed-from-json.ts",
+    "db:seed:demo-lawyer": "tsx scripts/seed-demo-lawyer.ts",
+    "db:normalize:subscriptions": "tsx scripts/normalize-subscription-plans.ts",
+    "db:migrate": "tsx scripts/run-migrate-v2.ts",
+    "db:migrate:security": "tsx scripts/run-migrate-v3.ts",
+    "db:migrate:profile": "tsx scripts/run-migrate-v4.ts",
+    "db:migrate:subscriptions": "tsx scripts/run-migrate-v5.ts",
+    "db:migrate:verification": "tsx scripts/run-migrate-v6.ts",
+    "db:migrate:subscription-expiry": "tsx scripts/run-migrate-v7.ts",
+    "db:migrate:lawyer-content": "tsx scripts/run-migrate-v8.ts",
+    "db:setup": "npm run db:schema && npm run db:migrate && npm run db:migrate:security && npm run db:migrate:profile && npm run db:migrate:subscriptions && npm run db:migrate:verification && npm run db:seed"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "bcryptjs": "^2.4.3",
+    "express-rate-limit": "^7.5.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

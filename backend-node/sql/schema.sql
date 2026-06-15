@@ -1,0 +1,159 @@
+CREATE TABLE IF NOT EXISTS site_config (
+  id INTEGER PRIMARY KEY DEFAULT 1,
+  name VARCHAR(255) NOT NULL,
+  tagline VARCHAR(512) NOT NULL,
+  url VARCHAR(512) NOT NULL,
+  description TEXT NOT NULL,
+  site_content JSONB DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS platform_users (
+  id VARCHAR(64) PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(32) NOT NULL,
+  lawyer_id VARCHAR(128),
+  phone VARCHAR(32),
+  status VARCHAR(32) DEFAULT 'active',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS stats (
+  id SERIAL PRIMARY KEY,
+  label VARCHAR(255) NOT NULL,
+  value VARCHAR(64) NOT NULL,
+  sort_order INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS practice_areas (
+  slug VARCHAR(128) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  icon VARCHAR(64) NOT NULL,
+  lawyers INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS states (
+  slug VARCHAR(128) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  code VARCHAR(8) NOT NULL,
+  active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS cities (
+  slug VARCHAR(128) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  state_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS subscription_plans (
+  id VARCHAR(32) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price_monthly INTEGER NOT NULL DEFAULT 0,
+  currency VARCHAR(8) NOT NULL DEFAULT 'INR',
+  description TEXT,
+  features JSONB NOT NULL DEFAULT '[]'::jsonb,
+  highlight BOOLEAN NOT NULL DEFAULT FALSE,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS lawyers (
+  id VARCHAR(128) PRIMARY KEY,
+  slug VARCHAR(128) UNIQUE,
+  name VARCHAR(255) NOT NULL,
+  image TEXT NOT NULL,
+  rating DOUBLE PRECISION DEFAULT 0,
+  reviews INTEGER DEFAULT 0,
+  experience INTEGER DEFAULT 0,
+  fee INTEGER,
+  currency VARCHAR(8),
+  location VARCHAR(512) NOT NULL,
+  address TEXT,
+  practice VARCHAR(128) NOT NULL,
+  city_slug VARCHAR(128),
+  email VARCHAR(255),
+  email_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  phone VARCHAR(32),
+  phone_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  firm VARCHAR(255),
+  bio TEXT,
+  online BOOLEAN DEFAULT TRUE,
+  verified BOOLEAN DEFAULT FALSE,
+  specialization JSONB DEFAULT '[]'::jsonb,
+  languages JSONB,
+  education JSONB,
+  timeline JSONB,
+  practice_groups JSONB,
+  courts JSONB,
+  awards JSONB,
+  client_reviews JSONB,
+  profile_faq JSONB,
+  subscription_plan_id VARCHAR(32) REFERENCES subscription_plans(id),
+  featured BOOLEAN NOT NULL DEFAULT FALSE,
+  top_rated BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS qa_posts (
+  id VARCHAR(64) PRIMARY KEY,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  title VARCHAR(512) NOT NULL,
+  excerpt TEXT NOT NULL,
+  category VARCHAR(128) NOT NULL,
+  answers INTEGER DEFAULT 0,
+  views INTEGER DEFAULT 0,
+  status VARCHAR(32) DEFAULT 'published',
+  content TEXT
+);
+
+CREATE TABLE IF NOT EXISTS articles (
+  slug VARCHAR(255) PRIMARY KEY,
+  title VARCHAR(512) NOT NULL,
+  excerpt TEXT NOT NULL,
+  category VARCHAR(128) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  date VARCHAR(64) NOT NULL,
+  read_time VARCHAR(32) NOT NULL,
+  image TEXT NOT NULL,
+  trending BOOLEAN DEFAULT FALSE,
+  status VARCHAR(32) DEFAULT 'published',
+  content TEXT
+);
+
+CREATE TABLE IF NOT EXISTS trending_topics (
+  id SERIAL PRIMARY KEY,
+  topic VARCHAR(255) NOT NULL,
+  sort_order INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS default_profile_reviews (
+  id SERIAL PRIMARY KEY,
+  author VARCHAR(255) NOT NULL,
+  rating DOUBLE PRECISION NOT NULL,
+  text TEXT NOT NULL,
+  date VARCHAR(64) NOT NULL,
+  verified BOOLEAN DEFAULT FALSE,
+  avatar TEXT,
+  sort_order INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS admin_users (
+  id VARCHAR(64) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  role VARCHAR(32) NOT NULL,
+  last_login VARCHAR(64)
+);
+
+CREATE TABLE IF NOT EXISTS bookings (
+  id VARCHAR(64) PRIMARY KEY,
+  lawyer_id VARCHAR(128) NOT NULL,
+  lawyer_name VARCHAR(255) NOT NULL,
+  client_name VARCHAR(255) NOT NULL,
+  client_email VARCHAR(255) NOT NULL,
+  date VARCHAR(32) NOT NULL,
+  time VARCHAR(32) NOT NULL,
+  type VARCHAR(64) NOT NULL,
+  status VARCHAR(32) NOT NULL
+);
