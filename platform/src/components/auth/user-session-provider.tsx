@@ -45,7 +45,6 @@ export function UserSessionProvider({ children }: { children: ReactNode }) {
     try {
       const current = await fetchCurrentUser();
       setUser(current);
-      return current;
     } catch {
       setUser(null);
       return null;
