@@ -74,7 +74,11 @@ function AdminStandaloneShell({ title, subtitle, breadcrumbs, children }: ShellP
 
   async function logout() {
     try {
-      await fetch('/api/admin/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      await fetch('/api/admin/auth/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+      });
     } catch {
       /* Backend may be unreachable — clear cookie client-side below */
     }
