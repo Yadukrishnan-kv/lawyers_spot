@@ -54,7 +54,11 @@ export async function lawyerSignup(body: {
 }
 
 export async function logoutUser() {
-  await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+  await fetch('/api/auth/logout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+  });
 }
 
 export async function fetchCurrentUser() {
