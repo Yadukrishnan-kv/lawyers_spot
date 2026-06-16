@@ -31,7 +31,7 @@ export function verifySessionToken(token: string | undefined): string | null {
 
 const cookieOpts = () => ({
   httpOnly: true,
-  sameSite: 'strict' as const,
+  sameSite: 'lax' as const,
   path: '/',
   secure: config.isProduction,
   maxAge: config.sessionDays * 86400 * 1000,
