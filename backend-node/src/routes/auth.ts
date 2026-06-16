@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { loadCms, saveCms } from '../cms.js';
 import {
   clearUserCookie,
@@ -15,7 +16,15 @@ import { slugifyName } from '../lawyer-slug.js';
 
 export const authRouter = Router();
 
-authRouter.post('/signup', async (req, res) => {
+const sensitiveLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { detail: 'Too many requests. Try again later.' },
+});
+
+authRouter.post('/signup', sensitiveLimiter, async (req, res) => {
   try {
     const { name, email, password } = req.body as { name?: string; email?: string; password?: string };
     const normalized = email ? normalizeEmail(email) : null;
@@ -43,7 +52,7 @@ authRouter.post('/signup', async (req, res) => {
   }
 });
 
-authRouter.post('/lawyer-signup', async (req, res) => {
+authRouter.post('/lawyer-signup', sensitiveLimiter, async (req, res) => {
   try {
     const { name, email, password, phone, practice, barId, citySlug } = req.body as {
       name?: string;
@@ -112,7 +121,7 @@ authRouter.post('/lawyer-signup', async (req, res) => {
   }
 });
 
-authRouter.post('/login', async (req, res) => {
+authRouter.post('/login', sensitiveLimiter, async (req, res) => {
   try {
     const { email, password, role } = req.body as { email?: string; password?: string; role?: string };
     const normalized = email ? normalizeEmail(email) : null;

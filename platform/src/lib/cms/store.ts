@@ -21,14 +21,14 @@ function ensureDir() {
 }
 
 function loadLawyersFromSource(raw: Partial<CmsData>, defaults: CmsData): Lawyer[] {
+  if (Array.isArray(raw.lawyers) && raw.lawyers.length > 0) {
+    return normalizeLawyerSlugs(raw.lawyers);
+  }
   if (fs.existsSync(LAWYERS_SAMPLE_FILE)) {
     const sample = JSON.parse(fs.readFileSync(LAWYERS_SAMPLE_FILE, 'utf-8')) as Lawyer[];
     if (Array.isArray(sample) && sample.length > 0) {
       return normalizeLawyerSlugs(sample);
     }
-  }
-  if (Array.isArray(raw.lawyers) && raw.lawyers.length > 0) {
-    return normalizeLawyerSlugs(raw.lawyers);
   }
   return defaults.lawyers;
 }

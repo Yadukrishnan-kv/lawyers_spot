@@ -56,7 +56,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api/v1', publicRouter);
-app.use('/api/v1/auth', authLimiter, authRouter);
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/bookings', bookingLimiter, bookingsRouter);
 app.use('/api/v1/lawyer', lawyerRouter);
 app.use('/api/v1/admin/auth/login', adminLoginLimiter);

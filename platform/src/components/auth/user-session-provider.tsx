@@ -84,7 +84,11 @@ export function UserSessionProvider({ children }: { children: ReactNode }) {
   }, [loading, user, pathname]);
 
   const logout = useCallback(async () => {
-    await logoutUser();
+    try {
+      await logoutUser();
+    } catch {
+      // backend unreachable — clear client state anyway
+    }
     setUser(null);
     window.location.replace('/');
   }, []);

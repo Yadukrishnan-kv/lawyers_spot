@@ -224,10 +224,6 @@ async function clearContentTables(client: PoolClient) {
     'admin_users',
     'default_profile_reviews',
     'trending_topics',
-    'qa_answers',
-    'articles',
-    'qa_posts',
-    'lawyers',
     'cities',
     'states',
     'practice_areas',
@@ -327,7 +323,41 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
           practice, city_slug, email, email_verified, phone, phone_verified, firm, bio, online, verified,
           specialization, languages, education, timeline, practice_groups, courts, awards, client_reviews,
           profile_faq, subscription_plan_id, subscription_expires_at, featured, top_rated
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)`,
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)
+        ON CONFLICT (id) DO UPDATE SET
+          slug = EXCLUDED.slug,
+          name = EXCLUDED.name,
+          image = EXCLUDED.image,
+          rating = EXCLUDED.rating,
+          reviews = EXCLUDED.reviews,
+          experience = EXCLUDED.experience,
+          fee = EXCLUDED.fee,
+          currency = EXCLUDED.currency,
+          location = EXCLUDED.location,
+          address = EXCLUDED.address,
+          practice = EXCLUDED.practice,
+          city_slug = EXCLUDED.city_slug,
+          email = EXCLUDED.email,
+          email_verified = EXCLUDED.email_verified,
+          phone = EXCLUDED.phone,
+          phone_verified = EXCLUDED.phone_verified,
+          firm = EXCLUDED.firm,
+          bio = EXCLUDED.bio,
+          online = EXCLUDED.online,
+          verified = EXCLUDED.verified,
+          specialization = EXCLUDED.specialization,
+          languages = EXCLUDED.languages,
+          education = EXCLUDED.education,
+          timeline = EXCLUDED.timeline,
+          practice_groups = EXCLUDED.practice_groups,
+          courts = EXCLUDED.courts,
+          awards = EXCLUDED.awards,
+          client_reviews = EXCLUDED.client_reviews,
+          profile_faq = EXCLUDED.profile_faq,
+          subscription_plan_id = EXCLUDED.subscription_plan_id,
+          subscription_expires_at = EXCLUDED.subscription_expires_at,
+          featured = EXCLUDED.featured,
+          top_rated = EXCLUDED.top_rated`,
         [
           row.id,
           row.slug ?? null,
@@ -370,7 +400,16 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
     for (const q of data.qaPosts) {
       await client.query(
         `INSERT INTO qa_posts (id, slug, title, excerpt, category, answers, views, status, content)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+         ON CONFLICT (id) DO UPDATE SET
+           slug = EXCLUDED.slug,
+           title = EXCLUDED.title,
+           excerpt = EXCLUDED.excerpt,
+           category = EXCLUDED.category,
+           answers = EXCLUDED.answers,
+           views = EXCLUDED.views,
+           status = EXCLUDED.status,
+           content = EXCLUDED.content`,
         [
           q.id,
           q.slug,
@@ -388,7 +427,19 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
     for (const a of data.articles) {
       await client.query(
         `INSERT INTO articles (slug, title, excerpt, category, author, date, read_time, image, trending, status, content, lawyer_id)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+         ON CONFLICT (slug) DO UPDATE SET
+           title = EXCLUDED.title,
+           excerpt = EXCLUDED.excerpt,
+           category = EXCLUDED.category,
+           author = EXCLUDED.author,
+           date = EXCLUDED.date,
+           read_time = EXCLUDED.read_time,
+           image = EXCLUDED.image,
+           trending = EXCLUDED.trending,
+           status = EXCLUDED.status,
+           content = EXCLUDED.content,
+           lawyer_id = EXCLUDED.lawyer_id`,
         [
           a.slug,
           a.title,

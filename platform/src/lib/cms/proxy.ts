@@ -28,6 +28,8 @@ export async function proxyToBackend(
   const headers = new Headers(init?.headers);
   const cookie = request.headers.get('cookie');
   if (cookie) headers.set('cookie', cookie);
+  const contentType = request.headers.get('content-type');
+  if (contentType) headers.set('content-type', contentType);
 
   try {
     const res = await fetch(url, {
