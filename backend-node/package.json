@@ -19,6 +19,7 @@
     "db:migrate:verification": "tsx scripts/run-migrate-v6.ts",
     "db:migrate:subscription-expiry": "tsx scripts/run-migrate-v7.ts",
     "db:migrate:lawyer-content": "tsx scripts/run-migrate-v8.ts",
+    "db:migrate:sections": "tsx scripts/run-migrate-v9.ts",
     "db:setup": "npm run db:schema && npm run db:migrate && npm run db:migrate:security && npm run db:migrate:profile && npm run db:migrate:subscriptions && npm run db:migrate:verification && npm run db:seed"
   },
   "dependencies": {

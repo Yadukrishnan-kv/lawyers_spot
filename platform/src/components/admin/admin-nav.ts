@@ -25,6 +25,15 @@ export const adminNav: AdminNavItem[] = [
   { href: '/admin/users', label: 'Admin Users', icon: 'fe-users' },
   { href: '/admin/analytics', label: 'Analytics', icon: 'fe-bar-chart-2' },
   {
+    href: '/admin/sections',
+    label: 'Section',
+    icon: 'fe-book',
+    children: [
+      { href: '/admin/sections/ipc', label: 'IPC Section' },
+      { href: '/admin/sections/bns', label: 'BNS Section' },
+    ],
+  },
+  {
     href: '/admin/settings',
     label: 'Settings',
     icon: 'fe-settings',

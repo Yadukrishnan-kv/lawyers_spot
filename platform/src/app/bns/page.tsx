@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/seo/breadcrumbs';
 import { getSiteContent } from '@/lib/data';
+import { getSiteSections } from '@/lib/sections-data';
 import { resolveBnsPage } from '@/lib/site-page-content';
 import { sanitizeCmsHtml } from '@/lib/security/sanitize-html';
 import type { Metadata } from 'next';
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BnsPage() {
   const sc = await getSiteContent();
   const page = resolveBnsPage(sc);
-  const { bnsSections } = sc;
+  const bnsSections = await getSiteSections('bns');
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">

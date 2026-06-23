@@ -8,6 +8,7 @@ import { authRouter } from './routes/auth.js';
 import { bookingsRouter } from './routes/bookings.js';
 import { lawyerRouter } from './routes/lawyer.js';
 import { publicRouter } from './routes/public.js';
+import { sectionsRouter } from './routes/sections.js';
 import { securityHeaders, requireJsonContentType } from './security/middleware.js';
 
 const app = express();
@@ -19,7 +20,7 @@ app.use(
   cors({
     origin: config.corsOrigins,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Cookie'],
   }),
 );
@@ -60,6 +61,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/bookings', bookingLimiter, bookingsRouter);
 app.use('/api/v1/lawyer', lawyerRouter);
 app.use('/api/v1/admin/auth/login', adminLoginLimiter);
+app.use('/api/v1', sectionsRouter);
 app.use('/api/v1/admin', adminRouter);
 
 app.use((_req, res) => {
