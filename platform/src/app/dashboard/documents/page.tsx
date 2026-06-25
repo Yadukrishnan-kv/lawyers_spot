@@ -87,9 +87,17 @@ export default function DocumentsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="animate-fade-in space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-xl font-bold text-navy-900 dark:text-white">Documents</h2>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-300">
+            <FileText className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="font-display text-xl font-bold text-navy-900 dark:text-white">Documents</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Upload and manage your legal documents</p>
+          </div>
+        </div>
         <div>
           <input
             ref={fileInputRef}
@@ -101,9 +109,8 @@ export default function DocumentsPage() {
           <Button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="bg-royal-600 hover:bg-royal-500"
           >
-            <Upload className="mr-1 h-4 w-4" />
+            <Upload className="h-4 w-4" />
             {uploading ? 'Uploading…' : 'Upload Document'}
           </Button>
         </div>
@@ -112,53 +119,52 @@ export default function DocumentsPage() {
       {documents.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-4 py-12">
-            <FileText className="h-12 w-12 text-slate-300" />
-            <p className="text-sm text-slate-500">No documents uploaded yet.</p>
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-violet-50 dark:bg-violet-950/30">
+              <FileText className="h-6 w-6 text-violet-400" />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold text-navy-900 dark:text-white">No documents uploaded yet</p>
+              <p className="mt-1 text-xs text-slate-500">Upload case files, agreements, and other legal documents.</p>
+            </div>
           </CardContent>
         </Card>
       ) : (
-        <Card>
-          <CardContent className="p-0">
-            <div className="divide-y divide-slate-100 dark:divide-navy-700">
-              {documents.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="flex flex-wrap items-center gap-4 px-6 py-4"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-royal-50 text-royal-600 dark:bg-royal-950/30 dark:text-royal-300">
-                    {fileIcon(doc.mimeType, doc.fileName)}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-navy-900 dark:text-white">
-                      {doc.fileName}
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      {formatSize(doc.fileSize)} &middot; Uploaded {formatDate(doc.createdAt)}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      asChild
-                    >
-                      <a href={`/api/user/documents/${doc.id}/download`} download>
-                        <Download className="h-4 w-4" />
-                      </a>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDelete(doc.id)}
-                      className="text-red-500 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/30"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+        <Card className="overflow-hidden">
+          <div className="divide-y divide-slate-100 dark:divide-navy-700">
+            {documents.map((doc) => (
+              <div
+                key={doc.id}
+                className="flex flex-wrap items-center gap-4 px-6 py-4 transition hover:bg-slate-50/50 dark:hover:bg-navy-800/30"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 text-violet-600 dark:bg-violet-950/30 dark:text-violet-300">
+                  {fileIcon(doc.mimeType, doc.fileName)}
                 </div>
-              ))}
-            </div>
-          </CardContent>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-navy-900 dark:text-white">
+                    {doc.fileName}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {formatSize(doc.fileSize)} &middot; Uploaded {formatDate(doc.createdAt)}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button variant="secondary" size="sm" asChild>
+                    <a href={`/api/user/documents/${doc.id}/download`} download>
+                      <Download className="h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDelete(doc.id)}
+                    className="text-red-500 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/30"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </Card>
       )}
     </div>

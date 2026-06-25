@@ -8,9 +8,15 @@ import { Footer } from '@/components/layout/footer';
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
+  const isDashboard = pathname?.startsWith('/dashboard') || pathname?.startsWith('/lawyer-dashboard');
 
-  if (isAdmin) {
-    return <>{children}</>;
+  if (isAdmin || isDashboard) {
+    return (
+      <UserSessionProvider>
+        <Header />
+        <main className="min-h-screen">{children}</main>
+      </UserSessionProvider>
+    );
   }
 
   return (

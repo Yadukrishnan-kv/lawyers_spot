@@ -386,6 +386,7 @@ export async function fetchConversations() {
       lawyerPractice: string;
       lastMessage: string | null;
       lastMessageAt: string;
+      unreadCount?: number;
     }>;
   };
 }
@@ -401,6 +402,7 @@ export async function fetchMessages(conversationId: number) {
       senderType: string;
       text: string;
       createdAt: string;
+      isRead?: boolean;
     }>;
   };
 }
@@ -466,4 +468,75 @@ export async function deleteDocument(id: number) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to delete document');
   return data as { success: boolean };
+}
+
+/* ─── Lawyer Messaging API ─── */
+
+export async function fetchLawyerConversations() {
+  const res = await fetch('/api/lawyer/conversations', { credentials: 'include' });
+  if (res.status === 401) return { conversations: [] };
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) return { conversations: [] };
+  return data as {
+    conversations: Array<{
+      id: number;
+      userId: string;
+      userName: string;
+      userEmail: string;
+      lastMessage: string | null;
+      lastMessageAt: string;
+      unreadCount: number;
+    }>;
+  };
+}
+
+export async function fetchLawyerMessages(conversationId: number) {
+  const res = await fetch(`/api/lawyer/conversations/${conversationId}/messages`, { credentials: 'include' });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error('Failed to load messages');
+  return data as {
+    messages: Array<{
+      id: number;
+      senderId: string;
+      senderType: string;
+      text: string;
+      createdAt: string;
+      isRead: boolean;
+    }>;
+  };
+}
+
+export async function sendLawyerMessage(conversationId: number, text: string) {
+  const res = await fetch(`/api/lawyer/conversations/${conversationId}/messages`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to send message');
+  return data as { success: boolean; message: Record<string, unknown> };
+}
+
+export async function markConversationRead(conversationId: number, role: 'user' | 'lawyer') {
+  const prefix = role === 'lawyer' ? 'lawyer' : 'user';
+  const res = await fetch(`/api/${prefix}/conversations/${conversationId}/read`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: '{}',
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error('Failed to mark as read');
+  return data as { success: boolean };
+}
+
+export async function fetchUnreadCounts() {
+  const [userConvs, lawyerConvs] = await Promise.all([
+    fetchConversations().catch(() => ({ conversations: [] })),
+    fetchLawyerConversations().catch(() => ({ conversations: [] })),
+  ]);
+  const userUnread = (userConvs.conversations ?? []).reduce((sum, c) => sum + ((c as { unreadCount?: number }).unreadCount ?? 0), 0);
+  const lawyerUnread = (lawyerConvs.conversations ?? []).reduce((sum, c) => sum + (c.unreadCount ?? 0), 0);
+  return { userUnread, lawyerUnread };
 }

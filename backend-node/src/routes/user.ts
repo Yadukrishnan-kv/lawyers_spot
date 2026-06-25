@@ -342,6 +342,7 @@ userRouter.get('/conversations', requireUser(), async (req, res) => {
         lawyerPractice: (lawyer?.practice as string) ?? '',
         lastMessage: row.last_message,
         lastMessageAt: row.last_message_at ?? row.created_at,
+        unreadCount: 0,
       };
     });
     res.json({ conversations });
@@ -384,6 +385,7 @@ userRouter.get('/conversations/:id/messages', requireUser(), async (req, res) =>
         senderType: row.sender_type,
         text: row.text,
         createdAt: row.created_at,
+        isRead: true,
       })),
     });
   } catch (e) {
@@ -422,6 +424,12 @@ userRouter.post('/conversations/:id/messages', requireUser(), async (req, res) =
       'UPDATE conversations SET last_message = $1, last_message_at = NOW() WHERE id = $2',
       [text.trim(), convId],
     );
+    try {
+      await query(
+        'UPDATE conversations SET lawyer_unread_count = lawyer_unread_count + 1 WHERE id = $1',
+        [convId],
+      );
+    } catch { /* column may not exist yet */ }
     res.json({
       success: true,
       message: {
@@ -430,6 +438,7 @@ userRouter.post('/conversations/:id/messages', requireUser(), async (req, res) =
         senderType: 'user',
         text: text.trim(),
         createdAt: msg.rows[0].created_at,
+        isRead: false,
       },
     });
   } catch (e) {
@@ -465,11 +474,47 @@ userRouter.post('/conversations', requireUser(), async (req, res) => {
          VALUES ($1, $2, 'user', $3)`,
         [conv.rows[0].id, userId, initialMessage.trim()],
       );
+      try {
+        await query(
+          'UPDATE conversations SET lawyer_unread_count = lawyer_unread_count + 1 WHERE id = $1',
+          [conv.rows[0].id],
+        );
+      } catch { /* column may not exist yet */ }
     }
     res.json({ conversationId: conv.rows[0].id, existing: false });
   } catch (e) {
     console.error(e);
     res.status(500).json({ detail: 'Failed to create conversation' });
+  }
+});
+
+userRouter.post('/conversations/:id/read', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as typeof req & { user: { userId: string } }).user;
+    const convId = Number(req.params.id);
+    if (!convId) { res.status(400).json({ detail: 'Invalid conversation ID' }); return; }
+    const conv = await query(
+      'SELECT id FROM conversations WHERE id = $1 AND user_id = $2',
+      [convId, userId],
+    );
+    if (conv.rows.length === 0) { res.status(404).json({ detail: 'Conversation not found' }); return; }
+    try {
+      await query(
+        `UPDATE messages SET is_read = TRUE, is_read_at = NOW()
+         WHERE conversation_id = $1 AND sender_type = 'lawyer' AND is_read = FALSE`,
+        [convId],
+      );
+    } catch { /* column may not exist yet */ }
+    try {
+      await query(
+        'UPDATE conversations SET lawyer_unread_count = 0 WHERE id = $1',
+        [convId],
+      );
+    } catch { /* column may not exist yet */ }
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to mark messages as read' });
   }
 });
 

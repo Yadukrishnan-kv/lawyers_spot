@@ -282,3 +282,156 @@ lawyerRouter.post('/subscription/renew', requireUser(['lawyer']), async (req, re
     res.status(500).json({ detail: 'Failed to renew subscription' });
   }
 });
+
+/* ─── Lawyer Messaging Routes ─── */
+
+lawyerRouter.get('/conversations', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as AuthedRequest).user;
+    const account = await resolveLawyerAccount(userId);
+    if (!account) { res.status(403).json({ detail: 'Lawyer account not found' }); return; }
+    const lawyerId = account.lawyer.id;
+
+    const r = await query<{
+      id: number; user_id: string; last_message: string | null;
+      last_message_at: string | null; created_at: string;
+    }>(
+      `SELECT id, user_id, last_message, last_message_at, created_at
+       FROM conversations WHERE lawyer_id = $1
+       ORDER BY COALESCE(last_message_at, created_at) DESC`,
+      [lawyerId],
+    );
+
+    const userIds = [...new Set(r.rows.map((row) => row.user_id))];
+    const usersRes = await query<{ id: string; name: string; email: string }>(
+      'SELECT id, name, email FROM platform_users WHERE id = ANY($1)',
+      [userIds],
+    );
+    const userMap = new Map(usersRes.rows.map((u) => [u.id, u]));
+
+    const conversations = r.rows.map((row) => {
+      const u = userMap.get(row.user_id);
+      return {
+        id: row.id,
+        userId: row.user_id,
+        userName: u?.name ?? 'Unknown User',
+        userEmail: u?.email ?? '',
+        lastMessage: row.last_message,
+        lastMessageAt: row.last_message_at ?? row.created_at,
+        unreadCount: 0,
+      };
+    });
+    res.json({ conversations });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to load conversations' });
+  }
+});
+
+lawyerRouter.get('/conversations/:id/messages', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as AuthedRequest).user;
+    const account = await resolveLawyerAccount(userId);
+    if (!account) { res.status(403).json({ detail: 'Lawyer account not found' }); return; }
+    const lawyerId = account.lawyer.id;
+    const convId = Number(req.params.id);
+    if (!convId) { res.status(400).json({ detail: 'Invalid conversation ID' }); return; }
+
+    const conv = await query(
+      'SELECT id FROM conversations WHERE id = $1 AND lawyer_id = $2',
+      [convId, lawyerId],
+    );
+    if (conv.rows.length === 0) { res.status(404).json({ detail: 'Conversation not found' }); return; }
+
+    const r = await query<{
+      id: number; sender_id: string; sender_type: string;
+      text: string; created_at: string;
+    }>(
+      'SELECT id, sender_id, sender_type, text, created_at FROM messages WHERE conversation_id = $1 ORDER BY created_at ASC',
+      [convId],
+    );
+    res.json({
+      messages: r.rows.map((row) => ({
+        id: row.id,
+        senderId: row.sender_id,
+        senderType: row.sender_type,
+        text: row.text,
+        createdAt: row.created_at,
+        isRead: true,
+      })),
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to load messages' });
+  }
+});
+
+lawyerRouter.post('/conversations/:id/messages', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as AuthedRequest).user;
+    const account = await resolveLawyerAccount(userId);
+    if (!account) { res.status(403).json({ detail: 'Lawyer account not found' }); return; }
+    const lawyerId = account.lawyer.id;
+    const convId = Number(req.params.id);
+    const { text } = req.body as { text?: string };
+    if (!convId) { res.status(400).json({ detail: 'Invalid conversation ID' }); return; }
+    if (!text || !text.trim()) { res.status(400).json({ detail: 'Message text required' }); return; }
+
+    const conv = await query(
+      'SELECT id, user_id FROM conversations WHERE id = $1 AND lawyer_id = $2',
+      [convId, lawyerId],
+    );
+    if (conv.rows.length === 0) { res.status(404).json({ detail: 'Conversation not found' }); return; }
+    const convUserId = conv.rows[0].user_id;
+
+    const msg = await query<{ id: number; created_at: string }>(
+      `INSERT INTO messages (conversation_id, sender_id, sender_type, text)
+       VALUES ($1, $2, 'lawyer', $3) RETURNING id, created_at`,
+      [convId, userId, text.trim()],
+    );
+    await query(
+      'UPDATE conversations SET last_message = $1, last_message_at = NOW() WHERE id = $2',
+      [text.trim(), convId],
+    );
+    try { await query('UPDATE conversations SET user_unread_count = user_unread_count + 1 WHERE id = $1', [convId]); } catch {}
+
+    res.json({
+      success: true,
+      message: {
+        id: msg.rows[0].id,
+        senderId: userId,
+        senderType: 'lawyer',
+        text: text.trim(),
+        createdAt: msg.rows[0].created_at,
+        isRead: false,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to send message' });
+  }
+});
+
+lawyerRouter.post('/conversations/:id/read', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as AuthedRequest).user;
+    const account = await resolveLawyerAccount(userId);
+    if (!account) { res.status(403).json({ detail: 'Lawyer account not found' }); return; }
+    const lawyerId = account.lawyer.id;
+    const convId = Number(req.params.id);
+    if (!convId) { res.status(400).json({ detail: 'Invalid conversation ID' }); return; }
+
+    const conv = await query(
+      'SELECT id FROM conversations WHERE id = $1 AND lawyer_id = $2',
+      [convId, lawyerId],
+    );
+    if (conv.rows.length === 0) { res.status(404).json({ detail: 'Conversation not found' }); return; }
+
+    try { await query(`UPDATE messages SET is_read = TRUE, is_read_at = NOW() WHERE conversation_id = $1 AND sender_type = 'user' AND is_read = FALSE`, [convId]); } catch {}
+    try { await query('UPDATE conversations SET user_unread_count = 0 WHERE id = $1', [convId]); } catch {}
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to mark messages as read' });
+  }
+});

@@ -1,24 +1,19 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { MessageSquare, Send, ArrowLeft, Search, Paperclip, Check, CheckCheck, Clock, User, Scale } from 'lucide-react';
-import { fetchConversations, fetchMessages, sendMessage, startConversation, markConversationRead } from '@/lib/user-auth';
-import { Card, CardContent } from '@/components/ui/card';
+import { MessageSquare, Send, ArrowLeft, Search, Paperclip, Check, CheckCheck, User } from 'lucide-react';
+import { fetchLawyerConversations, fetchLawyerMessages, sendLawyerMessage, markConversationRead } from '@/lib/user-auth';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 type Conversation = {
   id: number;
-  lawyerId: string;
-  lawyerName: string;
-  lawyerImage: string;
-  lawyerPractice: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
   lastMessage: string | null;
   lastMessageAt: string;
-  unreadCount?: number;
+  unreadCount: number;
 };
 
 type ChatMessage = {
@@ -59,8 +54,11 @@ function isSameDay(a: string, b: string) {
   return da.getFullYear() === db.getFullYear() && da.getMonth() === db.getMonth() && da.getDate() === db.getDate();
 }
 
-export default function MessagesPage() {
-  const router = useRouter();
+function getInitials(name: string) {
+  return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
+}
+
+export default function LawyerMessagesPage() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedConv, setSelectedConv] = useState<Conversation | null>(null);
@@ -77,7 +75,7 @@ export default function MessagesPage() {
 
   const loadConversations = useCallback(async () => {
     try {
-      const data = await fetchConversations();
+      const data = await fetchLawyerConversations();
       setConversations(data.conversations ?? []);
     } catch {}
   }, []);
@@ -98,11 +96,11 @@ export default function MessagesPage() {
     if (!selectedConv) return;
     const id = setInterval(async () => {
       try {
-        const data = await fetchMessages(selectedConv.id);
+        const data = await fetchLawyerMessages(selectedConv.id);
         const newMsgs = data.messages ?? [];
         const prevLen = messagesRef.current.length;
         if (newMsgs.length > prevLen) {
-          const isFromOther = prevLen > 0 && newMsgs[newMsgs.length - 1].senderType !== 'user';
+          const isFromOther = prevLen > 0 && newMsgs[newMsgs.length - 1].senderType !== 'lawyer';
           const el = bottomRef.current;
           if (isFromOther && el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
         }
@@ -119,10 +117,10 @@ export default function MessagesPage() {
     setMessages([]);
     setShowMobileList(false);
     try {
-      const data = await fetchMessages(conv.id);
+      const data = await fetchLawyerMessages(conv.id);
       setMessages(data.messages ?? []);
-      if (conv.unreadCount && conv.unreadCount > 0) {
-        await markConversationRead(conv.id, 'user').catch(() => {});
+      if (conv.unreadCount > 0) {
+        await markConversationRead(conv.id, 'lawyer').catch(() => {});
         setConversations((prev) =>
           prev.map((c) => c.id === conv.id ? { ...c, unreadCount: 0 } : c),
         );
@@ -138,7 +136,7 @@ export default function MessagesPage() {
     if (!msgText.trim() || !selectedConv || sending) return;
     setSending(true);
     try {
-      const data = await sendMessage(selectedConv.id, msgText.trim());
+      const data = await sendLawyerMessage(selectedConv.id, msgText.trim());
       const newMsg = data.message as ChatMessage;
       setMessages((prev) => [...prev, { ...newMsg, isRead: false }]);
       setMsgText('');
@@ -160,11 +158,11 @@ export default function MessagesPage() {
   }
 
   const filteredConvs = conversations.filter((c) =>
-    c.lawyerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.lawyerPractice.toLowerCase().includes(searchQuery.toLowerCase()),
+    c.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.userEmail.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const totalUnread = conversations.reduce((sum, c) => sum + (c.unreadCount ?? 0), 0);
+  const totalUnread = conversations.reduce((sum, c) => sum + c.unreadCount, 0);
 
   if (loading) {
     return (
@@ -179,7 +177,7 @@ export default function MessagesPage() {
       <div className="flex h-[calc(100vh-5rem)] overflow-hidden rounded-none bg-white shadow-sm dark:bg-navy-900 sm:rounded-2xl sm:border sm:border-slate-200 dark:sm:border-navy-700">
         {/* Left Panel */}
         <div className={cn(
-          'flex w-full flex-col border-r border-slate-200 dark:border-navy-700 sm:w-80 lg:w-96',
+          'flex w-full flex-col border-r border-slate-200 dark:border-navy-700 sm:w-72 lg:w-80',
           !showMobileList && 'hidden sm:flex',
         )}>
           {/* Header */}
@@ -198,7 +196,7 @@ export default function MessagesPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search conversations..."
+                placeholder="Search clients..."
                 className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm outline-none transition focus:border-royal-500 focus:bg-white focus:ring-2 focus:ring-royal-500/20 dark:border-navy-600 dark:bg-navy-800 dark:text-white dark:focus:bg-navy-800"
               />
             </div>
@@ -213,11 +211,8 @@ export default function MessagesPage() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-navy-900 dark:text-white">No messages yet</p>
-                  <p className="mt-1 text-xs text-slate-500">Book a consultation to start chatting with a lawyer.</p>
+                  <p className="mt-1 text-xs text-slate-500">When clients message you, conversations will appear here.</p>
                 </div>
-                <Button asChild size="sm">
-                  <Link href="/lawyers"><Scale className="h-4 w-4" />Find a Lawyer</Link>
-                </Button>
               </div>
             ) : filteredConvs.length === 0 ? (
               <div className="py-12 text-center text-sm text-slate-500">No conversations match your search.</div>
@@ -233,32 +228,25 @@ export default function MessagesPage() {
                   )}
                 >
                   <div className="relative shrink-0">
-                    <div className="relative h-12 w-12 overflow-hidden rounded-full">
-                      <Image
-                        src={conv.lawyerImage || 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=48&h=48&fit=crop'}
-                        alt={conv.lawyerName}
-                        fill
-                        className="object-cover"
-                        sizes="48px"
-                      />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-royal-100 to-royal-200 text-sm font-bold text-royal-700 dark:from-royal-950/50 dark:to-royal-900/50 dark:text-royal-300">
+                      {getInitials(conv.userName)}
                     </div>
                     <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-emerald-500 dark:border-navy-900" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <p className="truncate text-sm font-semibold text-navy-900 dark:text-white">
-                        {conv.lawyerName}
+                        {conv.userName}
                       </p>
                       {conv.lastMessageAt && (
                         <span className="shrink-0 text-[11px] text-slate-400">{formatTime(conv.lastMessageAt)}</span>
                       )}
                     </div>
-                    <p className="truncate text-xs text-slate-500">{conv.lawyerPractice}</p>
                     {conv.lastMessage && (
                       <p className="mt-0.5 truncate text-xs text-slate-400">{conv.lastMessage}</p>
                     )}
                   </div>
-                  {(conv.unreadCount ?? 0) > 0 && (
+                  {conv.unreadCount > 0 && (
                     <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-royal-600 px-1.5 text-[10px] font-bold text-white">
                       {conv.unreadCount}
                     </span>
@@ -282,24 +270,19 @@ export default function MessagesPage() {
                   <ArrowLeft className="h-5 w-5 text-slate-600" />
                 </button>
                 <div className="relative shrink-0">
-                  <div className="relative h-10 w-10 overflow-hidden rounded-full">
-                    <Image
-                      src={selectedConv.lawyerImage || 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=40&h=40&fit=crop'}
-                      alt={selectedConv.lawyerName}
-                      fill
-                      className="object-cover"
-                      sizes="40px"
-                    />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-royal-100 to-royal-200 text-sm font-bold text-royal-700 dark:from-royal-950/50 dark:to-royal-900/50 dark:text-royal-300">
+                    {getInitials(selectedConv.userName)}
                   </div>
                   <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500 dark:border-navy-900" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-navy-900 dark:text-white">{selectedConv.lawyerName}</p>
+                  <p className="text-sm font-semibold text-navy-900 dark:text-white">{selectedConv.userName}</p>
                   <p className="text-xs text-emerald-600">Online</p>
                 </div>
-                <Button variant="secondary" size="sm" asChild className="hidden sm:inline-flex">
-                  <Link href={`/lawyers/${selectedConv.lawyerId}`}>View Profile</Link>
-                </Button>
+                <div className="flex items-center gap-1 text-xs text-slate-400">
+                  <User className="h-3 w-3" />
+                  {selectedConv.userEmail}
+                </div>
               </div>
 
               {/* Chat Area */}
@@ -314,13 +297,13 @@ export default function MessagesPage() {
                       <MessageSquare className="h-6 w-6 text-slate-400" />
                     </div>
                     <p className="mt-3 text-sm font-semibold text-navy-900 dark:text-white">No messages yet</p>
-                    <p className="mt-1 text-xs text-slate-500">Send a message to start the conversation.</p>
+                    <p className="mt-1 text-xs text-slate-500">Send a message to reply to this client.</p>
                   </div>
                 ) : (
                   <div className="space-y-1">
                     {messages.map((msg, idx) => {
                       const showDateSep = idx === 0 || !isSameDay(messages[idx - 1].createdAt, msg.createdAt);
-                      const isUser = msg.senderType === 'user';
+                      const isLawyer = msg.senderType === 'lawyer';
                       return (
                         <div key={msg.id}>
                           {showDateSep && (
@@ -330,20 +313,20 @@ export default function MessagesPage() {
                               </span>
                             </div>
                           )}
-                          <div className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
+                          <div className={cn('flex', isLawyer ? 'justify-end' : 'justify-start')}>
                             <div className={cn(
                               'group relative max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed sm:max-w-[70%]',
-                              isUser
+                              isLawyer
                                 ? 'rounded-br-md bg-royal-600 text-white'
                                 : 'rounded-bl-md border border-slate-200 bg-white text-navy-900 dark:border-navy-700 dark:bg-navy-800 dark:text-white',
                             )}>
                               <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                               <div className={cn(
                                 'mt-1 flex items-center justify-end gap-1',
-                                isUser ? 'text-white/60' : 'text-slate-400',
+                                isLawyer ? 'text-white/60' : 'text-slate-400',
                               )}>
                                 <span className="text-[10px] leading-none">{formatMessageTime(msg.createdAt)}</span>
-                                {isUser && (
+                                {isLawyer && (
                                   msg.isRead
                                     ? <CheckCheck className="h-3 w-3 text-blue-300" />
                                     : <Check className="h-3 w-3" />
@@ -404,8 +387,8 @@ export default function MessagesPage() {
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 dark:bg-navy-800">
                   <MessageSquare className="h-10 w-10 text-slate-300" />
                 </div>
-                <h3 className="mt-4 font-display text-lg font-bold text-navy-900 dark:text-white">Your Messages</h3>
-                <p className="mt-1 text-sm text-slate-500">Select a conversation to start chatting.</p>
+                <h3 className="mt-4 font-display text-lg font-bold text-navy-900 dark:text-white">Client Messages</h3>
+                <p className="mt-1 text-sm text-slate-500">Select a conversation to reply to a client.</p>
               </div>
             </div>
           )}

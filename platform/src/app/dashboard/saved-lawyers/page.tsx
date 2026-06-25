@@ -55,14 +55,29 @@ export default function SavedLawyersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold text-navy-900 dark:text-white">Saved Lawyers</h2>
+    <div className="animate-fade-in space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300">
+            <Heart className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="font-display text-xl font-bold text-navy-900 dark:text-white">Saved Lawyers</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Your favourite legal professionals</p>
+          </div>
+        </div>
+      </div>
       {saved.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-4 py-12">
-            <Heart className="h-12 w-12 text-slate-300" />
-            <p className="text-sm text-slate-500">No saved lawyers yet.</p>
-            <Button asChild className="bg-royal-600 hover:bg-royal-500">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-rose-50 dark:bg-rose-950/30">
+              <Heart className="h-6 w-6 text-rose-400" />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold text-navy-900 dark:text-white">No saved lawyers yet</p>
+              <p className="mt-1 text-xs text-slate-500">Save lawyers you're interested in for quick access.</p>
+            </div>
+            <Button asChild>
               <Link href="/lawyers">Browse Lawyers</Link>
             </Button>
           </CardContent>
@@ -84,7 +99,7 @@ export default function SavedLawyersPage() {
                   <button
                     type="button"
                     onClick={() => handleRemove(lawyer.id)}
-                    className="absolute right-2 top-2 rounded-full bg-white/80 p-2 text-red-500 hover:bg-white"
+                    className="absolute right-2 top-2 rounded-full bg-white/80 p-2 text-red-500 backdrop-blur-sm hover:bg-white"
                     aria-label="Remove from saved"
                   >
                     <Heart className="h-4 w-4 fill-current" />

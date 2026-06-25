@@ -7,6 +7,7 @@ import { LawyerProfileTabs } from '@/components/lawyer/lawyer-profile-tabs';
 import { LawyerBookingWidget } from '@/components/lawyer/lawyer-booking-widget';
 import { ViewContactNumber } from '@/components/lawyer/view-contact';
 import { SaveLawyerButton } from '@/components/lawyer/save-lawyer-button';
+import { MessageLawyerButton } from '@/components/lawyer/message-lawyer-button';
 import { getLawyerBySlug, getLawyers, getDefaultProfileReviews } from '@/lib/data';
 import { getLawyerSlug, lawyerProfilePath } from '@/lib/lawyer-slug';
 import { getBookingFeeLabel, cn } from '@/lib/utils';
@@ -151,6 +152,11 @@ export default async function LawyerProfilePage({ params }: Props) {
               <LawyerProfileTabs lawyer={lawyer} reviews={reviews} />
             </div>
             <div className="lg:col-span-4">
+              <MessageLawyerButton
+                lawyerId={lawyer.id}
+                lawyerName={lawyer.name}
+                className="mb-4 w-full"
+              />
               <LawyerBookingWidget
                 feeLabel={bookingFee}
                 lawyerId={lawyer.id}

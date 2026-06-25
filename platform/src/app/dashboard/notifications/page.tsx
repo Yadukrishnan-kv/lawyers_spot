@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Bell, CheckCheck, Info, CalendarCheck, CalendarX, UserCheck, UserX, Megaphone } from 'lucide-react';
 import { fetchNotifications, markNotificationRead, markAllNotificationsRead } from '@/lib/user-auth';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -70,21 +71,36 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="animate-fade-in space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-xl font-bold text-navy-900 dark:text-white">Notifications</h2>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-300">
+            <Bell className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="font-display text-xl font-bold text-navy-900 dark:text-white">Notifications</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Stay updated with your legal matters</p>
+          </div>
+        </div>
         {notifications.some((n) => !n.read) && (
           <Button variant="secondary" size="sm" onClick={handleMarkAllRead}>
-            <CheckCheck className="mr-1 h-4 w-4" /> Mark all as read
+            <CheckCheck className="h-4 w-4" /> Mark all as read
           </Button>
         )}
       </div>
 
       {notifications.length === 0 ? (
-        <div className="flex flex-col items-center gap-4 py-12">
-          <Bell className="h-12 w-12 text-slate-300" />
-          <p className="text-sm text-slate-500">No notifications yet.</p>
-        </div>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-4 py-12">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-navy-800">
+              <Bell className="h-6 w-6 text-slate-400" />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold text-navy-900 dark:text-white">No notifications yet</p>
+              <p className="mt-1 text-xs text-slate-500">We'll notify you when something important happens.</p>
+            </div>
+          </CardContent>
+        </Card>
       ) : (
         <div className="space-y-2">
           {notifications.map((n) => {
@@ -95,15 +111,15 @@ export default function NotificationsPage() {
                 key={n.id}
                 onClick={() => !n.read && handleMarkRead(n.id)}
                 className={cn(
-                  'flex w-full items-start gap-4 rounded-xl border p-4 text-left transition',
+                  'flex w-full items-start gap-4 rounded-xl border p-4 text-left transition hover:shadow-sm',
                   n.read
                     ? 'border-slate-100 bg-white dark:border-navy-700 dark:bg-navy-900'
-                    : 'border-royal-100 bg-royal-50/50 dark:border-royal-900/50 dark:bg-royal-950/20',
+                    : 'border-royal-100 bg-royal-50/50 shadow-sm dark:border-royal-900/50 dark:bg-royal-950/20',
                 )}
               >
                 <div
                   className={cn(
-                    'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
+                    'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
                     n.read
                       ? 'bg-slate-100 text-slate-400 dark:bg-navy-800'
                       : 'bg-royal-100 text-royal-600 dark:bg-royal-900/50 dark:text-royal-300',
@@ -123,7 +139,7 @@ export default function NotificationsPage() {
                     >
                       {n.title}
                     </p>
-                    <span className="shrink-0 text-xs text-slate-400">{timeAgo(n.createdAt)}</span>
+                    <span className="shrink-0 whitespace-nowrap text-xs text-slate-400">{timeAgo(n.createdAt)}</span>
                   </div>
                   <p className="mt-1 text-sm text-slate-500">{n.message}</p>
                 </div>

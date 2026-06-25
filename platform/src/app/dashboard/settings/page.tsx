@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { User, Mail, Phone, MapPin, Save, Camera } from 'lucide-react';
+import { Settings, User, Mail, Phone, MapPin, Save, Camera } from 'lucide-react';
 import { fetchUserProfile, updateUserProfile, fetchCurrentUser } from '@/lib/user-auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -73,29 +73,34 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold text-navy-900 dark:text-white">Settings</h2>
+    <div className="animate-fade-in space-y-6">
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+          <Settings className="h-5 w-5" />
+        </div>
+        <div>
+          <h2 className="font-display text-xl font-bold text-navy-900 dark:text-white">Settings</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Manage your account preferences</p>
+        </div>
+      </div>
 
-      <Card>
-        <CardContent className="p-6">
-          <div className="mb-6 flex items-center gap-4">
-            <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-royal-100 text-2xl font-bold text-royal-600 dark:bg-royal-950/30 dark:text-royal-300">
+      <Card className="overflow-hidden">
+        <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-navy-700 dark:bg-navy-800/50">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-royal-100 to-royal-200 text-lg font-bold text-royal-700 dark:from-royal-950/50 dark:to-royal-900/50 dark:text-royal-300">
               {profile?.profileImage ? (
-                <img
-                  src={profile.profileImage}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
+                <img src={profile.profileImage} alt="" className="h-full w-full object-cover" />
               ) : (
                 profile?.name?.charAt(0)?.toUpperCase() ?? '?'
               )}
             </div>
             <div>
               <p className="font-semibold text-navy-900 dark:text-white">{profile?.name}</p>
-              <p className="text-sm text-slate-500">{profile?.email}</p>
+              <p className="text-xs text-slate-500">{profile?.email}</p>
             </div>
           </div>
-
+        </div>
+        <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="mb-1.5 flex items-center gap-1.5 text-sm font-semibold text-navy-900 dark:text-white">
@@ -160,13 +165,9 @@ export default function SettingsPage() {
               </p>
             )}
 
-            <div className="flex justify-end">
-              <Button
-                type="submit"
-                disabled={saving}
-                className="bg-royal-600 hover:bg-royal-500"
-              >
-                <Save className="mr-1 h-4 w-4" />
+            <div className="flex justify-end border-t border-slate-100 pt-5 dark:border-navy-700">
+              <Button type="submit" disabled={saving}>
+                <Save className="h-4 w-4" />
                 {saving ? 'Saving…' : 'Save Changes'}
               </Button>
             </div>
