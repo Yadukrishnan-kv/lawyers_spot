@@ -2,9 +2,19 @@ import { NextResponse } from 'next/server';
 import { getBackendUrl } from '@/lib/cms/backend-url';
 
 export function forwardBackendResponse(res: Response): NextResponse {
+  const headers: Record<string, string> = {
+    'Content-Type': res.headers.get('content-type') ?? 'application/json',
+  };
+
+  const disposition = res.headers.get('content-disposition');
+  if (disposition) headers['Content-Disposition'] = disposition;
+
+  const contentLen = res.headers.get('content-length');
+  if (contentLen) headers['Content-Length'] = contentLen;
+
   const response = new NextResponse(res.body, {
     status: res.status,
-    headers: { 'Content-Type': res.headers.get('content-type') ?? 'application/json' },
+    headers,
   });
 
   const setCookies = res.headers.getSetCookie?.() ?? [];

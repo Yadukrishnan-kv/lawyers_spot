@@ -59,6 +59,7 @@ export type CmsData = {
   }[];
   bookings: {
     id: string;
+    userId?: string | null;
     lawyerId: string;
     lawyerName: string;
     clientName: string;

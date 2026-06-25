@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { Calendar, Lock, Mail, User, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { fetchCurrentUser } from '@/lib/user-auth';
 
 type Props = {
   open: boolean;
@@ -70,6 +71,12 @@ export function BookingConfirmModal({
 
   useEffect(() => {
     if (open) {
+      fetchCurrentUser().then((u) => {
+        if (u) {
+          setClientName(u.name);
+          setClientEmail(u.email);
+        }
+      });
       const t = window.setTimeout(() => {
         panelRef.current?.querySelector<HTMLInputElement>('input')?.focus();
       }, 50);

@@ -1,58 +1,99 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Breadcrumbs } from '@/components/seo/breadcrumbs';
-import { UserDashboardShell } from '@/components/dashboard/user-dashboard-shell';
+import { Calendar, Clock, Bell, MessageSquare } from 'lucide-react';
+import { fetchUserBookings, fetchNotifications, fetchConversations } from '@/lib/user-auth';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Heart, Bell, MessageSquare, FileText, Settings } from 'lucide-react';
-import type { Metadata } from 'next';
+import { Button } from '@/components/ui/button';
 
-export const metadata: Metadata = { title: 'My Dashboard' };
+export default function DashboardOverviewPage() {
+  const [bookings, setBookings] = useState<Array<{ id: string; lawyerName: string; date: string; time: string; status: string }>>([]);
+  const [unreadNotifs, setUnreadNotifs] = useState(0);
+  const [convCount, setConvCount] = useState(0);
 
-const nav = [
-  { icon: Calendar, label: 'Consultations', href: '/dashboard' },
-  { icon: Heart, label: 'Saved Lawyers', href: '/dashboard/saved' },
-  { icon: Bell, label: 'Notifications', href: '/dashboard/notifications' },
-  { icon: MessageSquare, label: 'Messages', href: '/dashboard/messages' },
-  { icon: FileText, label: 'Documents', href: '/dashboard/documents' },
-  { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
-];
+  useEffect(() => {
+    fetchUserBookings().then((d) => setBookings(d.bookings)).catch(() => {});
+    fetchNotifications().then((d) => setUnreadNotifs(d.notifications.filter((n) => !n.read).length)).catch(() => {});
+    fetchConversations().then((d) => setConvCount(d.conversations.length)).catch(() => {});
+  }, []);
 
-export default function UserDashboardPage() {
+  const upcoming = bookings.filter((b) => b.status === 'pending' || b.status === 'confirmed').slice(0, 5);
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Dashboard' }]} />
-      <h1 className="font-display text-3xl font-bold text-navy-900 dark:text-white">My Dashboard</h1>
-      <UserDashboardShell>
-      <div className="mt-8 grid gap-8 lg:grid-cols-4">
-        <aside className="space-y-1">
-          {nav.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-navy-800"
-            >
-              <item.icon className="h-4 w-4" /> {item.label}
-            </Link>
-          ))}
-        </aside>
-        <div className="lg:col-span-3 space-y-6">
-          <Card>
-            <CardContent>
-              <h2 className="font-bold">Upcoming Consultations</h2>
-              <p className="mt-4 text-sm text-slate-500">No upcoming sessions. <Link href="/lawyers" className="text-royal-600">Book a lawyer</Link></p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <h2 className="font-bold">Recent Activity</h2>
-              <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                <li>Viewed Adv. Priya Sharma profile</li>
-                <li>Saved article: Divorce by Mutual Consent</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
+    <div className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Card>
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-royal-50 text-royal-600 dark:bg-royal-950/30 dark:text-royal-300">
+              <Calendar className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-navy-900 dark:text-white">{bookings.length}</p>
+              <p className="text-xs text-slate-500">Total Consultations</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-300">
+              <Bell className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-navy-900 dark:text-white">{unreadNotifs}</p>
+              <p className="text-xs text-slate-500">Unread Notifications</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-300">
+              <MessageSquare className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-navy-900 dark:text-white">{convCount}</p>
+              <p className="text-xs text-slate-500">Conversations</p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-      </UserDashboardShell>
+
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="mb-4 text-lg font-bold text-navy-900 dark:text-white">Upcoming Consultations</h2>
+          {upcoming.length === 0 ? (
+            <div className="text-center">
+              <p className="text-sm text-slate-500">No upcoming sessions.</p>
+              <Button asChild className="mt-3 bg-royal-600 hover:bg-royal-500">
+                <Link href="/lawyers">Book a Lawyer</Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {upcoming.map((b) => (
+                <div
+                  key={b.id}
+                  className="flex items-center gap-4 rounded-xl border border-slate-100 p-3 dark:border-navy-700"
+                >
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-navy-900 dark:text-white">{b.lawyerName}</p>
+                    <div className="mt-1 flex items-center gap-3 text-xs text-slate-500">
+                      <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{b.date}</span>
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{b.time}</span>
+                    </div>
+                  </div>
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                    {b.status}
+                  </span>
+                </div>
+              ))}
+              <Link href="/dashboard/consultations" className="block text-center text-sm font-medium text-royal-600 hover:text-royal-500">
+                View all consultations
+              </Link>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

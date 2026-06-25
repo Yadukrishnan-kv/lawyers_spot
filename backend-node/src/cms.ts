@@ -117,7 +117,7 @@ export async function loadCms(): Promise<CmsData> {
       ),
       query('SELECT id, name, email, role, last_login FROM admin_users'),
       query(
-        'SELECT id, lawyer_id, lawyer_name, client_name, client_email, date, time, type, status FROM bookings',
+        'SELECT id, user_id, lawyer_id, lawyer_name, client_name, client_email, date, time, type, status FROM bookings',
       ),
       query(
         'SELECT id, name, price_monthly, currency, description, features, highlight, sort_order, active FROM subscription_plans ORDER BY sort_order',
@@ -203,6 +203,7 @@ export async function loadCms(): Promise<CmsData> {
     })),
     bookings: bookings.rows.map((b) => ({
       id: b.id as string,
+      userId: (b.user_id as string) ?? null,
       lawyerId: b.lawyer_id as string,
       lawyerName: b.lawyer_name as string,
       clientName: b.client_name as string,
@@ -482,10 +483,11 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
 
     for (const b of data.bookings) {
       await client.query(
-        `INSERT INTO bookings (id, lawyer_id, lawyer_name, client_name, client_email, date, time, type, status)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        `INSERT INTO bookings (id, user_id, lawyer_id, lawyer_name, client_name, client_email, date, time, type, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
         [
           b.id,
+          (b as { userId?: string | null }).userId ?? null,
           b.lawyerId,
           b.lawyerName,
           b.clientName,

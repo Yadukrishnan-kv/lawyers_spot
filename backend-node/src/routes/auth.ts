@@ -31,7 +31,7 @@ authRouter.post('/signup', sensitiveLimiter, async (req, res) => {
     const pwd = password ? validatePassword(password) : null;
     const cleanName = name ? sanitizeText(name, 120) : '';
     if (!cleanName || !normalized || !pwd) {
-      res.status(400).json({ detail: 'Invalid name, email, or password (min 8 characters)' });
+      res.status(400).json({ detail: 'Invalid name, email, or password (min 6 characters)' });
       return;
     }
     const existing = await findUserByEmail(normalized);

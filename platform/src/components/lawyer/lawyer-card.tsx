@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import type { Lawyer } from '@/lib/data-types';
 import { lawyerProfilePath } from '@/lib/lawyer-slug';
+import { SaveLawyerButton } from '@/components/lawyer/save-lawyer-button';
 
 export function LawyerCard({ lawyer }: { lawyer: Lawyer }) {
   const profileHref = lawyerProfilePath(lawyer);
@@ -28,6 +29,9 @@ export function LawyerCard({ lawyer }: { lawyer: Lawyer }) {
               <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" /> Online
             </Badge>
           )}
+        </div>
+        <div className="absolute right-2 top-2">
+          <SaveLawyerButton lawyerId={lawyer.id} />
         </div>
       </div>
       <CardContent className="flex flex-col gap-3">

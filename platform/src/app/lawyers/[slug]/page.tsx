@@ -6,6 +6,7 @@ import { LawyerCard } from '@/components/lawyer/lawyer-card';
 import { LawyerProfileTabs } from '@/components/lawyer/lawyer-profile-tabs';
 import { LawyerBookingWidget } from '@/components/lawyer/lawyer-booking-widget';
 import { ViewContactNumber } from '@/components/lawyer/view-contact';
+import { SaveLawyerButton } from '@/components/lawyer/save-lawyer-button';
 import { getLawyerBySlug, getLawyers, getDefaultProfileReviews } from '@/lib/data';
 import { getLawyerSlug, lawyerProfilePath } from '@/lib/lawyer-slug';
 import { getBookingFeeLabel, cn } from '@/lib/utils';
@@ -99,7 +100,10 @@ export default async function LawyerProfilePage({ params }: Props) {
                     </span>
                   )}
                 </div>
-                <h1 className="mb-2 text-2xl font-bold text-white md:text-3xl">{lawyer.name}</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="mb-2 text-2xl font-bold text-white md:text-3xl">{lawyer.name}</h1>
+                  <SaveLawyerButton lawyerId={lawyer.id} className="mb-2" />
+                </div>
                 <p className="mb-2 text-white/50">
                   <MapPin className="me-1 inline h-4 w-4" />
                   {locationLine}

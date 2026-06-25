@@ -173,7 +173,7 @@ lawyerRouter.post('/change-password', requireUser(['lawyer']), async (req, res) 
     };
     const pwd = newPassword ? validatePassword(newPassword) : null;
     if (!currentPassword || !pwd) {
-      res.status(400).json({ detail: 'Valid current and new password required (min 8 characters)' });
+      res.status(400).json({ detail: 'Valid current and new password required (min 6 characters)' });
       return;
     }
 

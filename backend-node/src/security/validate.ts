@@ -7,7 +7,7 @@ export function normalizeEmail(email: string): string | null {
 
 export function validatePassword(password: string): string | null {
   const p = password;
-  if (p.length < 8 || p.length > 128) return null;
+  if (p.length < 6 || p.length > 128) return null;
   return p;
 }
 
