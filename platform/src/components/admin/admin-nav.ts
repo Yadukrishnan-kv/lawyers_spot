@@ -15,6 +15,7 @@ export type AdminNavItem = {
 export const adminNav: AdminNavItem[] = [
   { href: '/admin', label: 'Dashboard', icon: 'fe-home', exact: true },
   { href: '/admin/lawyers', label: 'Lawyers', icon: 'fe-briefcase' },
+  { href: '/admin/lawyers-pending', label: 'Lawyers Pending', icon: 'fe-clock' },
   { href: '/admin/subscriptions', label: 'Subscriptions', icon: 'fe-credit-card' },
   { href: '/admin/articles', label: 'Articles', icon: 'fe-file-text' },
   { href: '/admin/qa', label: 'Q&A', icon: 'fe-message-square' },

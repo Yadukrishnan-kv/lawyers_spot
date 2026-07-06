@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: lawyerspot
       POSTGRES_DB: lawyerspot
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - lawyerspot_pgdata:/var/lib/postgresql/data
 

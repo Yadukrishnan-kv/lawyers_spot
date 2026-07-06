@@ -10,6 +10,7 @@ import { lawyerRouter } from './routes/lawyer.js';
 import { publicRouter } from './routes/public.js';
 import { sectionsRouter } from './routes/sections.js';
 import { userRouter } from './routes/user.js';
+import { pendingLawyersRouter } from './routes/admin-pending-lawyers.js';
 import { securityHeaders, requireJsonContentType } from './security/middleware.js';
 
 const app = express();
@@ -65,6 +66,7 @@ app.use('/api/v1/admin/auth/login', adminLoginLimiter);
 app.use('/api/v1', sectionsRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/admin', adminRouter);
+app.use('/api/v1/admin/pending-lawyers', pendingLawyersRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ detail: 'Not found' });

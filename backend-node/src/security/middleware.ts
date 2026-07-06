@@ -20,8 +20,12 @@ export function requireJsonContentType(req: Request, res: Response, next: NextFu
     return;
   }
   const ct = req.headers['content-type'] ?? '';
-  if (!ct.includes('application/json')) {
-    res.status(415).json({ detail: 'Content-Type must be application/json' });
+  if (!ct) {
+    next();
+    return;
+  }
+  if (!ct.includes('application/json') && !ct.includes('multipart/form-data')) {
+    res.status(415).json({ detail: 'Content-Type must be application/json or multipart/form-data' });
     return;
   }
   next();
