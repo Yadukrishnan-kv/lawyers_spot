@@ -30,30 +30,42 @@ body.admin-theme-active .side-menu {
   display: none !important;
 }
 
-/* Prevent stacked sidebar logos before theme CSS hydrates */
-.app-sidebar .side-header .header-brand1 .header-brand-img {
-  display: none;
-  max-height: 2.5rem;
+/* Header logo visibility */
+.logo-horizontal {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-horizontal .header-brand-img {
+  max-height: 2rem;
   width: auto;
-}
-
-.app-sidebar .side-header .header-brand1 .desktop-logo,
-.app-sidebar .side-header .header-brand1 .light-logo1 {
-  display: block;
-}
-
-body.sidenav-toggled .app-sidebar .side-header .header-brand1 .desktop-logo,
-body.sidenav-toggled .app-sidebar .side-header .header-brand1 .light-logo1 {
   display: none;
 }
 
-body.sidenav-toggled .app-sidebar .side-header .header-brand1 .toggle-logo {
+.logo-horizontal .desktop-logo,
+.logo-horizontal .light-logo1 {
   display: block;
+}
+
+/* Sidebar - no logo area needed now */
+.app-sidebar .side-header {
+  display: none;
+}
+
+/* Ensure header does not overlap sidebar logo */
+.app-header {
+  z-index: 1040 !important;
+}
+
+.app-sidebar {
+  z-index: 1050 !important;
 }
 
 /* Stable main content area while route segments load */
 .admin-main-container {
   min-height: 60vh;
+  padding-top: 50px;
 }
 
 .admin-page-content {

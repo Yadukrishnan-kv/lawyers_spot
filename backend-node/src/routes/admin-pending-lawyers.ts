@@ -151,8 +151,8 @@ pendingLawyersRouter.post('/import', upload.single('file'), async (req, res) => 
     if (!req.file) return res.status(400).json({ detail: 'No file uploaded' });
 
     const ext = req.file.originalname.split('.').pop()?.toLowerCase();
-    if (!['xlsx', 'xls'].includes(ext || '')) {
-      return res.status(400).json({ detail: 'Only .xlsx and .xls files are accepted' });
+    if (!['xlsx', 'xls', 'csv'].includes(ext || '')) {
+      return res.status(400).json({ detail: 'Only .xlsx, .xls, and .csv files are accepted' });
     }
 
     const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });

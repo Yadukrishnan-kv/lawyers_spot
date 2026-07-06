@@ -40,10 +40,10 @@ export function buildDefaultSiteContent(): SiteContent {
     legalGuides: nav.legalGuides,
     qaCategories: nav.qaCategories,
     hero: {
-      title: "India's Legal Intelligence Platform",
+      title: "India's Intelligent Legal Platform",
       subtitle:
         'Search verified lawyers, free legal answers, guides & acts — built for scale, SEO & trust.',
-      badges: ['100% Confidential', 'Bar Council Verified'],
+      badges: ['100% Confidential'],
     },
     about: {
       title: DEFAULT_ABOUT_PAGE.title,

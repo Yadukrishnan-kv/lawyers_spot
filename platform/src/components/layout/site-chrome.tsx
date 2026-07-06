@@ -13,7 +13,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   if (isAdmin || isDashboard) {
     return (
       <UserSessionProvider>
-        <Header />
         <main className="min-h-screen">{children}</main>
       </UserSessionProvider>
     );

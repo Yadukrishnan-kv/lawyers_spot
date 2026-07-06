@@ -279,7 +279,7 @@ export function PendingLawyersManager() {
                 ) : rows.length === 0 ? (
                   <tr>
                     <td colSpan={8} className="text-center text-muted py-6">
-                      No records found. Import an Excel file to get started.
+                      No records found. Import an Excel or CSV file to get started.
                     </td>
                   </tr>
                 ) : (
@@ -365,7 +365,7 @@ export function PendingLawyersManager() {
             <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-5 py-4 dark:border-navy-700">
               <div>
                 <h2 className="text-lg font-bold text-navy-900 dark:text-white">Import Lawyers</h2>
-                <p className="text-muted fs-12 mb-0 mt-1">Upload .xlsx or .xls file</p>
+                <p className="text-muted fs-12 mb-0 mt-1">Upload .xlsx, .xls, or .csv file</p>
               </div>
               <button type="button" className="btn btn-sm btn-light rounded-circle p-2" onClick={() => setImportOpen(false)} disabled={importing}>
                 <X className="h-4 w-4" />
@@ -379,10 +379,10 @@ export function PendingLawyersManager() {
                     <p className="text-sm text-slate-600 mb-1">
                       {importFile ? importFile.name : 'Click to select file'}
                     </p>
-                    <p className="text-xs text-slate-400">Accepted: .xlsx, .xls (max 10MB)</p>
+                    <p className="text-xs text-slate-400">Accepted: .xlsx, .xls, .csv (max 10MB)</p>
                     <input
                       type="file"
-                      accept=".xlsx,.xls"
+                      accept=".xlsx,.xls,.csv"
                       className="hidden"
                       onChange={(e) => setImportFile(e.target.files?.[0] ?? null)}
                     />
