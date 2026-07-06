@@ -156,8 +156,8 @@ export async function loadCms(): Promise<CmsData> {
     subscriptionPlans,
     lawyers: applySubscriptionEntitlementsToLawyers(
       normalizeLawyerSlugs(
-        lawyers.rows.map((l) => lawyerRowToJson(l as Record<string, unknown>)) as CmsData['lawyers'],
-      ),
+        lawyers.rows.map((l) => lawyerRowToJson(l as Record<string, unknown>)) as unknown as { slug?: string | null; name: string; id: string }[],
+      ) as CmsData['lawyers'],
       subscriptionPlans,
     ),
     qaPosts: qaPosts.rows.map((q) => ({
@@ -252,7 +252,7 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
   const plans =
     payload.subscriptionPlans?.length ? payload.subscriptionPlans : DEFAULT_SUBSCRIPTION_PLANS;
   const lawyers = applySubscriptionEntitlementsToLawyers(
-    normalizeLawyerSlugs(payload.lawyers),
+    normalizeLawyerSlugs(payload.lawyers as unknown as { slug?: string | null; name: string; id: string }[]),
     plans,
   );
   const data = { ...payload, subscriptionPlans: plans, lawyers };

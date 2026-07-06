@@ -262,7 +262,7 @@ lawyerRouter.post('/subscription/renew', requireUser(['lawyer']), async (req, re
     );
 
     const cms = await loadCms();
-    const idx = cms.lawyers.findIndex((l) => l.id === updated.id);
+    const idx = cms.lawyers.findIndex((l) => (l as Record<string, unknown>).id === (updated as Record<string, unknown>).id);
     if (idx < 0) {
       res.status(404).json({ detail: 'Lawyer profile not found' });
       return;

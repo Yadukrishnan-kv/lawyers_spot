@@ -395,7 +395,7 @@ lawyerContentRouter.post('/qa/questions/:id/answers', requireUser(['lawyer']), a
       );
     }
 
-    await syncQaAnswerCount(req.params.id);
+    await syncQaAnswerCount(req.params.id as string);
 
     const saved = await query(
       'SELECT id, qa_post_id, lawyer_id, lawyer_name, body, status, created_at, updated_at FROM qa_answers WHERE qa_post_id = $1 AND lawyer_id = $2',
