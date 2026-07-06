@@ -75,7 +75,7 @@ export default function SavedLawyersPage() {
             </div>
             <div className="text-center">
               <p className="text-sm font-semibold text-navy-900 dark:text-white">No saved lawyers yet</p>
-              <p className="mt-1 text-xs text-slate-500">Save lawyers you're interested in for quick access.</p>
+              <p className="mt-1 text-xs text-slate-500">Save lawyers you&apos;re interested in for quick access.</p>
             </div>
             <Button asChild>
               <Link href="/lawyers">Browse Lawyers</Link>

@@ -97,7 +97,7 @@ export default function NotificationsPage() {
             </div>
             <div className="text-center">
               <p className="text-sm font-semibold text-navy-900 dark:text-white">No notifications yet</p>
-              <p className="mt-1 text-xs text-slate-500">We'll notify you when something important happens.</p>
+              <p className="mt-1 text-xs text-slate-500">We&apos;ll notify you when something important happens.</p>
             </div>
           </CardContent>
         </Card>
