@@ -120,14 +120,15 @@ export function AdminDataTable<T>({
       </div>
 
       {totalItems > pageSize && (
-        <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3">
-          <p className="text-muted fs-12 mb-0">
+        <div className="admin-pagination">
+          <p className="admin-pagination__info">
             Showing {from}–{to} of {totalItems}
           </p>
-          <ul className="pagination pagination-sm mb-0">
-            <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
-              <button type="button" className="page-link" onClick={() => setPage(page - 1)}>
-                Previous
+          <ul className="admin-pagination__list">
+            <li className={`admin-pagination__item ${page <= 1 ? 'disabled' : ''}`}>
+              <button type="button" className="admin-pagination__link" onClick={() => setPage(page - 1)} disabled={page <= 1}>
+                <span className="admin-pagination__label-desktop">Previous</span>
+                <span className="admin-pagination__label-mobile">&lsaquo;</span>
               </button>
             </li>
             {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -136,23 +137,24 @@ export function AdminDataTable<T>({
                 const prev = arr[idx - 1];
                 const showEllipsis = prev !== undefined && p - prev > 1;
                 return (
-                  <span key={p} className="d-flex">
+                  <span key={p} className="admin-pagination__group">
                     {showEllipsis && (
-                      <li className="page-item disabled">
-                        <span className="page-link">…</span>
+                      <li className="admin-pagination__item disabled">
+                        <span className="admin-pagination__link">&hellip;</span>
                       </li>
                     )}
-                    <li className={`page-item ${p === page ? 'active' : ''}`}>
-                      <button type="button" className="page-link" onClick={() => setPage(p)}>
+                    <li className={`admin-pagination__item ${p === page ? 'active' : ''}`}>
+                      <button type="button" className="admin-pagination__link" onClick={() => setPage(p)}>
                         {p}
                       </button>
                     </li>
                   </span>
                 );
               })}
-            <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
-              <button type="button" className="page-link" onClick={() => setPage(page + 1)}>
-                Next
+            <li className={`admin-pagination__item ${page >= totalPages ? 'disabled' : ''}`}>
+              <button type="button" className="admin-pagination__link" onClick={() => setPage(page + 1)} disabled={page >= totalPages}>
+                <span className="admin-pagination__label-desktop">Next</span>
+                <span className="admin-pagination__label-mobile">&rsaquo;</span>
               </button>
             </li>
           </ul>

@@ -75,7 +75,7 @@ export async function loadCms() {
     if (!site) {
         throw new Error('Site not configured. Run: npm run db:setup');
     }
-    const [stats, practiceAreas, states, cities, lawyers, qaPosts, articles, topics, reviews, adminUsers, bookings, plansRes,] = await Promise.all([
+    const [stats, practiceAreas, states, cities, lawyers, qaPosts, articles, articleLawyers, topics, reviews, adminUsers, bookings, plansRes,] = await Promise.all([
         query('SELECT label, value FROM stats ORDER BY sort_order'),
         query('SELECT slug, name, icon, lawyers FROM practice_areas ORDER BY name'),
         query('SELECT slug, name, code, active FROM states ORDER BY name'),
@@ -83,12 +83,21 @@ export async function loadCms() {
         query('SELECT * FROM lawyers ORDER BY name'),
         query('SELECT id, title, excerpt, category, answers, views, slug, status, content FROM qa_posts'),
         query('SELECT slug, title, excerpt, category, author, date, read_time, image, trending, status, content, lawyer_id FROM articles'),
+        query('SELECT article_slug, lawyer_id FROM article_lawyers'),
         query('SELECT topic FROM trending_topics ORDER BY sort_order'),
         query('SELECT author, rating, text, date, verified, avatar FROM default_profile_reviews ORDER BY sort_order'),
         query('SELECT id, name, email, role, last_login FROM admin_users'),
         query('SELECT id, user_id, lawyer_id, lawyer_name, client_name, client_email, date, time, type, status FROM bookings'),
         query('SELECT id, name, price_monthly, currency, description, features, highlight, sort_order, active FROM subscription_plans ORDER BY sort_order'),
     ]);
+    const assignedByArticle = new Map();
+    for (const row of articleLawyers.rows) {
+        const slug = row.article_slug;
+        const lid = row.lawyer_id;
+        if (!assignedByArticle.has(slug))
+            assignedByArticle.set(slug, []);
+        assignedByArticle.get(slug).push(lid);
+    }
     const subscriptionPlans = plansRes.rows.length > 0
         ? plansRes.rows.map((r) => planRowToJson(r))
         : DEFAULT_SUBSCRIPTION_PLANS;
@@ -141,6 +150,7 @@ export async function loadCms() {
             status: a.status,
             content: a.content ?? undefined,
             lawyerId: a.lawyer_id ?? undefined,
+            assignedLawyerIds: assignedByArticle.get(a.slug) ?? [],
         })),
         trendingTopics: topics.rows.map((t) => t.topic),
         defaultProfileReviews: reviews.rows.map((r) => ({
@@ -177,6 +187,7 @@ export async function loadCms() {
 }
 async function clearContentTables(client) {
     const tables = [
+        'article_lawyers',
         'bookings',
         'admin_users',
         'default_profile_reviews',
@@ -373,6 +384,12 @@ export async function saveCms(payload) {
                 a.content ?? null,
                 a.lawyerId ?? null,
             ]);
+            const assigned = a.assignedLawyerIds ?? [];
+            if (assigned.length > 0) {
+                for (const lawyerId of assigned) {
+                    await client.query(`INSERT INTO article_lawyers (article_slug, lawyer_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`, [a.slug, lawyerId]);
+                }
+            }
         }
         for (let i = 0; i < data.trendingTopics.length; i++) {
             await client.query('INSERT INTO trending_topics (topic, sort_order) VALUES ($1, $2)', [

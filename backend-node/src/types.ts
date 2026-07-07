@@ -40,6 +40,7 @@ export type CmsData = {
     image: string;
     trending: boolean;
     status?: string;
+    assignedLawyerIds?: string[];
   }[];
   trendingTopics: string[];
   defaultProfileReviews: {

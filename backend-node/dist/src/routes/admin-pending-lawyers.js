@@ -107,7 +107,7 @@ pendingLawyersRouter.get('/', async (req, res) => {
         const total = countResult.rows[0].total;
         const rows = await query(`SELECT id, enrollment_no, name, father_name, mobile, email, gender, district, state, bar_council, practice_areas, status, rejection_reason, verified_by, verified_at, rejected_by, rejected_at, import_batch_id, created_at, updated_at
        FROM lawyer_pending ${where}
-       ORDER BY created_at DESC
+       ORDER BY sort_order ASC, created_at DESC
        LIMIT $${idx} OFFSET $${idx + 1}`, [...params, limit, offset]);
         res.json({ rows: rows.rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     }
@@ -187,8 +187,8 @@ pendingLawyersRouter.post('/import', upload.single('file'), async (req, res) => 
             if (mapped.enrollmentNo)
                 existingEnrollments.add(mapped.enrollmentNo.toLowerCase());
             try {
-                await query(`INSERT INTO lawyer_pending (enrollment_no, name, father_name, mobile, email, gender, district, state, bar_council, practice_areas, import_batch_id, raw_data)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`, [
+                await query(`INSERT INTO lawyer_pending (enrollment_no, name, father_name, mobile, email, gender, district, state, bar_council, practice_areas, import_batch_id, raw_data, sort_order)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`, [
                     mapped.enrollmentNo,
                     sanitizeText(mapped.name, 255),
                     mapped.fatherName ? sanitizeText(mapped.fatherName, 255) : null,
@@ -201,6 +201,7 @@ pendingLawyersRouter.post('/import', upload.single('file'), async (req, res) => 
                     mapped.practiceAreas ? sanitizeText(mapped.practiceAreas, 1000) : null,
                     batchId,
                     JSON.stringify(raw),
+                    i,
                 ]);
                 imported++;
             }
@@ -329,5 +330,19 @@ pendingLawyersRouter.delete('/:id', async (req, res) => {
     catch (e) {
         console.error(e);
         res.status(500).json({ detail: 'Delete failed' });
+    }
+});
+pendingLawyersRouter.post('/bulk-delete', async (req, res) => {
+    try {
+        const { ids } = req.body;
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ detail: 'No IDs provided' });
+        }
+        const r = await query('DELETE FROM lawyer_pending WHERE id = ANY($1)', [ids]);
+        res.json({ success: true, deleted: r.rowCount });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ detail: 'Bulk delete failed' });
     }
 });

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Upload, Eye, CheckCircle, XCircle, Search, X, Loader2, Trash2 } from 'lucide-react';
+import { Upload, Eye, CheckCircle, XCircle, X, Loader2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -59,6 +59,8 @@ export function PendingLawyersManager() {
   const [rejectReason, setRejectReason] = useState('');
   const [rejectLoading, setRejectLoading] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -165,6 +167,45 @@ export function PendingLawyersManager() {
     }
   }
 
+  async function handleBulkDelete() {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    if (!confirm(`Delete ${ids.length} selected record(s) permanently?`)) return;
+    setBulkDeleting(true);
+    try {
+      const res = await fetch('/api/admin/pending-lawyers/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.detail || 'Bulk delete failed');
+      showToast('success', `Deleted ${result.deleted ?? ids.length} records`);
+      setSelectedIds(new Set());
+      fetchData();
+    } catch {
+      showToast('error', 'Bulk delete failed');
+    }
+    setBulkDeleting(false);
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === rows.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(rows.map((r) => r.id)));
+    }
+  }
+
+  function toggleSelect(id: number) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
   const rows = data?.rows ?? [];
   const totalItems = data?.total ?? 0;
   const totalPages = data?.totalPages ?? 1;
@@ -192,23 +233,23 @@ export function PendingLawyersManager() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-5">
         <div className="card border-amber-200 bg-amber-50">
-          <div className="card-body text-center">
-            <p className="text-amber-600 text-2xl font-bold mb-0">{stats.pending}</p>
-            <p className="text-amber-600 text-sm mb-0">Pending</p>
+          <div className="card-body text-center py-3 sm:py-4">
+            <p className="text-amber-600 text-xl sm:text-2xl font-bold mb-0">{stats.pending}</p>
+            <p className="text-amber-600 text-xs sm:text-sm mb-0">Pending</p>
           </div>
         </div>
         <div className="card border-emerald-200 bg-emerald-50">
-          <div className="card-body text-center">
-            <p className="text-emerald-600 text-2xl font-bold mb-0">{stats.verified}</p>
-            <p className="text-emerald-600 text-sm mb-0">Verified</p>
+          <div className="card-body text-center py-3 sm:py-4">
+            <p className="text-emerald-600 text-xl sm:text-2xl font-bold mb-0">{stats.verified}</p>
+            <p className="text-emerald-600 text-xs sm:text-sm mb-0">Verified</p>
           </div>
         </div>
         <div className="card border-red-200 bg-red-50">
-          <div className="card-body text-center">
-            <p className="text-red-600 text-2xl font-bold mb-0">{stats.rejected}</p>
-            <p className="text-red-600 text-sm mb-0">Rejected</p>
+          <div className="card-body text-center py-3 sm:py-4">
+            <p className="text-red-600 text-xl sm:text-2xl font-bold mb-0">{stats.rejected}</p>
+            <p className="text-red-600 text-xs sm:text-sm mb-0">Rejected</p>
           </div>
         </div>
       </div>
@@ -217,13 +258,12 @@ export function PendingLawyersManager() {
         <div className="card-body">
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search name, email, mobile, enrollment..."
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <select
@@ -255,10 +295,33 @@ export function PendingLawyersManager() {
 
       <div className="card">
         <div className="card-body">
+          {selectedIds.size > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mb-3 p-2 sm:p-3 bg-red-50 border border-red-200 rounded-lg">
+              <span className="text-xs sm:text-sm font-medium text-red-700">{selectedIds.size} selected</span>
+              <button
+                type="button"
+                onClick={handleBulkDelete}
+                disabled={bulkDeleting}
+                className="inline-flex items-center gap-1 rounded-md bg-red-600 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                {bulkDeleting ? 'Deleting…' : 'Delete'}
+              </button>
+            </div>
+          )}
+
           <div className="table-responsive">
             <table className="table table-bordered text-nowrap border-bottom mb-0">
               <thead>
                 <tr>
+                  <th className="text-center align-middle">
+                    <input
+                      type="checkbox"
+                      className="form-check-input m-0"
+                      checked={rows.length > 0 && selectedIds.size === rows.length}
+                      onChange={toggleSelectAll}
+                    />
+                  </th>
                   <th>#</th>
                   <th>Name</th>
                   <th>Enrollment</th>
@@ -272,19 +335,27 @@ export function PendingLawyersManager() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-6">
+                    <td colSpan={9} className="text-center py-6">
                       <Loader2 className="h-5 w-5 animate-spin text-blue-600 mx-auto" />
                     </td>
                   </tr>
                 ) : rows.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center text-muted py-6">
+                    <td colSpan={9} className="text-center text-muted py-6">
                       No records found. Import an Excel or CSV file to get started.
                     </td>
                   </tr>
                 ) : (
                   rows.map((row, idx) => (
-                    <tr key={row.id}>
+                    <tr key={row.id} className={selectedIds.has(row.id) ? 'table-active' : ''}>
+                      <td className="text-center align-middle">
+                        <input
+                          type="checkbox"
+                          className="form-check-input m-0"
+                          checked={selectedIds.has(row.id)}
+                          onChange={() => toggleSelect(row.id)}
+                        />
+                      </td>
                       <td>{from + idx}</td>
                       <td className="fw-semibold">{row.name}</td>
                       <td>{row.enrollment_no || '—'}</td>
@@ -325,13 +396,16 @@ export function PendingLawyersManager() {
           </div>
 
           {totalItems > 15 && (
-            <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3">
-              <p className="text-muted fs-12 mb-0">
+            <div className="admin-pagination">
+              <p className="admin-pagination__info">
                 Showing {from}–{to} of {totalItems}
               </p>
-              <ul className="pagination pagination-sm mb-0">
-                <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
-                  <button type="button" className="page-link" onClick={() => setPage(page - 1)}>Previous</button>
+              <ul className="admin-pagination__list">
+                <li className={`admin-pagination__item ${page <= 1 ? 'disabled' : ''}`}>
+                  <button type="button" className="admin-pagination__link" onClick={() => setPage(page - 1)} disabled={page <= 1}>
+                    <span className="admin-pagination__label-desktop">Previous</span>
+                    <span className="admin-pagination__label-mobile">&lsaquo;</span>
+                  </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
@@ -339,18 +413,25 @@ export function PendingLawyersManager() {
                     const prev = arr[idx - 1];
                     const showEllipsis = prev !== undefined && p - prev > 1;
                     return (
-                      <span key={p} className="d-flex">
+                      <span key={p} className="admin-pagination__group">
                         {showEllipsis && (
-                          <li className="page-item disabled"><span className="page-link">…</span></li>
+                          <li className="admin-pagination__item disabled">
+                            <span className="admin-pagination__link">&hellip;</span>
+                          </li>
                         )}
-                        <li className={`page-item ${p === page ? 'active' : ''}`}>
-                          <button type="button" className="page-link" onClick={() => setPage(p)}>{p}</button>
+                        <li className={`admin-pagination__item ${p === page ? 'active' : ''}`}>
+                          <button type="button" className="admin-pagination__link" onClick={() => setPage(p)}>
+                            {p}
+                          </button>
                         </li>
                       </span>
                     );
                   })}
-                <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
-                  <button type="button" className="page-link" onClick={() => setPage(page + 1)}>Next</button>
+                <li className={`admin-pagination__item ${page >= totalPages ? 'disabled' : ''}`}>
+                  <button type="button" className="admin-pagination__link" onClick={() => setPage(page + 1)} disabled={page >= totalPages}>
+                    <span className="admin-pagination__label-desktop">Next</span>
+                    <span className="admin-pagination__label-mobile">&rsaquo;</span>
+                  </button>
                 </li>
               </ul>
             </div>

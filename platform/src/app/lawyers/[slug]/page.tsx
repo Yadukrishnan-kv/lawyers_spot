@@ -8,7 +8,7 @@ import { LawyerBookingWidget } from '@/components/lawyer/lawyer-booking-widget';
 import { ViewContactNumber } from '@/components/lawyer/view-contact';
 import { SaveLawyerButton } from '@/components/lawyer/save-lawyer-button';
 import { MessageLawyerButton } from '@/components/lawyer/message-lawyer-button';
-import { getLawyerBySlug, getLawyers, getDefaultProfileReviews } from '@/lib/data';
+import { getLawyerBySlug, getLawyers, getDefaultProfileReviews, getArticles } from '@/lib/data';
 import { getLawyerSlug, lawyerProfilePath } from '@/lib/lawyer-slug';
 import { getBookingFeeLabel, cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -54,6 +54,13 @@ export default async function LawyerProfilePage({ params }: Props) {
       ? lawyer.clientReviews
       : await getDefaultProfileReviews();
 
+  const allArticles = await getArticles();
+  const lawyerArticles = allArticles.filter(
+    (a) =>
+      a.assignedLawyerIds?.includes(lawyer.id) ||
+      (a.lawyerId && a.lawyerId === lawyer.id),
+  );
+
   return (
     <>
       <header className="profile-header">
@@ -78,17 +85,17 @@ export default async function LawyerProfilePage({ params }: Props) {
             </ol>
           </nav>
 
-          <div className="flex flex-col items-end gap-6 md:flex-row md:flex-wrap">
+          <div className="flex flex-col items-start gap-6 md:flex-row md:flex-wrap md:items-end">
             <div className="flex w-full flex-1 flex-col gap-4 sm:flex-row sm:flex-nowrap md:max-w-[66%]">
               <Image
                 src={lawyer.image}
                 alt={lawyer.name}
                 width={160}
                 height={160}
-                className="profile-avatar"
+                className="profile-avatar sm:h-40 sm:w-40"
                 priority
               />
-              <div>
+              <div className="min-w-0">
                 <div className="mb-2 flex flex-wrap gap-2">
                   {lawyer.verified && (
                     <span className="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2 py-1 text-xs font-semibold text-white">
@@ -102,10 +109,10 @@ export default async function LawyerProfilePage({ params }: Props) {
                   )}
                 </div>
                 <div className="flex items-center gap-3">
-                  <h1 className="mb-2 text-2xl font-bold text-white md:text-3xl">{lawyer.name}</h1>
+                  <h1 className="mb-2 text-xl font-bold text-white sm:text-2xl md:text-3xl">{lawyer.name}</h1>
                   <SaveLawyerButton lawyerId={lawyer.id} className="mb-2" />
                 </div>
-                <p className="mb-2 text-white/50">
+                <p className="mb-2 text-sm text-white/50 sm:text-base">
                   <MapPin className="me-1 inline h-4 w-4" />
                   {locationLine}
                 </p>
@@ -116,7 +123,7 @@ export default async function LawyerProfilePage({ params }: Props) {
                       className={cn('h-4 w-4', i < Math.round(lawyer.rating) ? 'fill-current' : 'text-white/30')}
                     />
                   ))}
-                  <span className="ms-1">
+                  <span className="ms-1 text-sm">
                     {lawyer.rating} ({lawyer.reviews} reviews)
                   </span>
                 </div>
@@ -145,11 +152,11 @@ export default async function LawyerProfilePage({ params }: Props) {
         </div>
       </header>
 
-      <main className="py-10 pt-4">
+      <main className="py-6 sm:py-10 pt-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-12">
             <div className="lg:col-span-8">
-              <LawyerProfileTabs lawyer={lawyer} reviews={reviews} />
+              <LawyerProfileTabs lawyer={lawyer} reviews={reviews} articles={lawyerArticles} />
             </div>
             <div className="lg:col-span-4">
               <MessageLawyerButton
@@ -166,9 +173,9 @@ export default async function LawyerProfilePage({ params }: Props) {
             </div>
           </div>
 
-          <section className="mt-12 border-t border-slate-200 pt-12 dark:border-navy-800">
-            <h2 className="mb-4 font-display text-xl font-bold text-navy-900 dark:text-white">Similar Lawyers</h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <section className="mt-8 sm:mt-12 border-t border-slate-200 pt-8 sm:pt-12 dark:border-navy-800">
+            <h2 className="mb-4 font-display text-lg sm:text-xl font-bold text-navy-900 dark:text-white">Similar Lawyers</h2>
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((l) => (
                 <LawyerCard key={l.id} lawyer={l} />
               ))}

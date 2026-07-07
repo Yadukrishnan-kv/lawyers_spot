@@ -62,10 +62,59 @@ body.admin-theme-active .side-menu {
   z-index: 1050 !important;
 }
 
+/* ===== Mobile sidebar — full responsive fix ===== */
+@media (max-width: 991px) {
+  /* Remove sticky from sidebar wrapper so position: fixed works */
+  .admin-sidebar-wrap {
+    position: static !important;
+  }
+
+  /* Sidebar slides in from left when toggled */
+  body.sidenav-toggled .app-sidebar {
+    position: fixed !important;
+    inset-inline-start: 0 !important;
+    inset-block-start: 0 !important;
+    inset-block-end: 0 !important;
+    z-index: 99999 !important;
+    width: 270px !important;
+    max-width: 85vw;
+  }
+
+  /* Dark overlay behind sidebar */
+  body.sidenav-toggled .app-sidebar__overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99998 !important;
+    visibility: visible !important;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* Main content stays below sidebar when open */
+  body.sidenav-toggled .page-main,
+  body.sidenav-toggled .main-content,
+  body.sidenav-toggled .app-content {
+    position: relative;
+    z-index: auto;
+  }
+
+  /* Prevent body scroll when sidebar is open */
+  body.sidenav-toggled {
+    overflow: hidden;
+  }
+}
+
 /* Stable main content area while route segments load */
 .admin-main-container {
   min-height: 60vh;
   padding-top: 50px;
+}
+
+@media (max-width: 767.98px) {
+  .admin-main-container {
+    padding-top: 60px;
+  }
 }
 
 .admin-page-content {
@@ -187,4 +236,146 @@ body.admin-theme-active .side-menu {
 .app .side-menu .slide-menu .slide-item {
   font-size: 0.8125rem;
   padding: 0.45rem 0.75rem 0.45rem 2.75rem;
+}
+
+/* ===== Responsive table pagination ===== */
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-pagination__info {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+.admin-pagination__list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-pagination__group {
+  display: flex;
+}
+
+.admin-pagination__item {
+  display: flex;
+}
+
+.admin-pagination__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #495057;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.admin-pagination__link:hover:not(:disabled):not(.disabled) {
+  color: #6259ca;
+  border-color: #6259ca;
+  background: rgba(98, 89, 202, 0.04);
+}
+
+.admin-pagination__item.active .admin-pagination__link {
+  color: #fff;
+  background: #6259ca;
+  border-color: #6259ca;
+}
+
+.admin-pagination__item.disabled .admin-pagination__link {
+  color: #adb5bd;
+  background: #f8f9fa;
+  border-color: #dee2e6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.admin-pagination__link:disabled {
+  color: #adb5bd;
+  background: #f8f9fa;
+  border-color: #dee2e6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Hide arrows on mobile, show text */
+.admin-pagination__label-mobile {
+  display: none;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 575.98px) {
+  .admin-pagination {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .admin-pagination__info {
+    text-align: center;
+  }
+
+  .admin-pagination__list {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .admin-pagination__link {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    font-size: 0.8125rem;
+  }
+
+  /* Show arrows, hide text on mobile */
+  .admin-pagination__label-desktop {
+    display: none;
+  }
+
+  .admin-pagination__label-mobile {
+    display: inline;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .admin-pagination__link {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 8px;
+  }
+}
+
+/* Checkbox in table cells */
+.table td:first-child,
+.table th:first-child {
+  text-align: center;
+  vertical-align: middle;
+  width: 32px;
+  min-width: 32px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }

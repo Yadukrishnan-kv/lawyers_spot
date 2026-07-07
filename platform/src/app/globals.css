@@ -103,3 +103,35 @@
 .calendar-day.empty {
   @apply cursor-default;
 }
+
+/* ---- Lawyer profile responsive ---- */
+@media (max-width: 639.98px) {
+  .profile-header {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+  }
+
+  .profile-avatar {
+    height: 5rem;
+    width: 5rem;
+    border-width: 2px;
+  }
+
+  .booking-widget {
+    position: static;
+  }
+
+  .calendar-grid {
+    gap: 0.2rem;
+  }
+
+  .profile-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .profile-tabs::-webkit-scrollbar {
+    display: none;
+  }
+}

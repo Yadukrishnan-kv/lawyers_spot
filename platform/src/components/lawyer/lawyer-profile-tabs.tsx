@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Star, Landmark, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { Star, Landmark, ChevronDown, FileText } from 'lucide-react';
 import type { Lawyer, LawyerReview } from '@/lib/data-types';
+import type { Article } from '@/lib/cms/types';
 import { cn } from '@/lib/utils';
 
 const DEFAULT_FAQ_ITEMS = [
@@ -25,7 +27,7 @@ const DEFAULT_FAQ_ITEMS = [
   },
 ];
 
-type TabId = 'about' | 'experience' | 'reviews' | 'faq';
+type TabId = 'about' | 'experience' | 'reviews' | 'faq' | 'articles';
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -43,9 +45,10 @@ function StarRating({ rating }: { rating: number }) {
 type Props = {
   lawyer: Lawyer;
   reviews: LawyerReview[];
+  articles?: Article[];
 };
 
-export function LawyerProfileTabs({ lawyer, reviews }: Props) {
+export function LawyerProfileTabs({ lawyer, reviews, articles = [] }: Props) {
   const [tab, setTab] = useState<TabId>('about');
   const faqItems =
     lawyer.profileFaq && lawyer.profileFaq.length > 0
@@ -67,6 +70,7 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
     { id: 'about', label: 'About' },
     { id: 'experience', label: 'Experience' },
     { id: 'reviews', label: 'Reviews' },
+    ...(articles.length > 0 ? [{ id: 'articles' as TabId, label: `Articles (${articles.length})` }] : []),
     { id: 'faq', label: 'FAQ' },
   ];
 
@@ -95,12 +99,12 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
 
       {tab === 'about' && (
         <div className="space-y-4">
-          <div className="rounded-2xl border-0 bg-white p-6 shadow-sm dark:bg-navy-900">
-            <h2 className="mb-3 text-lg font-bold text-navy-900 dark:text-white">About</h2>
-            <p className="mb-0 text-slate-500 dark:text-slate-400">{bio}</p>
+          <div className="rounded-2xl border-0 bg-white p-4 sm:p-6 shadow-sm dark:bg-navy-900">
+            <h2 className="mb-3 text-base sm:text-lg font-bold text-navy-900 dark:text-white">About</h2>
+            <p className="mb-0 text-sm sm:text-base text-slate-500 dark:text-slate-400">{bio}</p>
           </div>
-          <div className="rounded-2xl border-0 bg-white p-6 shadow-sm dark:bg-navy-900">
-            <h2 className="mb-3 text-lg font-bold text-navy-900 dark:text-white">Education</h2>
+          <div className="rounded-2xl border-0 bg-white p-4 sm:p-6 shadow-sm dark:bg-navy-900">
+            <h2 className="mb-3 text-base sm:text-lg font-bold text-navy-900 dark:text-white">Education</h2>
             {education.length > 0 ? (
               education.map((e, i) => (
                 <div key={i} className="timeline-item">
@@ -114,12 +118,12 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
               <p className="text-sm text-slate-500">—</p>
             )}
           </div>
-          <div className="rounded-2xl border-0 bg-white p-6 shadow-sm dark:bg-navy-900">
-            <h2 className="mb-3 text-lg font-bold text-navy-900 dark:text-white">Court Practice</h2>
+          <div className="rounded-2xl border-0 bg-white p-4 sm:p-6 shadow-sm dark:bg-navy-900">
+            <h2 className="mb-3 text-base sm:text-lg font-bold text-navy-900 dark:text-white">Court Practice</h2>
             <ul className="mb-0 list-none space-y-2">
               {courts.length > 0 ? (
                 courts.map((c) => (
-                  <li key={c} className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                  <li key={c} className="flex items-center gap-2 text-sm sm:text-base text-slate-600 dark:text-slate-400">
                     <Landmark className="h-4 w-4 shrink-0 text-royal-600" />
                     {c}
                   </li>
@@ -133,8 +137,8 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
       )}
 
       {tab === 'experience' && (
-        <div className="rounded-2xl border-0 bg-white p-6 shadow-sm dark:bg-navy-900">
-          <h2 className="mb-3 text-lg font-bold text-navy-900 dark:text-white">Professional Timeline</h2>
+        <div className="rounded-2xl border-0 bg-white p-4 sm:p-6 shadow-sm dark:bg-navy-900">
+          <h2 className="mb-3 text-base sm:text-lg font-bold text-navy-900 dark:text-white">Professional Timeline</h2>
           <p className="mb-3 text-sm text-slate-500">
             <span className="font-medium text-navy-900 dark:text-white">{lawyer.experience} years</span> of legal
             experience
@@ -151,8 +155,8 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
       )}
 
       {tab === 'reviews' && (
-        <div className="rounded-2xl border-0 bg-white p-6 shadow-sm dark:bg-navy-900">
-          <h2 className="mb-4 text-lg font-bold text-navy-900 dark:text-white">Client Reviews</h2>
+        <div className="rounded-2xl border-0 bg-white p-4 sm:p-6 shadow-sm dark:bg-navy-900">
+          <h2 className="mb-4 text-base sm:text-lg font-bold text-navy-900 dark:text-white">Client Reviews</h2>
           {reviews.map((review, i) => (
             <div
               key={i}
@@ -181,6 +185,53 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
         </div>
       )}
 
+      {tab === 'articles' && (
+        <div className="rounded-2xl border-0 bg-white p-4 sm:p-6 shadow-sm dark:bg-navy-900">
+          <h2 className="mb-4 text-base sm:text-lg font-bold text-navy-900 dark:text-white">Published Articles</h2>
+          {articles.length === 0 ? (
+            <p className="text-sm text-slate-500">No articles published yet.</p>
+          ) : (
+            <div className="space-y-4">
+              {articles.map((article) => (
+                <div
+                  key={article.slug}
+                  className="flex gap-3 sm:gap-4 border-b border-slate-100 pb-4 last:border-0 last:pb-0 dark:border-navy-700"
+                >
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    width={120}
+                    height={80}
+                    className="h-16 w-20 sm:h-20 sm:w-28 shrink-0 rounded-lg object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="mb-1 text-sm font-semibold text-navy-900 dark:text-white">
+                      <Link
+                        href={`/articles/${encodeURIComponent(article.slug)}`}
+                        className="hover:text-royal-600 dark:hover:text-royal-400"
+                      >
+                        {article.title}
+                      </Link>
+                    </h3>
+                    <p className="mb-1 text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                      {article.excerpt}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-400">
+                      <FileText className="h-3 w-3" />
+                      <span>{article.category}</span>
+                      <span>·</span>
+                      <span>{article.date}</span>
+                      <span>·</span>
+                      <span>{article.readTime}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {tab === 'faq' && (
         <div className="space-y-2">
           {faqItems.map((item) => {
@@ -192,7 +243,7 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
               >
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between px-4 py-3 text-left font-semibold text-navy-900 dark:text-white"
+                  className="flex w-full items-center justify-between px-3 sm:px-4 py-3 text-left text-sm sm:text-base font-semibold text-navy-900 dark:text-white"
                   onClick={() => setOpenFaq(isOpen ? '' : item.id)}
                   aria-expanded={isOpen}
                 >
@@ -200,7 +251,7 @@ export function LawyerProfileTabs({ lawyer, reviews }: Props) {
                   <ChevronDown className={cn('h-4 w-4 transition', isOpen && 'rotate-180')} />
                 </button>
                 {isOpen && (
-                  <div className="border-t border-slate-100 px-4 py-3 text-sm text-slate-600 dark:border-navy-700 dark:text-slate-400">
+                  <div className="border-t border-slate-100 px-3 sm:px-4 py-3 text-sm text-slate-600 dark:border-navy-700 dark:text-slate-400">
                     {item.answer}
                   </div>
                 )}

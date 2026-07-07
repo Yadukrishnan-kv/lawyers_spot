@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { config } from '../config.js';
 import { clearSessionCookie, requireAdmin, setSessionCookie } from '../auth.js';
 import { loadCms, saveCms } from '../cms.js';
+import { query } from '../db.js';
 import { safeCompareStrings } from '../security/safe-compare.js';
 import { normalizeEmail } from '../security/validate.js';
 export const adminRouter = Router();
@@ -40,5 +41,41 @@ adminRouter.put('/cms', requireAdmin, async (req, res) => {
     catch (e) {
         console.error(e);
         res.status(500).json({ detail: 'Failed to save CMS' });
+    }
+});
+adminRouter.get('/articles/:slug/lawyers', requireAdmin, async (req, res) => {
+    try {
+        const rows = await query('SELECT lawyer_id FROM article_lawyers WHERE article_slug = $1', [req.params.slug]);
+        res.json({ lawyerIds: rows.rows.map((r) => r.lawyer_id) });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ detail: 'Failed to load article lawyers' });
+    }
+});
+adminRouter.put('/articles/:slug/lawyers', requireAdmin, async (req, res) => {
+    try {
+        const { lawyerIds } = req.body;
+        if (!Array.isArray(lawyerIds)) {
+            res.status(400).json({ detail: 'lawyerIds must be an array' });
+            return;
+        }
+        const slug = req.params.slug;
+        const articleCheck = await query('SELECT slug FROM articles WHERE slug = $1', [slug]);
+        if (!articleCheck.rows[0]) {
+            res.status(404).json({ detail: 'Article not found' });
+            return;
+        }
+        const uniqueIds = [...new Set(lawyerIds.filter((id) => id && id.trim()))];
+        await query('DELETE FROM article_lawyers WHERE article_slug = $1', [slug]);
+        for (const lawyerId of uniqueIds) {
+            await query('INSERT INTO article_lawyers (article_slug, lawyer_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [slug, lawyerId]);
+        }
+        await query('UPDATE site_config SET updated_at = NOW() WHERE id = 1');
+        res.json({ success: true, lawyerIds: uniqueIds });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ detail: 'Failed to update article lawyers' });
     }
 });

@@ -25,13 +25,13 @@ export function ViewContactNumber({ phone, className }: Props) {
       type="button"
       onClick={() => setRevealed(true)}
       className={cn(
-        'w-full rounded-md bg-royal-600 px-4 py-3 text-center text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:bg-royal-500 focus:outline-none focus:ring-2 focus:ring-royal-400 focus:ring-offset-2 focus:ring-offset-navy-800',
+        'w-full rounded-md bg-royal-600 px-4 py-3 text-center text-xs sm:text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:bg-royal-500 focus:outline-none focus:ring-2 focus:ring-royal-400 focus:ring-offset-2 focus:ring-offset-navy-800',
         revealed && 'cursor-default hover:bg-royal-600',
         className
       )}
       aria-label={revealed ? `Contact number ${fullDisplay}` : 'View contact number'}
     >
-      {label}
+      <span className="block truncate">{label}</span>
     </button>
   );
 }

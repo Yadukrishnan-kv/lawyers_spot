@@ -197,6 +197,7 @@ export type Article = {
   status?: 'published' | 'draft';
   content?: string;
   lawyerId?: string;
+  assignedLawyerIds?: string[];
 };
 
 export type QaAnswer = {
