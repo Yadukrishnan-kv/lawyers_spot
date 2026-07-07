@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { Article, CmsData } from '@/lib/cms/types';
 import { AdminInput, SaveBar, useCmsSave } from '@/components/admin/cms-editor';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
 
 type Props = {
   initial: CmsData;
@@ -71,7 +72,13 @@ export function ArticleEditForm({ initial, article: initialArticle, isNew = fals
               <AdminInput label="Image URL" value={article.image} onChange={(v) => patch({ image: v })} />
             </div>
             <div className="col-12">
-              <AdminInput label="Excerpt" value={article.excerpt} onChange={(v) => patch({ excerpt: v })} />
+              <RichTextEditor
+                label="Excerpt"
+                value={article.excerpt ?? ''}
+                onChange={(v) => patch({ excerpt: v })}
+                placeholder="Write article excerpt…"
+                minHeight={120}
+              />
             </div>
             <div className="col-12">
               <label className="form-label">Content (HTML)</label>

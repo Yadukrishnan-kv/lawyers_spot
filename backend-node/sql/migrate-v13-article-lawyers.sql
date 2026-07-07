@@ -10,3 +10,4 @@ CREATE INDEX IF NOT EXISTS idx_article_lawyers_lawyer ON article_lawyers(lawyer_
 INSERT INTO article_lawyers (article_slug, lawyer_id)
 SELECT slug, lawyer_id FROM articles WHERE lawyer_id IS NOT NULL
 ON CONFLICT DO NOTHING;
+

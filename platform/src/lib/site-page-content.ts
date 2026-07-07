@@ -41,7 +41,7 @@ export const DEFAULT_ABOUT_PAGE: AboutPageContent = {
   body: '<p>LawyerSpot connects clients with verified advocates across India. All statistics and content are managed dynamically from our admin CMS.</p>',
   metaTitle: 'About LawyerSpot',
   metaDescription:
-    "India's legal intelligence platform — connecting citizens with verified lawyers and free legal knowledge.",
+    "India's intelligent legal platform — connecting citizens with verified lawyers and free legal knowledge.",
 };
 
 export const DEFAULT_TERMS_PAGE: CmsPageFields = {
