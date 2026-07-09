@@ -233,6 +233,7 @@ export async function loadCms(): Promise<CmsData> {
 async function clearContentTables(client: PoolClient) {
   const tables = [
     'article_lawyers',
+    'articles',
     'bookings',
     'admin_users',
     'default_profile_reviews',

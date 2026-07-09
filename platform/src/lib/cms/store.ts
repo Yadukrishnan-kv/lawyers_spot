@@ -65,7 +65,7 @@ const fetchPublicCmsCached = unstable_cache(
   async (): Promise<CmsData> => {
     const url = `${getBackendUrl()}/api/v1/cms`;
     try {
-      const res = await fetch(url, { next: { revalidate: CMS_REVALIDATE } });
+      const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) return readCmsFromFile();
       const data = (await res.json()) as Partial<CmsData>;
       return mergeCmsWithDefaults(data, false);

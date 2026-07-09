@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       signal: AbortSignal.timeout(4000),
     });
     if (res.ok || res.status === 401) {
-      return forwardBackendResponse(res);
+      return await forwardBackendResponse(res);
     }
   } catch {
     /* Node API offline — use local auth below */

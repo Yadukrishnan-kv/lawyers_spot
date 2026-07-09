@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Breadcrumbs } from '@/components/seo/breadcrumbs';
 import { getArticles } from '@/lib/data';
+import { sanitizeCmsHtml } from '@/lib/security/sanitize-html';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default async function ArticlesPage() {
             <div className="p-5">
               <span className="text-xs font-bold text-royal-600">{a.category}</span>
               <h2 className="mt-2 font-bold group-hover:text-royal-600">{a.title}</h2>
-              <p className="mt-2 line-clamp-2 text-sm text-slate-500">{a.excerpt}</p>
+              <p className="mt-2 line-clamp-2 text-sm text-slate-500" dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(a.excerpt) }} />
             </div>
           </Link>
         ))}

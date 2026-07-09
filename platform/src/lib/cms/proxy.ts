@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getBackendUrl } from '@/lib/cms/backend-url';
 
-export function forwardBackendResponse(res: Response): NextResponse {
+export async function forwardBackendResponse(res: Response): Promise<NextResponse> {
   const headers: Record<string, string> = {
     'Content-Type': res.headers.get('content-type') ?? 'application/json',
   };
@@ -9,10 +9,9 @@ export function forwardBackendResponse(res: Response): NextResponse {
   const disposition = res.headers.get('content-disposition');
   if (disposition) headers['Content-Disposition'] = disposition;
 
-  const contentLen = res.headers.get('content-length');
-  if (contentLen) headers['Content-Length'] = contentLen;
+  const body = await res.text();
 
-  const response = new NextResponse(res.body, {
+  const response = new NextResponse(body, {
     status: res.status,
     headers,
   });
@@ -47,7 +46,7 @@ export async function proxyToBackend(
       headers,
       signal: AbortSignal.timeout(10000),
     });
-    return forwardBackendResponse(res);
+    return await forwardBackendResponse(res);
   } catch {
     return NextResponse.json(
       { error: 'Backend API is not running. Start Node API: cd backend-node && npm run dev' },

@@ -63,7 +63,7 @@ export async function logoutUser() {
 
 export async function fetchCurrentUser() {
   const res = await fetch('/api/auth/me', { credentials: 'include' });
-  if (res.status === 401) return null;
+  if (res.status === 401 || res.status === 503) return null;
   if (!res.ok) throw new Error('Failed to load user');
   return res.json() as Promise<{
     id: string;

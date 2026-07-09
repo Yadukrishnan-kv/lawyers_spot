@@ -6,6 +6,7 @@ import { InternalLinksBlock } from '@/components/seo/internal-links';
 import { Button } from '@/components/ui/button';
 import { getArticleBySlug, getArticles, getPracticeAreas } from '@/lib/data';
 import { practiceAreaPath } from '@/lib/practice-utils';
+import { sanitizeCmsHtml } from '@/lib/security/sanitize-html';
 import type { Metadata } from 'next';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -14,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: 'Article' };
-  return { title: article.title, description: article.excerpt };
+  return { title: article.title, description: article.excerpt.replace(/<[^>]*>/g, '') };
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -44,7 +45,7 @@ export default async function ArticlePage({ params }: Props) {
             <Image src={article.image} alt="" fill className="object-cover" priority />
           </div>
           <div className="prose-legal mt-10">
-            <p className="text-xl text-slate-600">{article.excerpt}</p>
+            <div className="text-xl text-slate-600" dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(article.excerpt) }} />
             <h2 id="overview">Overview</h2>
             <p>Understanding your legal rights is the first step toward resolution. This guide is structured for readability, SEO performance, and long session engagement.</p>
             <h2 id="framework">Legal Framework</h2>

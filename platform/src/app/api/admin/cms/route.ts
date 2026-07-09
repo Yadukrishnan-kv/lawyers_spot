@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { getSession } from '@/lib/cms/auth';
 import { getAdminCmsData, saveCmsData } from '@/lib/cms/store';
@@ -15,7 +16,7 @@ export async function GET(request: Request) {
       headers: { cookie: request.headers.get('cookie') ?? '' },
       signal: AbortSignal.timeout(4000),
     });
-    if (res.ok) return forwardBackendResponse(res);
+    if (res.ok) return await forwardBackendResponse(res);
   } catch {
     /* use local CMS */
   }
@@ -45,11 +46,15 @@ export async function PUT(request: Request) {
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(15000),
     });
-    if (res.ok) return forwardBackendResponse(res);
+    if (res.ok) {
+      revalidateTag('cms');
+      return await forwardBackendResponse(res);
+    }
   } catch {
     /* save to cms.json */
   }
 
   const saved = saveCmsData(body);
+  revalidateTag('cms');
   return NextResponse.json(saved);
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/seo/breadcrumbs';
 import { searchCms } from '@/lib/data';
+import { sanitizeCmsHtml } from '@/lib/security/sanitize-html';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -53,7 +54,7 @@ export default async function SearchPage({ searchParams }: Props) {
             <Link href={r.href} className="mt-1 block font-semibold text-navy-900 hover:text-royal-600 dark:text-white">
               {r.title}
             </Link>
-            <p className="text-sm text-slate-600">{r.excerpt}</p>
+            <p className="text-sm text-slate-600" dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(r.excerpt) }} />
           </li>
         ))}
       </ul>

@@ -10,7 +10,7 @@ export async function POST() {
       signal: AbortSignal.timeout(4000),
     });
     if (res.ok) {
-      return forwardBackendResponse(res);
+      return await forwardBackendResponse(res);
     }
   } catch {
     /* fallback below */

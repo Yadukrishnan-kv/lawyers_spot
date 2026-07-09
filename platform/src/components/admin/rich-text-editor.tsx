@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import LinkExtension from '@tiptap/extension-link';
+import ImageExtension from '@tiptap/extension-image';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import type { Editor } from '@tiptap/react';
@@ -11,6 +12,8 @@ import {
   List,
   ListOrdered,
   Link2,
+  ImageIcon,
+  Loader2,
   Redo2,
   Undo2,
   Heading2,
@@ -27,6 +30,7 @@ type Props = {
   minHeight?: number;
   className?: string;
   hint?: string;
+  uploadUrl?: string;
 };
 
 function ToolbarButton({
@@ -56,19 +60,18 @@ function ToolbarButton({
   );
 }
 
-function EditorToolbar({ editor }: { editor: Editor | null }) {
+function EditorToolbar({
+  editor,
+  uploading,
+  onAddImage,
+  onSetLink,
+}: {
+  editor: Editor | null;
+  uploading: boolean;
+  onAddImage: () => void;
+  onSetLink: () => void;
+}) {
   if (!editor) return null;
-
-  function setLink() {
-    const prev = editor!.getAttributes('link').href as string | undefined;
-    const url = window.prompt('Link URL', prev ?? 'https://');
-    if (url === null) return;
-    if (url === '') {
-      editor!.chain().focus().extendMarkRange('link').unsetLink().run();
-      return;
-    }
-    editor!.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-  }
 
   return (
     <div className="admin-rich-text-editor__toolbar">
@@ -114,8 +117,11 @@ function EditorToolbar({ editor }: { editor: Editor | null }) {
       >
         <ListOrdered className="h-4 w-4" />
       </ToolbarButton>
-      <ToolbarButton title="Insert link" active={editor.isActive('link')} onClick={setLink}>
+      <ToolbarButton title="Insert link" active={editor.isActive('link')} onClick={onSetLink}>
         <Link2 className="h-4 w-4" />
+      </ToolbarButton>
+      <ToolbarButton title="Insert image" disabled={uploading} onClick={onAddImage}>
+        {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
       </ToolbarButton>
       <ToolbarButton
         title="Undo"
@@ -143,7 +149,11 @@ export function RichTextEditor({
   minHeight = 280,
   className,
   hint,
+  uploadUrl = '/api/admin/upload/article-image',
 }: Props) {
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -152,6 +162,7 @@ export function RichTextEditor({
         openOnClick: false,
         HTMLAttributes: { rel: 'noopener noreferrer' },
       }),
+      ImageExtension.configure({ inline: true }),
     ],
     content: value || '',
     onUpdate: ({ editor: ed }) => onChange(ed.getHTML()),
@@ -172,16 +183,56 @@ export function RichTextEditor({
     }
   }, [editor, value]);
 
+  const setLink = useCallback(() => {
+    if (!editor) return;
+    const prev = editor.getAttributes('link').href as string | undefined;
+    const url = window.prompt('Link URL', prev ?? 'https://');
+    if (url === null) return;
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
+    }
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  }, [editor]);
+
+  const handleFilePicked = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file || !editor) return;
+
+      setUploading(true);
+      try {
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await fetch(uploadUrl, { method: 'POST', body: fd });
+        if (!res.ok) throw new Error('Upload failed');
+        const data = (await res.json()) as { url: string };
+        editor.chain().focus().setImage({ src: data.url }).run();
+      } catch {
+        window.alert('Failed to upload image');
+      } finally {
+        setUploading(false);
+        if (fileRef.current) fileRef.current.value = '';
+      }
+    },
+    [editor, uploadUrl],
+  );
+
+  const addImage = useCallback(() => {
+    fileRef.current?.click();
+  }, []);
+
   return (
     <div className={className}>
       {label && <label className="form-label">{label}</label>}
       <div className="admin-rich-text-editor">
-        <EditorToolbar editor={editor} />
+        <EditorToolbar editor={editor} uploading={uploading} onAddImage={addImage} onSetLink={setLink} />
         <div className="admin-rich-text-editor__content" style={{ minHeight }}>
           <EditorContent editor={editor} />
         </div>
       </div>
       {hint && <p className="text-muted fs-12 mt-1 mb-0">{hint}</p>}
+      <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="d-none" onChange={handleFilePicked} />
     </div>
   );
 }

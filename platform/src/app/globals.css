@@ -51,6 +51,12 @@
 .prose-legal p {
   @apply mb-5 text-lg;
 }
+.prose-legal img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
 
 /* Lawyer profile — matches lawrato HTML lawyer-profile.html */
 .profile-header {

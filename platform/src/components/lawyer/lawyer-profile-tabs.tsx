@@ -7,6 +7,7 @@ import { Star, Landmark, ChevronDown, FileText } from 'lucide-react';
 import type { Lawyer, LawyerReview } from '@/lib/data-types';
 import type { Article } from '@/lib/cms/types';
 import { cn } from '@/lib/utils';
+import { sanitizeCmsHtml } from '@/lib/security/sanitize-html';
 
 const DEFAULT_FAQ_ITEMS = [
   {
@@ -213,9 +214,8 @@ export function LawyerProfileTabs({ lawyer, reviews, articles = [] }: Props) {
                         {article.title}
                       </Link>
                     </h3>
-                    <p className="mb-1 text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
-                      {article.excerpt}
-                    </p>
+                    <p className="mb-1 text-xs text-slate-500 dark:text-slate-400 line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(article.excerpt) }} />
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-400">
                       <FileText className="h-3 w-3" />
                       <span>{article.category}</span>
