@@ -331,7 +331,10 @@ export function RichTextEditor({
         const fd = new FormData();
         fd.append('file', file);
         const res = await fetch(uploadUrl, { method: 'POST', body: fd });
-        if (!res.ok) throw new Error('Upload failed');
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => null);
+          throw new Error(errBody?.detail || `Upload failed (${res.status})`);
+        }
         const data = (await res.json()) as { url: string };
         editor.chain().focus().setImage({ src: data.url }).run();
         const { from } = editor.state.selection;
@@ -339,8 +342,8 @@ export function RichTextEditor({
         if (imgPos >= 0) {
           editor.commands.setTextSelection({ from: imgPos, to: from });
         }
-      } catch {
-        window.alert('Failed to upload image');
+      } catch (err) {
+        window.alert(err instanceof Error ? err.message : 'Failed to upload image');
       } finally {
         setUploading(false);
         if (fileRef.current) fileRef.current.value = '';
