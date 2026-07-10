@@ -18,9 +18,32 @@ import {
   Undo2,
   Heading2,
   Heading3,
+  Check,
+  Trash2,
+  Move,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import '@/components/admin/rich-text-editor.css';
+
+const CustomImage = ImageExtension.configure({ inline: true }).extend({
+  addAttributes() {
+    return {
+      src: { default: null },
+      alt: { default: null },
+      title: { default: null },
+      width: {
+        default: null,
+        parseHTML: (el) => el.getAttribute('width'),
+        renderHTML: (attrs) => (attrs.width ? { width: attrs.width } : {}),
+      },
+      height: {
+        default: null,
+        parseHTML: (el) => el.getAttribute('height'),
+        renderHTML: (attrs) => (attrs.height ? { height: attrs.height } : {}),
+      },
+    };
+  },
+});
 
 type Props = {
   value: string;
@@ -141,6 +164,80 @@ function EditorToolbar({
   );
 }
 
+function ImageResizeBar({
+  width,
+  height,
+  onChange,
+  onDelete,
+  onCancel,
+}: {
+  width: string;
+  height: string;
+  onChange: (w: string, h: string) => void;
+  onDelete: () => void;
+  onCancel: () => void;
+}) {
+  const [localW, setLocalW] = useState(width);
+  const [localH, setLocalH] = useState(height);
+
+  useEffect(() => {
+    setLocalW(width);
+    setLocalH(height);
+  }, [width, height]);
+
+  return (
+    <div className="admin-rich-text-editor__image-resize">
+      <span className="admin-rich-text-editor__image-resize-label">
+        <Move className="h-3.5 w-3.5" />
+        Image Size
+      </span>
+      <div className="admin-rich-text-editor__image-resize-inputs">
+        <input
+          type="number"
+          className="form-control form-control-sm"
+          value={localW}
+          onChange={(e) => setLocalW(e.target.value)}
+          placeholder="W"
+          min="1"
+        />
+        <span className="admin-rich-text-editor__image-resize-sep">&times;</span>
+        <input
+          type="number"
+          className="form-control form-control-sm"
+          value={localH}
+          onChange={(e) => setLocalH(e.target.value)}
+          placeholder="H"
+          min="1"
+        />
+        <button
+          type="button"
+          className="btn btn-sm btn-primary"
+          onClick={() => onChange(localW || width, localH || height)}
+          title="Apply size"
+        >
+          <Check className="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-secondary"
+          onClick={onCancel}
+          title="Cancel"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      </div>
+      <button
+        type="button"
+        className="btn btn-sm btn-outline-danger"
+        onClick={onDelete}
+        title="Delete image"
+      >
+        <Trash2 className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
+
 export function RichTextEditor({
   value,
   onChange,
@@ -152,6 +249,10 @@ export function RichTextEditor({
   uploadUrl = '/api/admin/upload/article-image',
 }: Props) {
   const [uploading, setUploading] = useState(false);
+  const [imageAttrs, setImageAttrs] = useState<{
+    width: string;
+    height: string;
+  } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
@@ -162,7 +263,7 @@ export function RichTextEditor({
         openOnClick: false,
         HTMLAttributes: { rel: 'noopener noreferrer' },
       }),
-      ImageExtension.configure({ inline: true }),
+      CustomImage,
     ],
     content: value || '',
     onUpdate: ({ editor: ed }) => onChange(ed.getHTML()),
@@ -182,6 +283,31 @@ export function RichTextEditor({
       editor.commands.setContent(next, { emitUpdate: false });
     }
   }, [editor, value]);
+
+  useEffect(() => {
+    if (!editor) return;
+    const handler = () => {
+      if (editor.isActive('image')) {
+        const a = editor.getAttributes('image');
+        let w = a.width || '';
+        let h = a.height || '';
+        const img = editor.view.dom.querySelector(
+          '.ProseMirror-selectednode',
+        ) as HTMLImageElement | null;
+        if (img && img.naturalWidth && img.naturalHeight) {
+          if (!w) w = String(img.naturalWidth);
+          if (!h) h = String(img.naturalHeight);
+        }
+        setImageAttrs({ width: w, height: h });
+      } else {
+        setImageAttrs(null);
+      }
+    };
+    editor.on('selectionUpdate', handler);
+    return () => {
+      editor.off('selectionUpdate', handler);
+    };
+  }, [editor]);
 
   const setLink = useCallback(() => {
     if (!editor) return;
@@ -208,6 +334,11 @@ export function RichTextEditor({
         if (!res.ok) throw new Error('Upload failed');
         const data = (await res.json()) as { url: string };
         editor.chain().focus().setImage({ src: data.url }).run();
+        const { from } = editor.state.selection;
+        const imgPos = from - 1;
+        if (imgPos >= 0) {
+          editor.commands.setTextSelection({ from: imgPos, to: from });
+        }
       } catch {
         window.alert('Failed to upload image');
       } finally {
@@ -222,11 +353,37 @@ export function RichTextEditor({
     fileRef.current?.click();
   }, []);
 
+  const handleImageResize = useCallback(
+    (w: string, h: string) => {
+      if (!editor) return;
+      const payload: Record<string, string> = {};
+      if (w) payload.width = w;
+      if (h) payload.height = h;
+      editor.chain().updateAttributes('image', payload).run();
+      setImageAttrs(null);
+    },
+    [editor],
+  );
+
+  const handleImageDelete = useCallback(() => {
+    if (!editor) return;
+    editor.chain().focus().deleteSelection().run();
+  }, [editor]);
+
   return (
     <div className={className}>
       {label && <label className="form-label">{label}</label>}
       <div className="admin-rich-text-editor">
         <EditorToolbar editor={editor} uploading={uploading} onAddImage={addImage} onSetLink={setLink} />
+        {imageAttrs && (
+          <ImageResizeBar
+            width={imageAttrs.width}
+            height={imageAttrs.height}
+            onChange={handleImageResize}
+            onDelete={handleImageDelete}
+            onCancel={() => setImageAttrs(null)}
+          />
+        )}
         <div className="admin-rich-text-editor__content" style={{ minHeight }}>
           <EditorContent editor={editor} />
         </div>

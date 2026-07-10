@@ -52,10 +52,11 @@
   @apply mb-5 text-lg;
 }
 .prose-legal img {
+  display: inline-block;
   max-width: 100%;
   height: auto;
   border-radius: 0.5rem;
-  margin: 1rem 0;
+  vertical-align: middle;
 }
 
 /* Lawyer profile — matches lawrato HTML lawyer-profile.html */
