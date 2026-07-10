@@ -1,3 +1,4 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 
 const securityHeaders = [
@@ -23,6 +24,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: path.join(process.cwd(), '..'),
   poweredByHeader: false,
   compress: true,
   reactStrictMode: true,
