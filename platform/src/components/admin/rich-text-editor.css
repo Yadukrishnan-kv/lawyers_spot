@@ -118,3 +118,52 @@
   justify-content: center;
   padding: 0.2rem 0.4rem;
 }
+
+.admin-rich-text-editor__sep {
+  width: 1px;
+  background: var(--bs-border-color, #dee2e6);
+  align-self: stretch;
+  margin: 0 0.125rem;
+}
+
+.admin-rich-text-editor__content .tiptap table {
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.admin-rich-text-editor__content .tiptap th,
+.admin-rich-text-editor__content .tiptap td {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  box-sizing: border-box;
+  min-width: 1em;
+  padding: 0.5rem 0.75rem;
+  position: relative;
+  vertical-align: top;
+}
+
+.admin-rich-text-editor__content .tiptap th {
+  background: #f8f9fa;
+  font-weight: 700;
+  text-align: left;
+}
+
+.admin-rich-text-editor__content .tiptap table .selectedCell {
+  background: #f0f4ff;
+}
+
+.admin-rich-text-editor__content .tiptap table .column-resize-handle {
+  background: var(--bs-primary, #6259ca);
+  bottom: -2px;
+  pointer-events: none;
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 4px;
+}
+
+.admin-rich-text-editor__content .tiptap .tableWrapper {
+  overflow-x: auto;
+}
+

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import LinkExtension from '@tiptap/extension-link';
 import ImageExtension from '@tiptap/extension-image';
+import { Table as TableExtension, TableRow as TableRowExtension, TableCell as TableCellExtension, TableHeader as TableHeaderExtension } from '@tiptap/extension-table';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import type { Editor } from '@tiptap/react';
@@ -21,6 +22,9 @@ import {
   Check,
   Trash2,
   Move,
+  Table,
+  Rows3,
+  Columns3,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import '@/components/admin/rich-text-editor.css';
@@ -146,6 +150,29 @@ function EditorToolbar({
       <ToolbarButton title="Insert image" disabled={uploading} onClick={onAddImage}>
         {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
       </ToolbarButton>
+      <span className="admin-rich-text-editor__sep" />
+      <ToolbarButton
+        title="Insert table"
+        active={editor.isActive('table')}
+        onClick={() => editor.chain().focus().insertTable({ rows: 2, cols: 2, withHeaderRow: true }).run()}
+      >
+        <Table className="h-4 w-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        title="Add row after"
+        onClick={() => editor.chain().focus().addRowAfter().run()}
+      >
+        <Rows3 className="h-4 w-4" />
+      </ToolbarButton>
+      <ToolbarButton
+        title="Add column after"
+        onClick={() => editor.chain().focus().addColumnAfter().run()}
+      >
+        <Columns3 className="h-4 w-4" />
+      </ToolbarButton>
+      <ToolbarButton title="Delete table" onClick={() => editor.chain().focus().deleteTable().run()}>
+        <Trash2 className="h-4 w-4" />
+      </ToolbarButton>
       <ToolbarButton
         title="Undo"
         disabled={!editor.can().chain().focus().undo().run()}
@@ -264,6 +291,12 @@ export function RichTextEditor({
         HTMLAttributes: { rel: 'noopener noreferrer' },
       }),
       CustomImage,
+      TableExtension.configure({
+        resizable: true,
+      }),
+      TableRowExtension,
+      TableCellExtension,
+      TableHeaderExtension,
     ],
     content: value || '',
     onUpdate: ({ editor: ed }) => onChange(ed.getHTML()),

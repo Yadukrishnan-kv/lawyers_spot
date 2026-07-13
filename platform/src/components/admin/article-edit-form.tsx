@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Article, CmsData } from '@/lib/cms/types';
 import { AdminInput, SaveBar, useCmsSave } from '@/components/admin/cms-editor';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
+import { Loader2, Upload } from 'lucide-react';
 
 type Props = {
   initial: CmsData;
@@ -18,9 +19,33 @@ export function ArticleEditForm({ initial, article: initialArticle, isNew = fals
   const [cms, setCms] = useState(initial);
   const [article, setArticle] = useState(initialArticle);
   const { save, saving, message } = useCmsSave();
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const imageFileRef = useRef<HTMLInputElement>(null);
 
   function patch(p: Partial<Article>) {
     setArticle((a) => ({ ...a, ...p }));
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/admin/upload/article-image', { method: 'POST', body: fd });
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => null);
+        throw new Error(errBody?.detail || `Upload failed (${res.status})`);
+      }
+      const data = (await res.json()) as { url: string };
+      patch({ image: data.url });
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : 'Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+      if (imageFileRef.current) imageFileRef.current.value = '';
+    }
   }
 
   async function handleSave() {
@@ -69,7 +94,35 @@ export function ArticleEditForm({ initial, article: initialArticle, isNew = fals
               <AdminInput label="Date" value={article.date} onChange={(v) => patch({ date: v })} />
             </div>
             <div className="col-md-6">
-              <AdminInput label="Image URL" value={article.image} onChange={(v) => patch({ image: v })} />
+              <label className="form-label">Image</label>
+              {article.image && (
+                <div className="mb-2">
+                  <img src={article.image} alt="Preview" className="img-thumbnail" style={{ maxHeight: 160 }} />
+                </div>
+              )}
+              <div className="d-flex gap-2">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => imageFileRef.current?.click()}
+                  disabled={uploadingImage}
+                >
+                  {uploadingImage ? <Loader2 className="h-4 w-4 me-1 animate-spin" /> : <Upload className="h-4 w-4 me-1" />}
+                  {uploadingImage ? 'Uploading…' : 'Upload Image'}
+                </button>
+                {article.image && (
+                  <button type="button" className="btn btn-outline-danger" onClick={() => patch({ image: '' })}>
+                    Remove
+                  </button>
+                )}
+              </div>
+              <input
+                ref={imageFileRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="d-none"
+                onChange={handleImageUpload}
+              />
             </div>
             <div className="col-12">
               <RichTextEditor

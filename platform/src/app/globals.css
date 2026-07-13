@@ -58,6 +58,25 @@
   border-radius: 0.5rem;
   vertical-align: middle;
 }
+.prose-legal table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+.prose-legal th,
+.prose-legal td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+}
+.prose-legal th {
+  background: #f8f9fa;
+  font-weight: 700;
+  text-align: left;
+}
+.prose-legal .tableWrapper {
+  overflow-x: auto;
+}
 
 /* Lawyer profile — matches lawrato HTML lawyer-profile.html */
 .profile-header {
