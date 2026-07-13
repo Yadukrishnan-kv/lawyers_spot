@@ -5,6 +5,8 @@ import { getArticles } from '@/lib/data';
 import { sanitizeCmsHtml } from '@/lib/security/sanitize-html';
 import type { Metadata } from 'next';
 
+const DEFAULT_ARTICLE_IMAGE = '/images/photo-1450101499163-c8848c66ca85.avif';
+
 export const metadata: Metadata = {
   title: 'Legal Guides & Articles',
   description: 'Expert legal guides on divorce, property, tax, criminal law and more.',
@@ -21,7 +23,7 @@ export default async function ArticlesPage() {
         {articles.map((a) => (
           <Link key={a.slug} href={`/articles/${a.slug}`} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-navy-700 dark:bg-navy-800">
             <div className="relative h-52">
-              <Image src={a.image} alt="" fill className="object-cover" sizes="33vw" />
+              <Image src={a.image || DEFAULT_ARTICLE_IMAGE} alt="" fill className="object-cover" sizes="33vw" />
             </div>
             <div className="p-5">
               <span className="text-xs font-bold text-royal-600">{a.category}</span>

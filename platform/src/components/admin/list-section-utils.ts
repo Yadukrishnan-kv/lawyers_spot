@@ -32,7 +32,7 @@ export function makeDefaultItem(section: ListSection, cms: CmsData): Record<stri
         author: 'Legal Team',
         date: new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
         readTime: '5 min',
-        image: 'https://images.unsplash.com/photo-1589829545855-d10d557cf95f?w=800&h=500&fit=crop',
+        image: '',
         trending: false,
         status: 'published',
       };

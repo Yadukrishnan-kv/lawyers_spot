@@ -51,6 +51,13 @@
 .prose-legal p {
   @apply mb-5 text-lg;
 }
+.prose-legal a {
+  color: var(--bs-primary, #6259ca);
+  text-decoration: underline;
+}
+.prose-legal a:hover {
+  color: #4a44a0;
+}
 .prose-legal img {
   display: inline-block;
   max-width: 100%;

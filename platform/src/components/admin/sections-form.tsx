@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AdminInput, AdminSelect } from '@/components/admin/cms-editor';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import type { SectionRecord } from '@/lib/sections-data';
 
 type Props = {
@@ -158,13 +159,12 @@ export function SectionsForm({ type, initial }: Props) {
               />
             </div>
             <div className="col-12">
-              <label className="form-label">Body / Description (HTML)</label>
-              <textarea
-                className="form-control font-monospace"
-                rows={12}
+              <RichTextEditor
+                label="Description"
                 value={body}
-                onChange={(e) => setBody(e.target.value)}
-                placeholder="<p>Section description in HTML...</p>"
+                onChange={(v) => setBody(v)}
+                placeholder="Section description…"
+                minHeight={320}
               />
             </div>
           </div>

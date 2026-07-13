@@ -8,14 +8,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useCms } from '@/lib/cms/context';
 import type { Article } from '@/lib/cms/types';
 import { ArticleCoverUpload } from '@/components/lawyer/article-cover-upload';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import {
   createLawyerArticle,
   fetchLawyerArticle,
   updateLawyerArticle,
 } from '@/lib/user-auth';
 
-const DEFAULT_IMAGE =
-  'https://images.unsplash.com/photo-1589829545855-d10d557cf95f?w=800&h=450&fit=crop';
+const DEFAULT_IMAGE = '/images/photo-1450101499163-c8848c66ca85.avif';
 
 type Props = { slug?: string };
 
@@ -31,7 +31,7 @@ export function LawyerArticleForm({ slug }: Props) {
     author: '',
     date: new Date().toISOString().slice(0, 10),
     readTime: '5 min',
-    image: DEFAULT_IMAGE,
+    image: '',
     trending: false,
     status: 'draft',
     content: '',
@@ -53,18 +53,26 @@ export function LawyerArticleForm({ slug }: Props) {
     setSaving(true);
     setError('');
     try {
+      const articleToSave = {
+        ...article,
+        image: article.image || DEFAULT_IMAGE,
+      };
       if (isNew) {
-        const data = await createLawyerArticle(article);
+        const data = await createLawyerArticle(articleToSave);
         router.push(`/lawyer-dashboard/articles/${encodeURIComponent(data.article.slug)}/edit`);
         router.refresh();
       } else {
         await updateLawyerArticle(slug!, {
-          title: article.title,
-          excerpt: article.excerpt,
-          category: article.category,
-          content: article.content,
-          image: article.image,
-          status: article.status,
+          title: articleToSave.title,
+          slug: articleToSave.slug,
+          excerpt: articleToSave.excerpt,
+          category: articleToSave.category,
+          author: articleToSave.author,
+          readTime: articleToSave.readTime,
+          date: articleToSave.date,
+          content: articleToSave.content,
+          image: articleToSave.image,
+          status: articleToSave.status,
         });
         router.push('/lawyer-dashboard/articles');
         router.refresh();
@@ -97,6 +105,15 @@ export function LawyerArticleForm({ slug }: Props) {
               required
             />
           </div>
+          <div>
+            <label className="text-sm font-semibold">Slug</label>
+            <input
+              className={fieldClass}
+              value={article.slug}
+              onChange={(e) => setArticle({ ...article, slug: e.target.value })}
+              required
+            />
+          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="text-sm font-semibold">Category</label>
@@ -126,14 +143,45 @@ export function LawyerArticleForm({ slug }: Props) {
               </select>
             </div>
           </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="text-sm font-semibold">Author</label>
+              <input
+                className={fieldClass}
+                value={article.author}
+                onChange={(e) => setArticle({ ...article, author: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold">Read time</label>
+              <input
+                className={fieldClass}
+                value={article.readTime}
+                onChange={(e) => setArticle({ ...article, readTime: e.target.value })}
+              />
+            </div>
+          </div>
           <div>
-            <label className="text-sm font-semibold">Excerpt</label>
-            <textarea
-              rows={3}
-              className="mt-1 w-full rounded-xl border px-3 py-2 dark:border-navy-700 dark:bg-navy-800"
-              value={article.excerpt}
-              onChange={(e) => setArticle({ ...article, excerpt: e.target.value })}
-              required
+            <label className="text-sm font-semibold">Date</label>
+            <input
+              type="date"
+              className={fieldClass}
+              value={article.date}
+              onChange={(e) => setArticle({ ...article, date: e.target.value })}
+            />
+          </div>
+          <ArticleCoverUpload
+            imageUrl={article.image}
+            onChange={(url) => setArticle({ ...article, image: url })}
+          />
+          <div>
+            <RichTextEditor
+              label="Excerpt"
+              value={article.excerpt ?? ''}
+              onChange={(v) => setArticle({ ...article, excerpt: v })}
+              placeholder="Write article excerpt…"
+              minHeight={120}
+              uploadUrl="/api/lawyer/upload/article-image"
             />
           </div>
           <div>
@@ -146,10 +194,6 @@ export function LawyerArticleForm({ slug }: Props) {
               placeholder="Write your article content here. Plain text or simple HTML is supported."
             />
           </div>
-          <ArticleCoverUpload
-            imageUrl={article.image}
-            onChange={(url) => setArticle({ ...article, image: url })}
-          />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex flex-wrap gap-3">
             <Button type="submit" disabled={saving}>

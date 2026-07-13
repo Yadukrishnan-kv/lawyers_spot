@@ -110,7 +110,7 @@ export function AdminSidebar({ onLogout }: { onLogout?: () => void }) {
             <div className="sidebar-logout">
               <button
                 type="button"
-                className="side-menu__item has-link w-100 border-0 bg-transparent d-flex align-items-center"
+                className="side-menu__item has-link w-100 border-0 bg-transparent"
                 onClick={onLogout}
               >
                 <i className="side-menu__icon fe fe-power" />

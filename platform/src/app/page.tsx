@@ -85,7 +85,7 @@ export default async function HomePage() {
             {articles.map((a) => (
               <Link key={a.slug} href={`/articles/${a.slug}`} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-navy-700 dark:bg-navy-800">
                 <div className="relative h-48">
-                  <Image src={a.image} alt="" fill className="object-cover transition group-hover:scale-105" sizes="33vw" />
+                  <Image src={a.image || '/images/photo-1450101499163-c8848c66ca85.avif'} alt="" fill className="object-cover transition group-hover:scale-105" sizes="33vw" />
                 </div>
                 <div className="p-5">
                   <span className="text-xs font-bold text-royal-600">{a.category}</span>

@@ -8,6 +8,8 @@ import { AdminInput, SaveBar, useCmsSave } from '@/components/admin/cms-editor';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { Loader2, Upload } from 'lucide-react';
 
+const DEFAULT_ARTICLE_IMAGE = '/images/photo-1450101499163-c8848c66ca85.avif';
+
 type Props = {
   initial: CmsData;
   article: Article;
@@ -49,17 +51,21 @@ export function ArticleEditForm({ initial, article: initialArticle, isNew = fals
   }
 
   async function handleSave() {
+    const articleToSave = {
+      ...article,
+      image: article.image || DEFAULT_ARTICLE_IMAGE,
+    };
     const articles = [...cms.articles];
     if (isNew) {
-      if (articles.some((a) => a.slug === article.slug)) {
+      if (articles.some((a) => a.slug === articleToSave.slug)) {
         alert('An article with this slug already exists.');
         return;
       }
-      articles.push(article);
+      articles.push(articleToSave);
     } else {
       const idx = articles.findIndex((a) => a.slug === initialArticle.slug);
       if (idx < 0) return;
-      articles[idx] = article;
+      articles[idx] = articleToSave;
     }
     const next = { ...cms, articles };
     const ok = await save(next);

@@ -9,6 +9,8 @@ import { practiceAreaPath } from '@/lib/practice-utils';
 import { sanitizeCmsHtml } from '@/lib/security/sanitize-html';
 import type { Metadata } from 'next';
 
+const DEFAULT_ARTICLE_IMAGE = '/images/photo-1450101499163-c8848c66ca85.avif';
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -42,7 +44,7 @@ export default async function ArticlePage({ params }: Props) {
           <h1 className="mt-2 font-display text-4xl font-bold text-navy-900 dark:text-white">{article.title}</h1>
           <p className="mt-4 text-slate-500">{article.date} · {article.readTime} · {article.author}</p>
           <div className="relative mt-8 h-72 overflow-hidden rounded-2xl">
-            <Image src={article.image} alt="" fill className="object-cover" priority />
+            <Image src={article.image || DEFAULT_ARTICLE_IMAGE} alt="" fill className="object-cover" priority />
           </div>
           <div className="prose-legal mt-10">
             <div className="text-xl text-slate-600" dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(article.excerpt) }} />
