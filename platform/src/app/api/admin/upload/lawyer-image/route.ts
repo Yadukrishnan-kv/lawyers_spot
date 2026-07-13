@@ -43,12 +43,12 @@ export async function POST(request: Request) {
   const ext = EXT_BY_TYPE[file.type] ?? 'jpg';
   const safeId = lawyerId.replace(/[^a-zA-Z0-9-_]/g, '').slice(0, 64) || 'lawyer';
   const filename = `${safeId}-${Date.now()}.${ext}`;
-  const dir = path.join(process.cwd(), 'public', 'uploads', 'lawyers');
+  const dir = path.join(process.cwd(), 'data', 'uploads', 'lawyers');
 
   await mkdir(dir, { recursive: true });
   const bytes = Buffer.from(await file.arrayBuffer());
   await writeFile(path.join(dir, filename), bytes);
 
-  const url = `/uploads/lawyers/${filename}`;
+  const url = `/api/uploads/lawyers/${filename}`;
   return NextResponse.json({ url });
 }

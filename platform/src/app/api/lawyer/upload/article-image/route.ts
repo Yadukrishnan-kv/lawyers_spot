@@ -43,12 +43,12 @@ export async function POST(request: Request) {
 
   const ext = EXT_BY_TYPE[file.type] ?? 'jpg';
   const filename = `article-${session.userId.replace(/[^a-zA-Z0-9-_]/g, '')}-${Date.now()}.${ext}`;
-  const dir = path.join(process.cwd(), 'public', 'uploads', 'articles');
+  const dir = path.join(process.cwd(), 'data', 'uploads', 'articles');
 
   await mkdir(dir, { recursive: true });
   const bytes = Buffer.from(await file.arrayBuffer());
   await writeFile(path.join(dir, filename), bytes);
 
-  const url = `/uploads/articles/${filename}`;
+  const url = `/api/uploads/articles/${filename}`;
   return NextResponse.json({ url });
 }
