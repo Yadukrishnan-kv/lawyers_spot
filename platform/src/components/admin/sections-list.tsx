@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 import type { SectionRecord } from '@/lib/sections-data';
 
 type Props = {
@@ -24,7 +25,7 @@ export function SectionsList({ type }: Props) {
       const res = await fetch(`/api/admin/sections?type=${type}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('Failed to load');
       const data = (await res.json()) as SectionRecord[];
-      setSections(data);
+      setSections(sortByCreatedDesc(data));
     } catch {
       setError('Failed to load sections. Make sure the backend API is running.');
     } finally {

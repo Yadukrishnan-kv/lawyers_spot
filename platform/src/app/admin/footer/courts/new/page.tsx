@@ -10,6 +10,7 @@ export default async function NewCourtPage() {
     name: 'New Court',
     city: 'Delhi',
     body: '<p>Court description.</p>',
+    createdAt: new Date().toISOString(),
   };
 
   return (

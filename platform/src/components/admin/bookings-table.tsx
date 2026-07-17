@@ -1,12 +1,15 @@
 'use client';
 
+import { useMemo } from 'react';
 import type { BookingRecord } from '@/lib/cms/types';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 export function BookingsTable({ bookings }: { bookings: BookingRecord[] }) {
+  const sorted = useMemo(() => sortByCreatedDesc(bookings), [bookings]);
   return (
     <AdminDataTable
-      rows={bookings}
+      rows={sorted}
       rowKey={(b) => b.id}
       pageSize={15}
       showActions={false}

@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import type { CmsData, GuideEntry, QaCategory } from '@/lib/cms/types';
 import { AdminInput } from '@/components/admin/cms-editor';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
 import { AdminFormModal } from '@/components/admin/admin-form-modal';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 type Props = {
   cms: CmsData;
@@ -42,11 +43,12 @@ function GuidesTable({
 }) {
   const [editing, setEditing] = useState<GuideEntry | null>(null);
   const [editIndex, setEditIndex] = useState(-1);
+  const sortedGuides = useMemo(() => sortByCreatedDesc(guides), [guides]);
 
   function saveModal() {
     if (!editing) return;
     if (editIndex >= 0) onChange(guides.map((g, i) => (i === editIndex ? editing : g)));
-    else onChange([...guides, editing]);
+    else onChange([editing, ...guides]);
     setEditing(null);
     setEditIndex(-1);
   }
@@ -59,7 +61,7 @@ function GuidesTable({
           type="button"
           className="btn btn-sm btn-outline-primary"
           onClick={() => {
-            setEditing({ slug: `guide-${Date.now()}`, title: 'New Guide', category: 'General' });
+            setEditing({ slug: `guide-${Date.now()}`, title: 'New Guide', category: 'General', createdAt: new Date().toISOString() });
             setEditIndex(-1);
           }}
         >
@@ -67,7 +69,7 @@ function GuidesTable({
         </button>
       </div>
       <AdminDataTable
-        rows={guides}
+        rows={sortedGuides}
         rowKey={(g) => g.slug}
         pageSize={8}
         columns={[
@@ -115,11 +117,12 @@ function QaTopicsTable({
 }) {
   const [editing, setEditing] = useState<QaCategory | null>(null);
   const [editIndex, setEditIndex] = useState(-1);
+  const sortedTopics = useMemo(() => sortByCreatedDesc(topics), [topics]);
 
   function saveModal() {
     if (!editing) return;
     if (editIndex >= 0) onChange(topics.map((c, i) => (i === editIndex ? editing : c)));
-    else onChange([...topics, editing]);
+    else onChange([editing, ...topics]);
     setEditing(null);
     setEditIndex(-1);
   }
@@ -132,7 +135,7 @@ function QaTopicsTable({
           type="button"
           className="btn btn-sm btn-outline-primary"
           onClick={() => {
-            setEditing({ slug: `topic-${Date.now()}`, name: 'New Topic', count: 0 });
+            setEditing({ slug: `topic-${Date.now()}`, name: 'New Topic', count: 0, createdAt: new Date().toISOString() });
             setEditIndex(-1);
           }}
         >
@@ -140,7 +143,7 @@ function QaTopicsTable({
         </button>
       </div>
       <AdminDataTable
-        rows={topics}
+        rows={sortedTopics}
         rowKey={(c) => c.slug}
         pageSize={8}
         columns={[

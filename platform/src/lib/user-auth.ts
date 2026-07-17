@@ -89,6 +89,17 @@ export async function updateLawyerProfile(body: Record<string, unknown>) {
   return parseJson<{ success: boolean; lawyer: Lawyer }>(res);
 }
 
+export async function fetchLawyerDashboardStats() {
+  const res = await fetch('/api/lawyer/dashboard-stats', { credentials: 'include' });
+  return parseJson<{
+    newLeads: number;
+    appointments: number;
+    earnings: number;
+    rating: number;
+    unreadMessages: number;
+  }>(res);
+}
+
 export async function changeLawyerPassword(currentPassword: string, newPassword: string) {
   const res = await fetch('/api/lawyer/change-password', {
     method: 'POST',

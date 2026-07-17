@@ -57,8 +57,8 @@ export function LawyerArticlesManager() {
         {articles.length === 0 ? (
           <p className="mt-6 text-sm text-slate-500">No articles yet. Start by writing your first guide.</p>
         ) : (
-          <div className="mt-6 overflow-x-auto">
-            <table className="w-full text-left text-sm">
+          <div style={{ overflowX: 'auto' }} className="mt-6">
+            <table className="text-left text-sm" style={{ minWidth: 640 }}>
               <thead>
                 <tr className="border-b text-xs uppercase text-slate-500">
                   <th className="py-2 pr-4">Title</th>

@@ -80,6 +80,7 @@ authRouter.post('/lawyer-signup', sensitiveLimiter, async (req, res) => {
             phone: phone ? sanitizeText(phone, 20) : undefined,
             phoneVerified: false,
             bio: `Bar enrollment: ${barId ? sanitizeText(barId, 64) : 'pending'}. Profile created via lawyer signup.`,
+            createdAt: new Date().toISOString(),
         };
         cms.lawyers.push(newLawyer);
         await saveCms(cms);

@@ -17,6 +17,7 @@ export type PracticeArea = {
   name: string;
   icon: string;
   lawyers: number;
+  createdAt?: string;
 };
 
 export type StateEntry = {
@@ -25,12 +26,14 @@ export type StateEntry = {
   /** Short code, e.g. MH, DL */
   code: string;
   active: boolean;
+  createdAt?: string;
 };
 
 export type City = {
   slug: string;
   name: string;
   state: string;
+  createdAt?: string;
 };
 
 export type NavLink = { label: string; href: string };
@@ -62,6 +65,7 @@ export type CustomCmsPage = CmsPageFields & {
   id: string;
   slug: string;
   active?: boolean;
+  createdAt?: string;
 };
 export type CourtEntry = {
   slug: string;
@@ -70,6 +74,7 @@ export type CourtEntry = {
   body?: string;
   metaTitle?: string;
   metaDescription?: string;
+  createdAt?: string;
 };
 
 export type FooterContent = {
@@ -102,8 +107,8 @@ export type CourtsIndexPage = {
   metaDescription: string;
 };
 export type ActEntry = { slug: string; title: string; act: string; body?: string };
-export type GuideEntry = { slug: string; title: string; category: string };
-export type QaCategory = { slug: string; name: string; count: number };
+export type GuideEntry = { slug: string; title: string; category: string; createdAt?: string };
+export type QaCategory = { slug: string; name: string; count: number; createdAt?: string };
 
 export type EmailSmtpSettings = {
   enabled: boolean;
@@ -182,6 +187,7 @@ export type QaPost = {
   slug: string;
   status?: 'published' | 'draft';
   content?: string;
+  createdAt?: string;
 };
 
 export type Article = {
@@ -198,6 +204,7 @@ export type Article = {
   content?: string;
   lawyerId?: string;
   assignedLawyerIds?: string[];
+  createdAt?: string;
 };
 
 export type QaAnswer = {
@@ -220,6 +227,7 @@ export type AdminUser = {
   email: string;
   role: 'super_admin' | 'editor' | 'moderator';
   lastLogin?: string;
+  createdAt?: string;
 };
 
 export type BookingRecord = {
@@ -232,6 +240,7 @@ export type BookingRecord = {
   time: string;
   type: string;
   status: 'pending' | 'confirmed' | 'cancelled';
+  createdAt?: string;
 };
 
 export type CmsData = {

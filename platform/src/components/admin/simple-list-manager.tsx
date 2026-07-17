@@ -88,7 +88,7 @@ export function SimpleListManager<T extends Record<string, unknown>>({
           <button
             type="button"
             className="btn btn-primary btn-sm"
-            onClick={() => setItems([...items, makeDefaultItem(section, cms) as T])}
+            onClick={() => setItems([makeDefaultItem(section, cms) as T, ...items])}
           >
             <Plus className="h-4 w-4 me-1 d-inline" /> Add
           </button>

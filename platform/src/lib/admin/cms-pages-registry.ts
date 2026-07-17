@@ -132,6 +132,7 @@ export function newCustomCmsPage(): CustomCmsPage {
     metaDescription: '',
     lastUpdated: '',
     active: true,
+    createdAt: new Date().toISOString(),
   };
 }
 

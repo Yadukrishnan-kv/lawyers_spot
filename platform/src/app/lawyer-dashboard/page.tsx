@@ -1,19 +1,38 @@
+'use client';
+
 import { LawyerVerificationPanel } from '@/components/lawyer/lawyer-verification-panel';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import { Users, Calendar, TrendingUp, Star, MessageSquare, Clock, ArrowRight, FileText, HelpCircle, User } from 'lucide-react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = { title: 'Lawyer Dashboard' };
-
-const stats = [
-  { icon: Users, label: 'New Leads', value: '24' },
-  { icon: Calendar, label: 'Appointments', value: '12' },
-  { icon: TrendingUp, label: 'Earnings (MTD)', value: '₹1.2L' },
-  { icon: Star, label: 'Rating', value: '4.9' },
-];
+import { Users, Calendar, TrendingUp, Star, MessageSquare, Clock, ArrowRight, FileText, HelpCircle, User, Loader2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { fetchLawyerDashboardStats } from '@/lib/user-auth';
 
 export default function LawyerDashboardPage() {
+  const [stats, setStats] = useState<{ icon: React.ComponentType<{ className?: string }>; label: string; value: string }[] | null>(null);
+  const [unreadMessages, setUnreadMessages] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchLawyerDashboardStats()
+      .then((data) => {
+        setStats([
+          { icon: Users, label: 'New Leads', value: String(data.newLeads) },
+          { icon: Calendar, label: 'Appointments', value: String(data.appointments) },
+          { icon: TrendingUp, label: 'Earnings (MTD)', value: data.earnings > 0 ? `₹${(data.earnings / 100).toFixed(1)}L` : '₹0' },
+          { icon: Star, label: 'Rating', value: data.rating.toFixed(1) },
+        ]);
+        setUnreadMessages(data.unreadMessages);
+      })
+      .catch(() => {
+        setStats([
+          { icon: Users, label: 'New Leads', value: '0' },
+          { icon: Calendar, label: 'Appointments', value: '0' },
+          { icon: TrendingUp, label: 'Earnings (MTD)', value: '₹0' },
+          { icon: Star, label: 'Rating', value: '0.0' },
+        ]);
+        setUnreadMessages(0);
+      });
+  }, []);
+
   return (
     <div className="space-y-8">
       {/* Welcome */}
@@ -24,19 +43,34 @@ export default function LawyerDashboardPage() {
 
       {/* Stats */}
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((s) => (
-          <Card key={s.label}>
-            <CardContent className="flex items-center gap-4 p-5">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-royal-50 text-royal-600 dark:bg-royal-950/30 dark:text-royal-300">
-                <s.icon className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xl font-bold text-navy-900 dark:text-white">{s.value}</p>
-                <p className="text-xs text-slate-500">{s.label}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {stats === null
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i}>
+                <CardContent className="flex items-center gap-4 p-5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-royal-50 dark:bg-royal-950/30">
+                    <Loader2 className="h-5 w-5 animate-spin text-royal-600 dark:text-royal-300" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="h-5 w-16 animate-pulse rounded bg-slate-200 dark:bg-navy-700" />
+                    <div className="h-3 w-20 animate-pulse rounded bg-slate-100 dark:bg-navy-800" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          : stats.map((s) => (
+              <Card key={s.label}>
+                <CardContent className="flex items-center gap-4 p-5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-royal-50 text-royal-600 dark:bg-royal-950/30 dark:text-royal-300">
+                    <s.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold text-navy-900 dark:text-white">{s.value}</p>
+                    <p className="text-xs text-slate-500">{s.label}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+        }
       </div>
 
       {/* Quick Links */}
@@ -61,7 +95,7 @@ export default function LawyerDashboardPage() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-navy-900 dark:text-white">Client Chats</p>
-                  <p className="text-xs text-slate-500">3 unread messages</p>
+                  <p className="text-xs text-slate-500">{unreadMessages === null ? '...' : `${unreadMessages} unread messages`}</p>
                 </div>
               </div>
               <Link

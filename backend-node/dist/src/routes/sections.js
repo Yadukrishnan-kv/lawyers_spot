@@ -62,7 +62,7 @@ sectionsRouter.get('/admin/sections', requireAdmin, async (req, res) => {
               category, status, display_order, created_at, updated_at
        FROM sections
        WHERE type = $1
-       ORDER BY display_order ASC, id ASC`, [type]);
+       ORDER BY created_at DESC`, [type]);
         res.json(result.rows.map(rowToJson));
     }
     catch (e) {

@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, User, CreditCard, Settings, LogOut, FileText,
-  MessageSquare, Mail, Scale, Menu, X, ChevronRight,
+  MessageSquare, Mail, Scale, Menu, X, ChevronRight, Calendar,
 } from 'lucide-react';
 import { fetchCurrentUser, logoutUser } from '@/lib/user-auth';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 const NAV = [
   { href: '/lawyer-dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
   { href: '/lawyer-dashboard/profile', label: 'Edit Profile', icon: User },
+  { href: '/lawyer-dashboard/appointments', label: 'Appointments', icon: Calendar },
   { href: '/lawyer-dashboard/messages', label: 'Messages', icon: Mail },
   { href: '/lawyer-dashboard/articles', label: 'Articles', icon: FileText },
   { href: '/lawyer-dashboard/qa', label: 'Q&A', icon: MessageSquare },
@@ -143,14 +144,17 @@ export function LawyerDashboardShell({ children }: { children: React.ReactNode }
 
         {/* Main Area */}
         <div className="flex-1 lg:pl-64">
-          <button
-            type="button"
-            className="fixed left-4 top-4 z-50 rounded-lg bg-white p-2 text-slate-600 shadow-md hover:bg-slate-100 lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-            aria-label="Open sidebar"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+          <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-white px-4 dark:border-navy-700 dark:bg-navy-900">
+            <button
+              type="button"
+              className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden dark:text-slate-400 dark:hover:bg-navy-800"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open sidebar"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div />
+          </header>
 
           <main className="p-4 sm:p-6 lg:p-8">{children}</main>
         </div>

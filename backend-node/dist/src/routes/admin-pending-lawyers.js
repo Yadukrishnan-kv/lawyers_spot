@@ -107,7 +107,7 @@ pendingLawyersRouter.get('/', async (req, res) => {
         const total = countResult.rows[0].total;
         const rows = await query(`SELECT id, enrollment_no, name, father_name, mobile, email, gender, district, state, bar_council, practice_areas, status, rejection_reason, verified_by, verified_at, rejected_by, rejected_at, import_batch_id, created_at, updated_at
        FROM lawyer_pending ${where}
-       ORDER BY sort_order ASC, created_at DESC
+       ORDER BY created_at DESC, sort_order ASC
        LIMIT $${idx} OFFSET $${idx + 1}`, [...params, limit, offset]);
         res.json({ rows: rows.rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     }
@@ -236,8 +236,8 @@ pendingLawyersRouter.post('/:id/verify', async (req, res) => {
           id, slug, name, image, rating, reviews, experience, fee, currency, location, address,
           practice, city_slug, email, email_verified, phone, phone_verified, firm, bio, online, verified,
           specialization, languages, education, timeline, practice_groups, courts, awards, client_reviews,
-          profile_faq, subscription_plan_id, subscription_expires_at, featured, top_rated
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)`, [
+          profile_faq, subscription_plan_id, subscription_expires_at, featured, top_rated, created_at
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)`, [
                 lawyerId,
                 slug,
                 pending.name,
@@ -272,6 +272,7 @@ pendingLawyersRouter.post('/:id/verify', async (req, res) => {
                 null,
                 false,
                 false,
+                new Date(),
             ]);
             const tempPassword = `Law${Date.now().toString(36)}`;
             const passwordHash = await hashPassword(tempPassword);

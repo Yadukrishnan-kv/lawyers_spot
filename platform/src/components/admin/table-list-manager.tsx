@@ -9,6 +9,7 @@ import { AdminDataTable, type AdminTableColumn } from '@/components/admin/admin-
 import { AdminFormModal } from '@/components/admin/admin-form-modal';
 import { defaultCityState, getStateSelectOptions } from '@/components/admin/state-select-options';
 import { makeDefaultItem, type ListSection } from '@/components/admin/list-section-utils';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 export type ListField = {
   key: string;
@@ -44,7 +45,7 @@ export function TableListManager<T extends Record<string, unknown>>({
 }: Props<T>) {
   const router = useRouter();
   const [cms, setCms] = useState(initial);
-  const [items, setItems] = useState<T[]>(initial[section] as unknown as T[]);
+  const [items, setItems] = useState<T[]>(sortByCreatedDesc(initial[section] as unknown as T[]));
   const [editing, setEditing] = useState<T | null>(null);
   const [editIndex, setEditIndex] = useState(-1);
   const { save, saving, message } = useCmsSave();
@@ -81,7 +82,7 @@ export function TableListManager<T extends Record<string, unknown>>({
     if (editIndex >= 0) {
       list = items.map((item, i) => (i === editIndex ? editing : item));
     } else {
-      list = [...items, editing];
+      list = [editing, ...items];
     }
     await persistList(list);
     setEditing(null);

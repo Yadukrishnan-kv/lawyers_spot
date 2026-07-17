@@ -10,6 +10,7 @@ import { StatCard } from '@/components/admin/stat-card';
 import Link from 'next/link';
 import { getAdminCmsData } from '@/lib/cms/store';
 import { formatAdminTimestamp } from '@/lib/admin/format-timestamp';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 import { planNameById } from '@/lib/subscription';
 
 export const metadata = { title: 'Dashboard | Admin' };
@@ -131,7 +132,7 @@ export default async function AdminDashboardPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {cms.lawyers.slice(0, 8).map((l) => (
+                    {sortByCreatedDesc(cms.lawyers).slice(0, 8).map((l) => (
                       <tr key={l.id}>
                         <td className="fw-semibold">
                           <Link href={`/admin/lawyers/${encodeURIComponent(l.id)}/edit`} className="text-decoration-none">

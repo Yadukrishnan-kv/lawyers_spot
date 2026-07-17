@@ -3,10 +3,11 @@
 import { useState, useCallback } from 'react';
 import { TableListManager } from '@/components/admin/table-list-manager';
 import { LawyerAssignmentPicker } from '@/components/admin/lawyer-assignment-picker';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 import type { Article, CmsData } from '@/lib/cms/types';
 
 export function ArticlesManager({ initial }: { initial: CmsData }) {
-  const [articles, setArticles] = useState<Article[]>(initial.articles);
+  const [articles, setArticles] = useState<Article[]>(sortByCreatedDesc(initial.articles));
 
   const allLawyers = initial.lawyers.map((l) => ({
     id: l.id as string,

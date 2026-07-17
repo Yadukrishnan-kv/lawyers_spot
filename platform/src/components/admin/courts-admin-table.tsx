@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import type { CmsData, CourtEntry } from '@/lib/cms/types';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
 import { useCmsSave } from '@/components/admin/cms-editor';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 type Props = {
   cms: CmsData;
@@ -14,6 +16,7 @@ type Props = {
 export function CourtsAdminTable({ cms, onCmsChange }: Props) {
   const { save } = useCmsSave();
   const courts = cms.siteContent.courts;
+  const sortedCourts = useMemo(() => sortByCreatedDesc(courts), [courts]);
 
   async function remove(court: CourtEntry) {
     if (!confirm(`Delete "${court.name}"?`)) return;
@@ -38,7 +41,7 @@ export function CourtsAdminTable({ cms, onCmsChange }: Props) {
         </Link>
       </div>
       <AdminDataTable
-        rows={courts}
+        rows={sortedCourts}
         rowKey={(c) => c.slug}
         editHref={(c) => `/admin/footer/courts/${encodeURIComponent(c.slug)}/edit`}
         onDelete={remove}

@@ -22,7 +22,7 @@ export function NavLinksTable({ label, links, onChange }: Props) {
     if (editIndex >= 0) {
       onChange(links.map((l, i) => (i === editIndex ? editing : l)));
     } else {
-      onChange([...links, editing]);
+      onChange([editing, ...links]);
     }
     setEditing(null);
     setEditIndex(-1);

@@ -134,7 +134,7 @@ export function CmsPageEditor({ initial, pageId, isNew = false }: Props) {
       const exists = list.some((p) => p.id === normalized.id);
       const customCmsPages = exists
         ? list.map((p) => (p.id === normalized.id ? normalized : p))
-        : [...list, normalized];
+        : [normalized, ...list];
       next = {
         ...cms,
         siteContent: { ...cms.siteContent, customCmsPages },

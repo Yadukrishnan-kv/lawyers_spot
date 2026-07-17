@@ -48,6 +48,9 @@ function lawyerRowToJson(row: Record<string, unknown>) {
       : undefined,
     featured: Boolean(row.featured),
     topRated: Boolean(row.top_rated),
+    createdAt: row.created_at
+      ? new Date(row.created_at as string).toISOString()
+      : undefined,
   };
 }
 
@@ -269,6 +272,23 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
     plans,
   );
   const data = { ...payload, subscriptionPlans: plans, lawyers };
+
+  const incomingIdsSet = new Set(data.lawyers.map((l) => l.id));
+  if (data.articles) {
+    data.articles = data.articles.map((article) => {
+      const art = article as any;
+      const assignedLawyerIds = (art.assignedLawyerIds ?? []).filter((id: string) =>
+        incomingIdsSet.has(id),
+      );
+      const lawyerId = art.lawyerId && incomingIdsSet.has(art.lawyerId) ? art.lawyerId : undefined;
+      return {
+        ...art,
+        assignedLawyerIds,
+        lawyerId,
+      };
+    });
+  }
+
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -329,6 +349,58 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
       data.subscriptionPlans?.length ? data.subscriptionPlans : DEFAULT_SUBSCRIPTION_PLANS,
     );
 
+    const tablesCheck = await client.query(`
+      SELECT table_name 
+      FROM information_schema.tables 
+      WHERE table_schema = 'public' 
+        AND table_name IN ('saved_lawyers', 'conversations', 'messages')
+    `);
+    const existingTables = new Set(tablesCheck.rows.map((r) => r.table_name as string));
+
+    const incomingIds = data.lawyers.map((l) => l.id);
+    if (incomingIds.length > 0) {
+      if (existingTables.has('saved_lawyers')) {
+        await client.query(
+          `DELETE FROM saved_lawyers WHERE lawyer_id NOT IN (${incomingIds.map((_, i) => `$${i + 1}`).join(',')})`,
+          incomingIds,
+        );
+      }
+      if (existingTables.has('messages') && existingTables.has('conversations')) {
+        await client.query(
+          `DELETE FROM messages WHERE conversation_id IN (
+            SELECT id FROM conversations WHERE lawyer_id NOT IN (${incomingIds.map((_, i) => `$${i + 1}`).join(',')})
+          )`,
+          incomingIds,
+        );
+      }
+      if (existingTables.has('conversations')) {
+        await client.query(
+          `DELETE FROM conversations WHERE lawyer_id NOT IN (${incomingIds.map((_, i) => `$${i + 1}`).join(',')})`,
+          incomingIds,
+        );
+      }
+      await client.query(
+        `DELETE FROM platform_users WHERE lawyer_id IS NOT NULL AND lawyer_id NOT IN (${incomingIds.map((_, i) => `$${i + 1}`).join(',')})`,
+        incomingIds,
+      );
+      await client.query(
+        `DELETE FROM lawyers WHERE id NOT IN (${incomingIds.map((_, i) => `$${i + 1}`).join(',')})`,
+        incomingIds,
+      );
+    } else {
+      if (existingTables.has('saved_lawyers')) {
+        await client.query('DELETE FROM saved_lawyers');
+      }
+      if (existingTables.has('messages')) {
+        await client.query('DELETE FROM messages');
+      }
+      if (existingTables.has('conversations')) {
+        await client.query('DELETE FROM conversations');
+      }
+      await client.query('DELETE FROM platform_users WHERE lawyer_id IS NOT NULL');
+      await client.query('DELETE FROM lawyers');
+    }
+
     for (const l of data.lawyers) {
       const row = l as Record<string, unknown>;
       await client.query(
@@ -336,8 +408,8 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
           id, slug, name, image, rating, reviews, experience, fee, currency, location, address,
           practice, city_slug, email, email_verified, phone, phone_verified, firm, bio, online, verified,
           specialization, languages, education, timeline, practice_groups, courts, awards, client_reviews,
-          profile_faq, subscription_plan_id, subscription_expires_at, featured, top_rated
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)
+          profile_faq, subscription_plan_id, subscription_expires_at, featured, top_rated, created_at
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)
         ON CONFLICT (id) DO UPDATE SET
           slug = EXCLUDED.slug,
           name = EXCLUDED.name,
@@ -407,6 +479,7 @@ export async function saveCms(payload: CmsData): Promise<CmsData> {
           row.subscriptionExpiresAt ? new Date(row.subscriptionExpiresAt as string) : null,
           Boolean(row.featured),
           Boolean(row.topRated),
+          row.createdAt ? new Date(row.createdAt as string) : new Date(),
         ],
       );
     }

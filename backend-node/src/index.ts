@@ -12,6 +12,7 @@ import { sectionsRouter } from './routes/sections.js';
 import { userRouter } from './routes/user.js';
 import { pendingLawyersRouter } from './routes/admin-pending-lawyers.js';
 import { securityHeaders, requireJsonContentType } from './security/middleware.js';
+import { query } from './db.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -71,6 +72,14 @@ app.use('/api/v1/admin/pending-lawyers', pendingLawyersRouter);
 app.use((_req, res) => {
   res.status(404).json({ detail: 'Not found' });
 });
+
+// Run migration to add created_at column if it does not exist
+try {
+  await query('ALTER TABLE lawyers ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW()');
+  console.log('Database migration successful: added created_at to lawyers if missing.');
+} catch (e) {
+  console.error('Database migration failed:', e);
+}
 
 app.listen(config.port, () => {
   console.log(`LawyerSpot API (Node.js) http://127.0.0.1:${config.port}`);

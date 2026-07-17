@@ -92,11 +92,13 @@ function EditorToolbar({
   uploading,
   onAddImage,
   onSetLink,
+  uploadUrl,
 }: {
   editor: Editor | null;
   uploading: boolean;
   onAddImage: () => void;
   onSetLink: () => void;
+  uploadUrl?: string;
 }) {
   if (!editor) return null;
 
@@ -147,9 +149,11 @@ function EditorToolbar({
       <ToolbarButton title="Insert link" active={editor.isActive('link')} onClick={onSetLink}>
         <Link2 className="h-4 w-4" />
       </ToolbarButton>
-      <ToolbarButton title="Insert image" disabled={uploading} onClick={onAddImage}>
-        {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
-      </ToolbarButton>
+      {uploadUrl && (
+        <ToolbarButton title="Insert image" disabled={uploading} onClick={onAddImage}>
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+        </ToolbarButton>
+      )}
       <span className="admin-rich-text-editor__sep" />
       <ToolbarButton
         title="Insert table"
@@ -410,7 +414,7 @@ export function RichTextEditor({
     <div className={className}>
       {label && <label className="form-label">{label}</label>}
       <div className="admin-rich-text-editor">
-        <EditorToolbar editor={editor} uploading={uploading} onAddImage={addImage} onSetLink={setLink} />
+        <EditorToolbar editor={editor} uploading={uploading} onAddImage={addImage} onSetLink={setLink} uploadUrl={uploadUrl} />
         {imageAttrs && (
           <ImageResizeBar
             width={imageAttrs.width}

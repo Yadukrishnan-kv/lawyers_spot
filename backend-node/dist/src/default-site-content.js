@@ -91,7 +91,7 @@ export const defaultSiteContent = {
         title: 'About LawyerSpot',
         body: '<p>LawyerSpot connects clients with verified advocates across India. All statistics and content are managed dynamically from our admin CMS.</p>',
         metaTitle: 'About LawyerSpot',
-        metaDescription: "India's legal intelligence platform — connecting citizens with verified lawyers and free legal knowledge.",
+        metaDescription: "India's intelligent legal platform — connecting citizens with verified lawyers and free legal knowledge.",
     },
     ipcPage: {
         title: 'IPC Sections',

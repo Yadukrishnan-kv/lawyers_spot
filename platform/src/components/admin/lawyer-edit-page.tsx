@@ -32,7 +32,7 @@ export function LawyerEditPage({ initial, lawyer: initialLawyer, isNew = false }
     const exists = cms.lawyers.some((l) => l.id === normalized.id);
     const list = exists
       ? cms.lawyers.map((l) => (l.id === normalized.id ? normalized : l))
-      : [...cms.lawyers, normalized];
+      : [normalized, ...cms.lawyers];
     const next = { ...cms, lawyers: list };
     const ok = await save(next);
     if (ok) {

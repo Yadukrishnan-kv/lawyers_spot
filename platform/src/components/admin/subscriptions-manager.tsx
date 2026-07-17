@@ -12,6 +12,7 @@ import {
 import { useCmsSave } from '@/components/admin/cms-editor';
 import { AdminInput } from '@/components/admin/cms-editor';
 import { PlanFeaturePicker } from '@/components/admin/plan-feature-picker';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 export function SubscriptionsManager({ initial }: { initial: CmsData }) {
   const [cms, setCms] = useState(initial);
@@ -191,7 +192,7 @@ export function SubscriptionsManager({ initial }: { initial: CmsData }) {
                 </tr>
               </thead>
               <tbody>
-                {syncedLawyers.map((l) => {
+                {sortByCreatedDesc(syncedLawyers).map((l) => {
                   const plan = plans.find((p) => p.id === (l.subscriptionPlanId ?? 'basic'));
                   const feats = normalizeFeatureIds(plan?.features).map(featureLabel);
                   return (

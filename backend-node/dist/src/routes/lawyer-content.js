@@ -29,6 +29,7 @@ function articleRowToJson(row) {
         status: row.status ?? 'published',
         content: row.content ?? undefined,
         lawyerId: row.lawyer_id ?? undefined,
+        assigned: Boolean(row.assigned),
     };
 }
 function answerRowToJson(row) {
@@ -60,8 +61,12 @@ lawyerContentRouter.get('/articles', requireUser(['lawyer']), async (req, res) =
             res.status(404).json({ detail: 'Lawyer not found' });
             return;
         }
-        const rows = await query(`SELECT slug, title, excerpt, category, author, date, read_time, image, trending, status, content, lawyer_id
-       FROM articles WHERE lawyer_id = $1 ORDER BY date DESC`, [account.user.lawyer_id]);
+        const rows = await query(`SELECT DISTINCT a.slug, a.title, a.excerpt, a.category, a.author, a.date, a.read_time, a.image, a.trending, a.status, a.content, a.lawyer_id,
+              (a.lawyer_id = $1) AS assigned
+       FROM articles a
+       LEFT JOIN article_lawyers al ON al.article_slug = a.slug
+       WHERE a.lawyer_id = $1 OR al.lawyer_id = $1
+       ORDER BY a.date DESC`, [account.user.lawyer_id]);
         res.json({ articles: rows.rows.map((r) => articleRowToJson(r)) });
     }
     catch (e) {
@@ -77,8 +82,10 @@ lawyerContentRouter.get('/articles/:slug', requireUser(['lawyer']), async (req, 
             res.status(404).json({ detail: 'Lawyer not found' });
             return;
         }
-        const row = await query(`SELECT slug, title, excerpt, category, author, date, read_time, image, trending, status, content, lawyer_id
-       FROM articles WHERE slug = $1 AND lawyer_id = $2`, [req.params.slug, account.user.lawyer_id]);
+        const row = await query(`SELECT DISTINCT a.slug, a.title, a.excerpt, a.category, a.author, a.date, a.read_time, a.image, a.trending, a.status, a.content, a.lawyer_id
+       FROM articles a
+       LEFT JOIN article_lawyers al ON al.article_slug = a.slug
+       WHERE a.slug = $1 AND (a.lawyer_id = $2 OR al.lawyer_id = $2)`, [req.params.slug, account.user.lawyer_id]);
         if (!row.rows[0]) {
             res.status(404).json({ detail: 'Article not found' });
             return;

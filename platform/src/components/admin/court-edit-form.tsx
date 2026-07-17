@@ -25,13 +25,13 @@ export function CourtEditForm({ initial, court: initialCourt, isNew = false, bac
   }
 
   async function handleSave() {
-    const courts = [...cms.siteContent.courts];
+    let courts = [...cms.siteContent.courts];
     if (isNew) {
       if (courts.some((c) => c.slug === court.slug)) {
         alert('A court with this slug already exists.');
         return;
       }
-      courts.push(court);
+      courts = [court, ...courts];
     } else {
       const idx = courts.findIndex((c) => c.slug === initialCourt.slug);
       if (idx < 0) return;

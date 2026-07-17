@@ -58,8 +58,8 @@ export function LawyerArticleForm({ slug }: Props) {
         image: article.image || DEFAULT_IMAGE,
       };
       if (isNew) {
-        const data = await createLawyerArticle(articleToSave);
-        router.push(`/lawyer-dashboard/articles/${encodeURIComponent(data.article.slug)}/edit`);
+        await createLawyerArticle(articleToSave);
+        router.push('/lawyer-dashboard/articles');
         router.refresh();
       } else {
         await updateLawyerArticle(slug!, {
@@ -162,38 +162,18 @@ export function LawyerArticleForm({ slug }: Props) {
             </div>
           </div>
           <div>
-            <label className="text-sm font-semibold">Date</label>
-            <input
-              type="date"
-              className={fieldClass}
-              value={article.date}
-              onChange={(e) => setArticle({ ...article, date: e.target.value })}
-            />
-          </div>
-          <ArticleCoverUpload
-            imageUrl={article.image}
-            onChange={(url) => setArticle({ ...article, image: url })}
-          />
-          <div>
             <RichTextEditor
               label="Excerpt"
               value={article.excerpt ?? ''}
               onChange={(v) => setArticle({ ...article, excerpt: v })}
               placeholder="Write article excerpt…"
               minHeight={120}
-              uploadUrl="/api/lawyer/upload/article-image"
             />
           </div>
-          <div>
-            <label className="text-sm font-semibold">Article body</label>
-            <textarea
-              rows={12}
-              className="mt-1 w-full rounded-xl border px-3 py-2 font-mono text-sm dark:border-navy-700 dark:bg-navy-800"
-              value={article.content ?? ''}
-              onChange={(e) => setArticle({ ...article, content: e.target.value })}
-              placeholder="Write your article content here. Plain text or simple HTML is supported."
-            />
-          </div>
+          <ArticleCoverUpload
+            imageUrl={article.image}
+            onChange={(url) => setArticle({ ...article, image: url })}
+          />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex flex-wrap gap-3">
             <Button type="submit" disabled={saving}>

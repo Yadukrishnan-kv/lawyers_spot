@@ -106,6 +106,7 @@ export function LawyerAssignmentPicker({ articleSlug, allLawyers, initialSelecte
       if (!res.ok) throw new Error('Failed');
       setMessage('Saved');
       onChange?.([...selected]);
+      setOpen(false);
       setTimeout(() => setMessage(''), 2000);
     } catch {
       setMessage('Failed to save');

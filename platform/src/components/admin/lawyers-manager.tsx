@@ -10,6 +10,7 @@ import { useCmsSave } from '@/components/admin/cms-editor';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
 import { VerificationBadges } from '@/components/lawyer/verification-badges';
 import { planNameById } from '@/lib/subscription';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 import {
   emptyLawyerListFilters,
   filterLawyers,
@@ -42,7 +43,7 @@ export function LawyersManager({ initial }: { initial: CmsData }) {
   const courtOptions = useMemo(() => collectUniqueCourts(cms.lawyers), [cms.lawyers]);
 
   const filteredLawyers = useMemo(
-    () => filterLawyers(cms.lawyers, filters, cms.cities),
+    () => sortByCreatedDesc(filterLawyers(cms.lawyers, filters, cms.cities)),
     [cms.lawyers, cms.cities, filters],
   );
 
@@ -85,20 +86,17 @@ export function LawyersManager({ initial }: { initial: CmsData }) {
     downloadLawyersPdf(exportRows(), 'LawyerSpot — Lawyers');
   }
 
-  function persistLawyers(list: Lawyer[]) {
-    const next = { ...cms, lawyers: list };
-    setCms(next);
-    return next;
-  }
-
   function addNew() {
     router.push('/admin/lawyers/new');
   }
 
-  function remove(id: string) {
+  async function remove(id: string) {
     if (!confirm('Delete this lawyer?')) return;
-    const next = persistLawyers(cms.lawyers.filter((l) => l.id !== id));
-    save(next);
+    const list = cms.lawyers.filter((l) => l.id !== id);
+    const ok = await save({ ...cms, lawyers: list });
+    if (ok) {
+      setCms((prev) => ({ ...prev, lawyers: list }));
+    }
   }
 
   return (

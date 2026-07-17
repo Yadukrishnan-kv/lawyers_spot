@@ -29,6 +29,7 @@ export default async function NewLawyerPage() {
     profileFaq: [],
     subscriptionPlanId: 'basic',
     topRated: false,
+    createdAt: new Date().toISOString(),
   };
 
   return (

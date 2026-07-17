@@ -83,4 +83,5 @@ export type Lawyer = {
   featured?: boolean;
   /** Top Rated Lawyer badge on listings and profile */
   topRated?: boolean;
+  createdAt?: string;
 };

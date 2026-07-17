@@ -66,6 +66,113 @@ lawyerRouter.get('/profile', requireUser(['lawyer']), async (req, res) => {
         res.status(500).json({ detail: 'Failed to load profile' });
     }
 });
+lawyerRouter.get('/dashboard-stats', requireUser(['lawyer']), async (req, res) => {
+    try {
+        const { userId } = req.user;
+        const account = await resolveLawyerAccount(userId);
+        if (!account) {
+            res.status(404).json({ detail: 'Lawyer profile not found' });
+            return;
+        }
+        const lawyerId = account.lawyer.id;
+        const rating = account.lawyer.rating ?? 0;
+        const [bookingsRes, conversationsRes] = await Promise.all([
+            query('SELECT COUNT(*)::text as count FROM bookings WHERE lawyer_id = $1', [lawyerId]),
+            query('SELECT COUNT(*)::text as count FROM conversations WHERE lawyer_id = $1', [lawyerId]),
+        ]);
+        let unreadMessages = 0;
+        try {
+            const unreadRes = await query(`SELECT COUNT(*)::text as count FROM messages m
+         JOIN conversations c ON c.id = m.conversation_id
+         WHERE c.lawyer_id = $1 AND m.sender_type = 'user' AND m.is_read = FALSE`, [lawyerId]);
+            unreadMessages = parseInt(unreadRes.rows[0]?.count ?? '0', 10);
+        }
+        catch { }
+        res.json({
+            newLeads: parseInt(conversationsRes.rows[0]?.count ?? '0', 10),
+            appointments: parseInt(bookingsRes.rows[0]?.count ?? '0', 10),
+            earnings: 0,
+            rating,
+            unreadMessages,
+        });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ detail: 'Failed to load dashboard stats' });
+    }
+});
+lawyerRouter.get('/bookings', requireUser(['lawyer']), async (req, res) => {
+    try {
+        const { userId } = req.user;
+        const account = await resolveLawyerAccount(userId);
+        if (!account) {
+            res.status(404).json({ detail: 'Lawyer profile not found' });
+            return;
+        }
+        const lawyerId = account.lawyer.id;
+        const r = await query(`SELECT id, user_id, client_name, client_email, date, time, type, status 
+       FROM bookings 
+       WHERE lawyer_id = $1 
+       ORDER BY date DESC, time DESC`, [lawyerId]);
+        res.json({
+            bookings: r.rows.map((b) => ({
+                id: b.id,
+                userId: b.user_id,
+                clientName: b.client_name,
+                clientEmail: b.client_email,
+                date: b.date,
+                time: b.time,
+                type: b.type,
+                status: b.status,
+            })),
+        });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ detail: 'Failed to load bookings' });
+    }
+});
+lawyerRouter.patch('/bookings/:id', requireUser(['lawyer']), async (req, res) => {
+    try {
+        const { userId } = req.user;
+        const account = await resolveLawyerAccount(userId);
+        if (!account) {
+            res.status(404).json({ detail: 'Lawyer profile not found' });
+            return;
+        }
+        const lawyerId = account.lawyer.id;
+        const { status } = req.body;
+        if (!status || !['pending', 'confirmed', 'cancelled'].includes(status)) {
+            res.status(400).json({ detail: 'Invalid status' });
+            return;
+        }
+        const bookingId = req.params.id;
+        const check = await query('SELECT lawyer_id, user_id, date, time FROM bookings WHERE id = $1', [bookingId]);
+        const booking = check.rows[0];
+        if (!booking) {
+            res.status(404).json({ detail: 'Booking not found' });
+            return;
+        }
+        if (booking.lawyer_id !== lawyerId) {
+            res.status(403).json({ detail: 'Forbidden' });
+            return;
+        }
+        await query('UPDATE bookings SET status = $1 WHERE id = $2', [status, bookingId]);
+        if (booking.user_id) {
+            const title = status === 'confirmed' ? 'Booking Confirmed' : 'Booking Cancelled';
+            const msg = status === 'confirmed'
+                ? `Your appointment on ${booking.date} at ${booking.time} has been confirmed by the advocate.`
+                : `Your appointment on ${booking.date} at ${booking.time} has been cancelled.`;
+            await query(`INSERT INTO notifications (user_id, title, message, type)
+         VALUES ($1, $2, $3, $4)`, [booking.user_id, title, msg, status === 'confirmed' ? 'booking_confirmed' : 'booking_cancelled']);
+        }
+        res.json({ success: true });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ detail: 'Failed to update booking status' });
+    }
+});
 lawyerRouter.patch('/profile', requireUser(['lawyer']), async (req, res) => {
     try {
         const { userId } = req.user;
@@ -132,6 +239,9 @@ lawyerRouter.patch('/profile', requireUser(['lawyer']), async (req, res) => {
                 .map((v) => sanitizeText(v, 64))
                 .filter(Boolean)
                 .slice(0, 12);
+        }
+        if (typeof body.image === 'string') {
+            lawyer.image = sanitizeText(body.image, 512);
         }
         const cms = await loadCms();
         const idx = cms.lawyers.findIndex((l) => l.id === lawyer.id);

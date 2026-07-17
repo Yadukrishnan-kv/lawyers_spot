@@ -1,12 +1,15 @@
 'use client';
 
+import { useMemo } from 'react';
 import type { AdminUser } from '@/lib/cms/types';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 export function AdminUsersTable({ users }: { users: AdminUser[] }) {
+  const sorted = useMemo(() => sortByCreatedDesc(users), [users]);
   return (
     <AdminDataTable
-      rows={users}
+      rows={sorted}
       rowKey={(u) => u.id}
       pageSize={10}
       showActions={false}

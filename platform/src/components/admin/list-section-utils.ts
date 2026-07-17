@@ -3,15 +3,17 @@ import { defaultCityState } from '@/components/admin/state-select-options';
 
 export type ListSection = 'practiceAreas' | 'states' | 'cities' | 'qaPosts' | 'articles';
 
+const now = () => new Date().toISOString();
+
 export function makeDefaultItem(section: ListSection, cms: CmsData): Record<string, unknown> {
   const ts = Date.now();
   switch (section) {
     case 'practiceAreas':
-      return { slug: `area-${ts}`, name: 'New Area', icon: 'Gavel', lawyers: 0 };
+      return { slug: `area-${ts}`, name: 'New Area', icon: 'Gavel', lawyers: 0, createdAt: now() };
     case 'states':
-      return { slug: `state-${ts}`, name: 'New State', code: 'XX', active: true };
+      return { slug: `state-${ts}`, name: 'New State', code: 'XX', active: true, createdAt: now() };
     case 'cities':
-      return { slug: `city-${ts}`, name: 'New City', state: defaultCityState(cms) };
+      return { slug: `city-${ts}`, name: 'New City', state: defaultCityState(cms), createdAt: now() };
     case 'qaPosts':
       return {
         id: String(ts),
@@ -22,6 +24,7 @@ export function makeDefaultItem(section: ListSection, cms: CmsData): Record<stri
         views: 0,
         slug: `qa-${ts}`,
         status: 'published',
+        createdAt: now(),
       };
     case 'articles':
       return {
@@ -35,6 +38,7 @@ export function makeDefaultItem(section: ListSection, cms: CmsData): Record<stri
         image: '',
         trending: false,
         status: 'published',
+        createdAt: now(),
       };
   }
 }

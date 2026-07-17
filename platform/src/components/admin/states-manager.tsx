@@ -1,18 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import type { CmsData, StateEntry } from '@/lib/cms/types';
 import { AdminInput, useCmsSave } from '@/components/admin/cms-editor';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
 import { AdminFormModal } from '@/components/admin/admin-form-modal';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 export function StatesManager({ initial }: { initial: CmsData }) {
   const [cms, setCms] = useState(initial);
+  const sortedStates = useMemo(() => sortByCreatedDesc(cms.states), [cms.states]);
   const [editing, setEditing] = useState<StateEntry | null>(null);
   const [editIndex, setEditIndex] = useState(-1);
   const { save, saving } = useCmsSave();
-  const activeCount = cms.states.filter((s) => s.active).length;
+  const activeCount = sortedStates.filter((s) => s.active).length;
 
   async function persistStates(list: StateEntry[]) {
     const next = { ...cms, states: list };
@@ -26,7 +28,7 @@ export function StatesManager({ initial }: { initial: CmsData }) {
     if (editIndex >= 0) {
       list = cms.states.map((s, i) => (i === editIndex ? editing : s));
     } else {
-      list = [...cms.states, editing];
+      list = [editing, ...cms.states];
     }
     await persistStates(list);
     setEditing(null);
@@ -40,7 +42,7 @@ export function StatesManager({ initial }: { initial: CmsData }) {
           <div>
             <h3 className="card-title mb-0">States</h3>
             <p className="text-muted mb-0 fs-12">
-              {cms.states.length} states · {activeCount} active
+              {sortedStates.length} states · {activeCount} active
             </p>
           </div>
           <button
@@ -52,6 +54,7 @@ export function StatesManager({ initial }: { initial: CmsData }) {
                 name: 'New State',
                 code: 'XX',
                 active: true,
+                createdAt: new Date().toISOString(),
               });
               setEditIndex(-1);
             }}
@@ -61,7 +64,7 @@ export function StatesManager({ initial }: { initial: CmsData }) {
         </div>
         <div className="card-body">
           <AdminDataTable
-            rows={cms.states}
+            rows={sortedStates}
             rowKey={(s) => s.slug}
             columns={[
               { key: 'name', header: 'State name', render: (s) => <span className="fw-semibold">{s.name}</span> },

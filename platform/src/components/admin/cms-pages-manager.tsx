@@ -8,13 +8,14 @@ import type { CmsData } from '@/lib/cms/types';
 import { useCmsSave } from '@/components/admin/cms-editor';
 import { AdminDataTable } from '@/components/admin/admin-data-table';
 import { listCmsPages, type CmsPageListRow } from '@/lib/admin/cms-pages-registry';
+import { sortByCreatedDesc } from '@/lib/admin/sort-utils';
 
 export function CmsPagesManager({ initial }: { initial: CmsData }) {
   const router = useRouter();
   const [cms, setCms] = useState(initial);
   const { save, saving } = useCmsSave();
 
-  const rows = useMemo(() => listCmsPages(cms.siteContent), [cms.siteContent]);
+  const rows = useMemo(() => sortByCreatedDesc(listCmsPages(cms.siteContent)), [cms.siteContent]);
 
   async function handleDelete(row: CmsPageListRow) {
     if (row.system) return;

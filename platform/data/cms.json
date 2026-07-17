@@ -5,6 +5,619 @@
     "url": "https://lawyerspot.com",
     "description": "Find verified lawyers, free legal answers, guides & consultations across 1200+ cities in India."
   },
+  "siteContent": {
+    "utilityNav": [
+      {
+        "href": "/indian-kanoon",
+        "label": "Indian Kanoon"
+      },
+      {
+        "href": "/ipc",
+        "label": "Indian Penal Code"
+      },
+      {
+        "href": "/qa/ask",
+        "label": "Ask A Free Question"
+      },
+      {
+        "href": "/lawyers",
+        "label": "Talk To A Lawyer"
+      },
+      {
+        "href": "/qa",
+        "label": "Free Legal Advice"
+      },
+      {
+        "href": "/lawyer-signup",
+        "label": "Lawyer Signup"
+      }
+    ],
+    "mainNav": [
+      {
+        "href": "/lawyers",
+        "mega": "lawyers",
+        "label": "Find A Lawyer"
+      },
+      {
+        "href": "/qa",
+        "mega": "advice",
+        "label": "Legal Advice"
+      },
+      {
+        "href": "/ipc",
+        "label": "IPC Sections"
+      },
+      {
+        "href": "/bns",
+        "label": "BNS Sections"
+      },
+      {
+        "href": "/about",
+        "label": "About"
+      },
+      {
+        "href": "/dashboard",
+        "label": "My Account"
+      }
+    ],
+    "languages": [
+      {
+        "code": "en",
+        "label": "English"
+      },
+      {
+        "code": "hi",
+        "label": "हिंदी"
+      }
+    ],
+    "ipcSections": [
+      {
+        "code": "498A",
+        "slug": "ipc-section-498a",
+        "title": "IPC Section 498A"
+      },
+      {
+        "code": "420",
+        "slug": "ipc-section-420",
+        "title": "IPC Section 420"
+      },
+      {
+        "code": "302",
+        "slug": "ipc-section-302",
+        "title": "IPC Section 302"
+      },
+      {
+        "code": "376",
+        "slug": "ipc-section-376",
+        "title": "IPC Section 376"
+      },
+      {
+        "code": "406",
+        "slug": "ipc-section-406",
+        "title": "IPC Section 406"
+      },
+      {
+        "code": "354",
+        "slug": "ipc-section-354",
+        "title": "IPC Section 354"
+      }
+    ],
+    "bnsSections": [
+      {
+        "code": "103",
+        "slug": "bns-section-103",
+        "title": "BNS Section 103 (Murder)"
+      },
+      {
+        "code": "64",
+        "slug": "bns-section-64",
+        "title": "BNS Section 64 (Rape)"
+      },
+      {
+        "code": "318",
+        "slug": "bns-section-318",
+        "title": "BNS Section 318 (Cheating)"
+      },
+      {
+        "code": "85",
+        "slug": "bns-section-85",
+        "title": "BNS Section 85"
+      },
+      {
+        "code": "115",
+        "slug": "bns-section-115",
+        "title": "BNS Section 115"
+      }
+    ],
+    "courts": [
+      {
+        "city": "Delhi",
+        "name": "Supreme Court of India",
+        "slug": "supreme-court"
+      },
+      {
+        "city": "Delhi",
+        "name": "Delhi High Court",
+        "slug": "delhi-high-court"
+      },
+      {
+        "city": "Mumbai",
+        "name": "Bombay High Court",
+        "slug": "bombay-high-court"
+      },
+      {
+        "city": "Bangalore",
+        "name": "Karnataka High Court",
+        "slug": "karnataka-high-court"
+      },
+      {
+        "city": "Kochi",
+        "name": "Kerala High Court",
+        "slug": "kerala-high-court"
+      },
+      {
+        "city": "Chandigarh",
+        "name": "Punjab & Haryana High Court",
+        "slug": "punjab-haryana-high-court"
+      },
+      {
+        "city": "Pan India",
+        "name": "Family Courts",
+        "slug": "family-court"
+      },
+      {
+        "city": "Pan India",
+        "name": "District Courts",
+        "slug": "district-court"
+      }
+    ],
+    "acts": [
+      {
+        "act": "Indian Penal Code",
+        "slug": "ipc-section-498a",
+        "title": "IPC Section 498A"
+      },
+      {
+        "act": "HMA",
+        "slug": "hindu-marriage-act-13b",
+        "title": "Hindu Marriage Act Section 13B"
+      },
+      {
+        "act": "RERA",
+        "slug": "rera-act-2016",
+        "title": "RERA Act 2016 Overview"
+      },
+      {
+        "act": "CGST Act",
+        "slug": "gst-act-section-73",
+        "title": "GST Act Section 73"
+      },
+      {
+        "act": "Cyber Law",
+        "slug": "it-act-section-66",
+        "title": "IT Act Section 66"
+      }
+    ],
+    "popularSearches": [
+      {
+        "href": "/practice/divorce",
+        "label": "Divorce lawyer near me"
+      },
+      {
+        "href": "/city/mumbai/property",
+        "label": "Property lawyer Mumbai"
+      },
+      {
+        "href": "/city/delhi/criminal",
+        "label": "Criminal lawyer Delhi"
+      },
+      {
+        "href": "/practice/tax",
+        "label": "GST notice lawyer"
+      },
+      {
+        "href": "/city/bangalore/property",
+        "label": "RERA lawyer Bangalore"
+      },
+      {
+        "href": "/court/supreme-court",
+        "label": "Bail lawyer Supreme Court"
+      },
+      {
+        "href": "/articles/divorce-mutual-consent-guide",
+        "label": "Mutual consent divorce"
+      },
+      {
+        "href": "/qa?q=cheque+bounce",
+        "label": "Cheque bounce case"
+      },
+      {
+        "href": "/practice/startup",
+        "label": "Startup incorporation"
+      },
+      {
+        "href": "/practice/cyber",
+        "label": "Cyber crime complaint"
+      },
+      {
+        "href": "/practice/family",
+        "label": "Child custody lawyer"
+      },
+      {
+        "href": "/practice/immigration",
+        "label": "Immigration lawyer"
+      }
+    ],
+    "legalGuides": [
+      {
+        "slug": "divorce-mutual-consent-guide",
+        "title": "Divorce by Mutual Consent in India",
+        "category": "Family"
+      },
+      {
+        "slug": "cheque-bounce-guide",
+        "title": "Do's & Don'ts in Cheque Bounce Cases",
+        "category": "Criminal"
+      },
+      {
+        "slug": "gst-notice-response",
+        "title": "How to Respond to GST Notice",
+        "category": "Tax"
+      },
+      {
+        "slug": "rera-homebuyer-rights",
+        "title": "RERA Rights for Homebuyers",
+        "category": "Property"
+      },
+      {
+        "slug": "startup-funding-legal-checklist",
+        "title": "Startup Funding Legal Checklist",
+        "category": "Startup"
+      },
+      {
+        "slug": "bail-application-guide",
+        "title": "Bail Application Guide India",
+        "category": "Criminal"
+      }
+    ],
+    "qaCategories": [
+      {
+        "name": "Family Law",
+        "slug": "family",
+        "count": 45000
+      },
+      {
+        "name": "Property Law",
+        "slug": "property",
+        "count": 38000
+      },
+      {
+        "name": "Criminal Law",
+        "slug": "criminal",
+        "count": 52000
+      },
+      {
+        "name": "Tax & GST",
+        "slug": "tax",
+        "count": 22000
+      },
+      {
+        "name": "Corporate Law",
+        "slug": "corporate",
+        "count": 18000
+      },
+      {
+        "name": "Labour Law",
+        "slug": "labour",
+        "count": 15000
+      }
+    ],
+    "hero": {
+      "title": "India's Legal Intelligence Platform",
+      "subtitle": "Search verified lawyers, free legal answers, guides & acts — built for scale, SEO & trust.",
+      "badges": [
+        "100% Confidential",
+        "Bar Council Verified"
+      ]
+    },
+    "about": {
+      "title": "About LawyerSpot",
+      "body": "<p>LawyerSpot connects clients with verified advocates across India. All statistics and content are managed dynamically from our admin CMS.</p>",
+      "metaTitle": "About LawyerSpot",
+      "metaDescription": "India's legal intelligence platform — connecting citizens with verified lawyers and free legal knowledge."
+    },
+    "termsPage": {
+      "title": "Terms of Use",
+      "lastUpdated": "June 2026",
+      "metaTitle": "Terms of Use",
+      "metaDescription": "LawyerSpot terms of use — rules for clients, lawyers, and visitors using our legal marketplace.",
+      "body": "<section><h2>1. Acceptance</h2><p>By accessing LawyerSpot (\"the Platform\"), you agree to these Terms of Use. If you do not agree, please do not use the website or related services.</p></section>\n<section><h2>2. Nature of service</h2><p>LawyerSpot is an online directory and information platform that helps users discover advocates and legal content. We do not provide legal advice. Content on the Platform is for general information only and does not create an attorney–client relationship.</p></section>\n<section><h2>3. User accounts</h2><p>You are responsible for keeping your login credentials secure and for activity under your account. Lawyers must provide accurate profile, contact, and bar enrollment information. We may suspend accounts that violate these terms or applicable law.</p></section>\n<section><h2>4. Lawyer listings &amp; subscriptions</h2><p>Lawyer profiles, visibility features, and subscription plans are described at signup and in the admin panel. Fees, plan features, and entitlements may change with notice. Misrepresentation of qualifications or verification status is prohibited.</p></section>\n<section><h2>5. Bookings &amp; communications</h2><p>Consultation requests and messages facilitated through the Platform are between you and the participating lawyer. LawyerSpot is not a party to those engagements and is not liable for outcomes of legal representation.</p></section>\n<section><h2>6. Acceptable use</h2><p>You may not scrape, spam, harass users, upload unlawful content, or attempt to disrupt Platform security. Automated access without permission is prohibited.</p></section>\n<section><h2>7. Intellectual property</h2><p>LawyerSpot branding, layout, and original content are protected. User-submitted content remains yours, but you grant us a licence to display it on the Platform for operational purposes.</p></section>\n<section><h2>8. Disclaimer &amp; liability</h2><p>The Platform is provided \"as is\" without warranties. To the extent permitted by law, LawyerSpot is not liable for indirect or consequential damages arising from use of the site or reliance on its content.</p></section>\n<section><h2>9. Governing law</h2><p>These terms are governed by the laws of India. Courts in India shall have exclusive jurisdiction, subject to mandatory consumer protections where applicable.</p></section>\n<section><h2>10. Contact</h2><p>Questions about these terms may be sent through the contact options on the <a href=\"/about\">About</a> page.</p></section>"
+    },
+    "privacyPage": {
+      "title": "Privacy Policy",
+      "lastUpdated": "June 2026",
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "How LawyerSpot collects, uses, and protects your personal information.",
+      "body": "<section><h2>1. Overview</h2><p>LawyerSpot respects your privacy. This policy explains what information we collect when you use our website, how we use it, and the choices available to you.</p></section>\n<section><h2>2. Information we collect</h2><ul><li><strong>Account data:</strong> name, email, phone, role, and profile details you provide at signup.</li><li><strong>Usage data:</strong> pages visited, search queries, device/browser type, and approximate location derived from IP.</li><li><strong>Communications:</strong> consultation requests, Q&amp;A submissions, and support messages.</li><li><strong>Payment-related data:</strong> processed by third-party gateways; we do not store full card numbers.</li></ul></section>\n<section><h2>3. How we use information</h2><p>We use personal data to operate the Platform, display lawyer profiles, authenticate accounts, send notifications, improve features, and comply with legal obligations.</p></section>\n<section><h2>4. Sharing</h2><p>We do not sell your personal information. We may share data with lawyers you contact, infrastructure providers, and authorities when required by law.</p></section>\n<section><h2>5. Cookies</h2><p>We use cookies for sessions, preferences, and analytics. You can control cookies through your browser settings.</p></section>\n<section><h2>6. Data retention &amp; security</h2><p>We retain information while your account is active and as needed for legal or operational purposes. Reasonable measures protect data, but no online service is completely secure.</p></section>\n<section><h2>7. Your rights</h2><p>Depending on applicable law, you may request access, correction, or deletion of your personal data.</p></section>\n<section><h2>8. Children</h2><p>LawyerSpot is not directed at children under 18. We do not knowingly collect personal data from minors.</p></section>\n<section><h2>9. Changes</h2><p>We may update this policy from time to time. Material changes will be reflected on this page with an updated date.</p></section>\n<section><h2>10. Contact</h2><p>Privacy questions: visit our <a href=\"/about\">About</a> page or review our <a href=\"/terms\">Terms of Use</a>.</p></section>"
+    },
+    "customCmsPages": [],
+    "ipcPage": {
+      "title": "IPC Sections",
+      "subtitle": "Indian Penal Code — section-wise legal information (legacy code; BNS now applicable for new cases)",
+      "footerNote": "Also see <a href=\"/bns\" class=\"text-royal-600 font-semibold\">BNS Sections</a> (Bharatiya Nyaya Sanhita, 2023)",
+      "metaTitle": "IPC Sections — Indian Penal Code",
+      "metaDescription": "Browse Indian Penal Code (IPC) sections with plain-English explanations. IPC 498A, 420, 302 and more."
+    },
+    "bnsPage": {
+      "title": "BNS Sections",
+      "subtitle": "Bharatiya Nyaya Sanhita, 2023 — replaces IPC for new criminal matters",
+      "footerNote": "Legacy code: <a href=\"/ipc\" class=\"text-royal-600 font-semibold\">IPC Sections</a>",
+      "metaTitle": "BNS Sections — Bharatiya Nyaya Sanhita",
+      "metaDescription": "Browse BNS 2023 sections — the new criminal code replacing IPC for offences committed after July 2024."
+    },
+    "footer": {
+      "brandTagline": "",
+      "sectionTitles": {
+        "findByCity": "Find by City",
+        "practiceAreas": "Practice Areas",
+        "courts": "Courts",
+        "quickLinks": "Quick Links",
+        "legalResources": "Legal Resources",
+        "qaTopics": "Q&A Topics",
+        "cityPractice": "Popular: lawyers by City & Service",
+        "popularSearches": "Popular Searches",
+        "featuredGuides": "Featured Law Guides"
+      },
+      "findByCityAll": {
+        "label": "All cities →",
+        "href": "/cities"
+      },
+      "courtsAll": {
+        "label": "All courts →",
+        "href": "/courts"
+      },
+      "courtsListLimit": 6,
+      "qaTopicsLimit": 4,
+      "legalResources": [
+        {
+          "href": "/ipc",
+          "label": "IPC Sections"
+        },
+        {
+          "href": "/bns",
+          "label": "BNS Sections"
+        },
+        {
+          "href": "/qa",
+          "label": "Legal Q&A (2.5M+)"
+        },
+        {
+          "href": "/guides",
+          "label": "Law Guides"
+        },
+        {
+          "href": "/acts",
+          "label": "Acts & Sections"
+        },
+        {
+          "href": "/articles",
+          "label": "Articles"
+        },
+        {
+          "href": "/html-sitemap",
+          "label": "HTML Sitemap"
+        }
+      ],
+      "bottomLinks": [
+        {
+          "href": "/privacy",
+          "label": "Privacy"
+        },
+        {
+          "href": "/terms",
+          "label": "Terms"
+        },
+        {
+          "href": "/html-sitemap",
+          "label": "Sitemap"
+        },
+        {
+          "href": "/lawyer-dashboard",
+          "label": "For Lawyers"
+        }
+      ],
+      "cityPracticeLinks": [
+        {
+          "href": "/city/bangalore/divorce",
+          "label": "Divorce lawyers in Bangalore"
+        },
+        {
+          "href": "/city/bangalore/property",
+          "label": "Property lawyers in Bangalore"
+        },
+        {
+          "href": "/city/bangalore/criminal",
+          "label": "Criminal lawyers in Bangalore"
+        },
+        {
+          "href": "/city/chennai/divorce",
+          "label": "Divorce lawyers in Chennai"
+        },
+        {
+          "href": "/city/chennai/property",
+          "label": "Property lawyers in Chennai"
+        },
+        {
+          "href": "/city/chennai/criminal",
+          "label": "Criminal lawyers in Chennai"
+        },
+        {
+          "href": "/city/delhi/divorce",
+          "label": "Divorce lawyers in Delhi"
+        },
+        {
+          "href": "/city/delhi/property",
+          "label": "Property lawyers in Delhi"
+        },
+        {
+          "href": "/city/delhi/criminal",
+          "label": "Criminal lawyers in Delhi"
+        },
+        {
+          "href": "/city/hyderabad/divorce",
+          "label": "Divorce lawyers in Hyderabad"
+        },
+        {
+          "href": "/city/hyderabad/property",
+          "label": "Property lawyers in Hyderabad"
+        },
+        {
+          "href": "/city/hyderabad/criminal",
+          "label": "Criminal lawyers in Hyderabad"
+        },
+        {
+          "href": "/city/kochi/divorce",
+          "label": "Divorce lawyers in Kochi"
+        },
+        {
+          "href": "/city/kochi/property",
+          "label": "Property lawyers in Kochi"
+        },
+        {
+          "href": "/city/kochi/criminal",
+          "label": "Criminal lawyers in Kochi"
+        },
+        {
+          "href": "/city/kolkata/divorce",
+          "label": "Divorce lawyers in Kolkata"
+        },
+        {
+          "href": "/city/kolkata/property",
+          "label": "Property lawyers in Kolkata"
+        },
+        {
+          "href": "/city/kolkata/criminal",
+          "label": "Criminal lawyers in Kolkata"
+        },
+        {
+          "href": "/city/mumbai/divorce",
+          "label": "Divorce lawyers in Mumbai"
+        },
+        {
+          "href": "/city/mumbai/property",
+          "label": "Property lawyers in Mumbai"
+        },
+        {
+          "href": "/city/mumbai/criminal",
+          "label": "Criminal lawyers in Mumbai"
+        },
+        {
+          "href": "/city/pune/divorce",
+          "label": "Divorce lawyers in Pune"
+        },
+        {
+          "href": "/city/pune/property",
+          "label": "Property lawyers in Pune"
+        },
+        {
+          "href": "/city/pune/criminal",
+          "label": "Criminal lawyers in Pune"
+        }
+      ]
+    },
+    "courtsPage": {
+      "title": "Lawyers by Court",
+      "subtitle": "Advocates practicing in Supreme Court, High Courts, District & Family Courts across India.",
+      "metaTitle": "Find lawyers by Court in India",
+      "metaDescription": "Advocates practicing in Supreme Court, High Courts, District & Family Courts across India."
+    },
+    "integrations": {
+      "email": {
+        "enabled": false,
+        "host": "",
+        "port": 587,
+        "secure": false,
+        "username": "",
+        "password": "",
+        "fromEmail": "noreply@lawyerspot.com",
+        "fromName": "LawyerSpot"
+      },
+      "payment": {
+        "enabled": false,
+        "provider": "razorpay",
+        "currency": "INR",
+        "razorpayKeyId": "",
+        "razorpayKeySecret": "",
+        "stripePublishableKey": "",
+        "stripeSecretKey": "",
+        "testMode": true
+      },
+      "twilio": {
+        "enabled": false,
+        "accountSid": "",
+        "authToken": "",
+        "fromNumber": "",
+        "messagingServiceSid": ""
+      }
+    }
+  },
+  "subscriptionPlans": [
+    {
+      "id": "basic",
+      "name": "Starter",
+      "priceMonthly": 999,
+      "currency": "INR",
+      "description": "Essential listing for new advocates building their practice.",
+      "features": [
+        "profile_listing",
+        "bookings_monthly_5",
+        "email_support",
+        "standard_search"
+      ],
+      "highlight": false,
+      "sortOrder": 1,
+      "active": true
+    },
+    {
+      "id": "professional",
+      "name": "Professional",
+      "priceMonthly": 2499,
+      "currency": "INR",
+      "description": "Grow visibility with priority placement and more client leads.",
+      "features": [
+        "profile_listing",
+        "unlimited_bookings",
+        "email_support",
+        "phone_support",
+        "standard_search",
+        "priority_search"
+      ],
+      "highlight": true,
+      "sortOrder": 2,
+      "active": true
+    },
+    {
+      "id": "premium",
+      "name": "Premium",
+      "priceMonthly": 4999,
+      "currency": "INR",
+      "description": "Maximum exposure for established practices and firms.",
+      "features": [
+        "profile_listing",
+        "unlimited_bookings",
+        "email_support",
+        "phone_support",
+        "standard_search",
+        "priority_search",
+        "top_rated_badge",
+        "dedicated_manager",
+        "analytics_dashboard"
+      ],
+      "highlight": false,
+      "sortOrder": 3,
+      "active": true
+    }
+  ],
   "stats": [
     {
       "label": "Verified Lawyers",
@@ -25,10 +638,10 @@
   ],
   "practiceAreas": [
     {
-      "slug": "divorce",
-      "name": "Divorce Law",
-      "icon": "HeartCrack",
-      "lawyers": 2400
+      "slug": "corporate",
+      "name": "Corporate Law",
+      "icon": "Briefcase",
+      "lawyers": 1900
     },
     {
       "slug": "criminal",
@@ -37,16 +650,16 @@
       "lawyers": 3200
     },
     {
-      "slug": "property",
-      "name": "Property Law",
-      "icon": "Building2",
-      "lawyers": 2800
+      "slug": "cyber",
+      "name": "Cyber Crime",
+      "icon": "Shield",
+      "lawyers": 850
     },
     {
-      "slug": "corporate",
-      "name": "Corporate Law",
-      "icon": "Briefcase",
-      "lawyers": 1900
+      "slug": "divorce",
+      "name": "Divorce Law",
+      "icon": "HeartCrack",
+      "lawyers": 2400
     },
     {
       "slug": "family",
@@ -55,10 +668,10 @@
       "lawyers": 2100
     },
     {
-      "slug": "cyber",
-      "name": "Cyber Crime",
-      "icon": "Shield",
-      "lawyers": 850
+      "slug": "tax",
+      "name": "GST & Tax",
+      "icon": "Calculator",
+      "lawyers": 1500
     },
     {
       "slug": "immigration",
@@ -67,383 +680,25 @@
       "lawyers": 1200
     },
     {
+      "slug": "property",
+      "name": "Property Law",
+      "icon": "Building2",
+      "lawyers": 2800
+    },
+    {
       "slug": "startup",
       "name": "Startup Law",
       "icon": "Rocket",
       "lawyers": 980
-    },
-    {
-      "slug": "tax",
-      "name": "GST & Tax",
-      "icon": "Calculator",
-      "lawyers": 1500
     }
   ],
-  "cities": [
-    {
-      "slug": "mumbai",
-      "name": "Mumbai",
-      "state": "Maharashtra"
-    },
-    {
-      "slug": "delhi",
-      "name": "Delhi",
-      "state": "Delhi"
-    },
-    {
-      "slug": "bangalore",
-      "name": "Bangalore",
-      "state": "Karnataka"
-    },
-    {
-      "slug": "kochi",
-      "name": "Kochi",
-      "state": "Kerala"
-    },
-    {
-      "slug": "hyderabad",
-      "name": "Hyderabad",
-      "state": "Telangana"
-    },
-    {
-      "slug": "chennai",
-      "name": "Chennai",
-      "state": "Tamil Nadu"
-    },
-    {
-      "slug": "pune",
-      "name": "Pune",
-      "state": "Maharashtra"
-    },
-    {
-      "slug": "kolkata",
-      "name": "Kolkata",
-      "state": "West Bengal"
-    }
-  ],
-  "lawyers": [
-    {
-      "id": "1",
-      "slug": "adv-priya-sharmaa",
-      "name": "Adv. Priya Sharmaa",
-      "image": "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=400&fit=crop",
-      "rating": 4.9,
-      "reviews": 312,
-      "experience": 18,
-      "fee": 2500,
-      "location": "Mumbai",
-      "practice": "family",
-      "specialization": [
-        "Family Law",
-        "Divorce",
-        "Child Custody"
-      ],
-      "online": true,
-      "verified": true,
-      "currency": "INR",
-      "bio": "Renowned family law advocate with 18+ years handling complex divorce and custody matters across Maharashtra."
-    },
-    {
-      "id": "advocate-yuganshu-sharma",
-      "slug": "advocate-yuganshu-sharma",
-      "name": "Advocate Yuganshu Sharma",
-      "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop",
-      "rating": 4.7,
-      "reviews": 50,
-      "experience": 9,
-      "fee": 2500,
-      "currency": "INR",
-      "location": "Lawrence Road, Keshav Puram, Delhi",
-      "address": "Lawrence Road, Keshav Puram, Delhi",
-      "practice": "criminal",
-      "firm": "Sys Law Offices",
-      "phone": "9810981039",
-      "languages": [
-        "English",
-        "Hindi"
-      ],
-      "online": true,
-      "verified": true,
-      "bio": "Delhi-based advocate specializing in Supreme Court litigation, family law, property, and criminal matters.",
-      "specialization": [
-        "Criminal Law",
-        "Family Law",
-        "Property Law",
-        "Supreme Court"
-      ]
-    },
-    {
-      "id": "2",
-      "slug": "adv-rajesh-kumar",
-      "name": "Adv. Rajesh Kumar",
-      "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
-      "rating": 4.8,
-      "reviews": 428,
-      "experience": 25,
-      "fee": 3000,
-      "currency": "INR",
-      "location": "Delhi",
-      "practice": "criminal",
-      "specialization": [
-        "Criminal Law",
-        "Bail",
-        "Supreme Court"
-      ],
-      "online": true,
-      "verified": true,
-      "bio": "Senior criminal defence advocate with extensive Supreme Court experience."
-    },
-    {
-      "id": "3",
-      "slug": "adv-maria-santos",
-      "name": "Adv. Maria Santos",
-      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
-      "rating": 4.6,
-      "reviews": 98,
-      "experience": 10,
-      "fee": 2000,
-      "currency": "INR",
-      "location": "Bangalore",
-      "practice": "property",
-      "specialization": [
-        "Property Law",
-        "RERA",
-        "Real Estate"
-      ],
-      "online": false,
-      "verified": true,
-      "bio": "Property and RERA specialist across Karnataka."
-    },
-    {
-      "id": "4",
-      "slug": "adv-fatima-hassan",
-      "name": "Adv. Fatima Hassan",
-      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
-      "rating": 4.7,
-      "reviews": 201,
-      "experience": 14,
-      "fee": 1800,
-      "currency": "INR",
-      "location": "Hyderabad",
-      "practice": "tax",
-      "specialization": [
-        "GST",
-        "Income Tax",
-        "Tax Appeals"
-      ],
-      "online": true,
-      "verified": true,
-      "bio": "GST and income tax advocate representing businesses before tribunals.",
-      "citySlug": "hyderabad",
-      "firm": "Hassan & Associates",
-      "languages": ["English", "Hindi", "Urdu"],
-      "education": [
-        {
-          "degree": "LL.B.",
-          "institution": "Osmania University",
-          "year": "2010"
-        },
-        {
-          "degree": "LL.M. (Taxation)",
-          "institution": "NALSAR University of Law",
-          "year": "2012"
-        }
-      ],
-      "courts": [
-        "Telangana High Court",
-        "GST Appellate Tribunal",
-        "Income Tax Appellate Tribunal"
-      ],
-      "timeline": [
-        {
-          "year": "2020",
-          "title": "Senior Tax Advocate",
-          "org": "Hassan & Associates"
-        },
-        {
-          "year": "2014",
-          "title": "Associate Advocate",
-          "org": "Hyderabad Tax Chambers"
-        },
-        {
-          "year": "2012",
-          "title": "Junior Advocate",
-          "org": "District Courts, Hyderabad"
-        }
-      ],
-      "clientReviews": [
-        {
-          "author": "Suresh K.",
-          "rating": 5,
-          "text": "Resolved our GST notice efficiently with clear documentation.",
-          "date": "March 2025",
-          "verified": true
-        },
-        {
-          "author": "Meena R.",
-          "rating": 5,
-          "text": "Excellent representation before the tribunal. Highly recommended.",
-          "date": "January 2025",
-          "verified": true
-        }
-      ],
-      "profileFaq": [
-        {
-          "id": "fatima-faq-1",
-          "question": "Do you handle GST appeals?",
-          "answer": "Yes. I represent businesses before the GST Appellate Tribunal and assist with notices, assessments, and appeals."
-        },
-        {
-          "id": "fatima-faq-2",
-          "question": "What documents should I bring to the first consultation?",
-          "answer": "Bring any tax notices, assessment orders, prior filings, and a brief timeline of the dispute so we can advise accurately."
-        }
-      ]
-    },
-    {
-      "id": "5",
-      "slug": "adv-anita-menon",
-      "name": "Adv. Anita Menon",
-      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
-      "rating": 4.8,
-      "reviews": 156,
-      "experience": 12,
-      "fee": 2200,
-      "currency": "INR",
-      "location": "Kochi",
-      "citySlug": "kochi",
-      "practice": "family",
-      "specialization": ["Family Law", "Divorce", "Kerala High Court"],
-      "online": true,
-      "verified": true,
-      "bio": "Family law advocate practicing before the Kerala High Court and district courts in Kochi.",
-      "courts": ["Kerala High Court", "District Courts, Kochi"]
-    }
-  ],
-  "defaultProfileReviews": [
-    {
-      "author": "Rahul M.",
-      "rating": 5,
-      "text": "Exceptional guidance on my family matter. Highly professional and responsive.",
-      "date": "",
-      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop"
-    },
-    {
-      "author": "Priya S.",
-      "rating": 5,
-      "text": "Clear advice and transparent fee structure. Would recommend to anyone.",
-      "date": "",
-      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=48&h=48&fit=crop"
-    },
-    {
-      "author": "Arjun K.",
-      "rating": 4,
-      "text": "Very knowledgeable. Consultation was worth every penny.",
-      "date": "",
-      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop"
-    }
-  ],
-  "qaPosts": [
-    {
-      "id": "1",
-      "title": "Can I file divorce without mutual consent?",
-      "excerpt": "Understanding contested divorce procedure and timeline in India...",
-      "category": "Family Law",
-      "answers": 12,
-      "views": 4500,
-      "slug": "divorce-without-mutual-consent",
-      "status": "published"
-    },
-    {
-      "id": "2",
-      "title": "What to do after receiving a GST notice?",
-      "excerpt": "Step-by-step guide to respond within the statutory deadline...",
-      "category": "Tax Law",
-      "answers": 8,
-      "views": 3200,
-      "slug": "gst-notice-response",
-      "status": "published"
-    },
-    {
-      "id": "3",
-      "title": "RERA complaint against delayed possession",
-      "excerpt": "Rights of homebuyers when builder delays project handover...",
-      "category": "Property Law",
-      "answers": 15,
-      "views": 6100,
-      "slug": "rera-delayed-possession",
-      "status": "published"
-    }
-  ],
-  "articles": [
-    {
-      "slug": "divorce-mutual-consent-guide",
-      "title": "Divorce by Mutual Consent: Complete Guide 2026",
-      "excerpt": "Everything you need to know about filing mutual consent divorce in India.",
-      "category": "Family Law",
-      "author": "Legal Team",
-      "date": "May 15, 2026",
-      "readTime": "8 min",
-      "image": "https://images.unsplash.com/photo-1589829545855-d10d557cf95f?w=800&h=500&fit=crop",
-      "trending": true,
-      "status": "published"
-    },
-    {
-      "slug": "gst-notice-response",
-      "title": "Understanding GST Notice: How to Respond",
-      "excerpt": "Types of notices, deadlines, and drafting an effective legal response.",
-      "category": "Tax Law",
-      "author": "Adv. Fatima Hassan",
-      "date": "May 10, 2026",
-      "readTime": "6 min",
-      "image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=500&fit=crop",
-      "trending": true,
-      "status": "published"
-    },
-    {
-      "slug": "startup-funding-legal-checklist",
-      "title": "Startup Funding: Legal Checklist for Founders",
-      "excerpt": "From incorporation to term sheets — essential steps before raising capital.",
-      "category": "Startup Law",
-      "author": "Adv. David Okonkwo",
-      "date": "May 8, 2026",
-      "readTime": "10 min",
-      "image": "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=500&fit=crop",
-      "trending": false,
-      "status": "published"
-    }
-  ],
-  "trendingTopics": [
-    "Mutual Consent Divorce",
-    "GST Notice Reply",
-    "RERA Complaint",
-    "Cyber Crime FIR",
-    "Startup Term Sheet",
-    "Bail Application"
-  ],
-  "adminUsers": [
-    {
-      "id": "1",
-      "name": "Super Admin",
-      "email": "admin@lawyerspot.com",
-      "role": "super_admin"
-    }
-  ],
-  "bookings": [
-    {
-      "id": "b1",
-      "lawyerId": "advocate-yuganshu-sharma",
-      "lawyerName": "Advocate Yuganshu Sharma",
-      "clientName": "Amit Verma",
-      "clientEmail": "amit@email.com",
-      "date": "2026-05-28",
-      "time": "10:00 AM",
-      "type": "Video Call",
-      "status": "confirmed"
-    }
-  ],
-  "updatedAt": "2026-05-26T09:39:08.717Z",
   "states": [
+    {
+      "slug": "andaman-nicobar",
+      "name": "Andaman and Nicobar Islands",
+      "code": "AN",
+      "active": true
+    },
     {
       "slug": "andhra-pradesh",
       "name": "Andhra Pradesh",
@@ -469,9 +724,27 @@
       "active": true
     },
     {
+      "slug": "chandigarh",
+      "name": "Chandigarh",
+      "code": "CH",
+      "active": true
+    },
+    {
       "slug": "chhattisgarh",
       "name": "Chhattisgarh",
       "code": "CG",
+      "active": true
+    },
+    {
+      "slug": "dadra-nagar-haveli-daman-diu",
+      "name": "Dadra and Nagar Haveli and Daman and Diu",
+      "code": "DH",
+      "active": true
+    },
+    {
+      "slug": "delhi",
+      "name": "Delhi",
+      "code": "DL",
       "active": true
     },
     {
@@ -499,6 +772,12 @@
       "active": true
     },
     {
+      "slug": "jammu-kashmir",
+      "name": "Jammu and Kashmir",
+      "code": "JK",
+      "active": true
+    },
+    {
       "slug": "jharkhand",
       "name": "Jharkhand",
       "code": "JH",
@@ -514,6 +793,18 @@
       "slug": "kerala",
       "name": "Kerala",
       "code": "KL",
+      "active": true
+    },
+    {
+      "slug": "ladakh",
+      "name": "Ladakh",
+      "code": "LA",
+      "active": true
+    },
+    {
+      "slug": "lakshadweep",
+      "name": "Lakshadweep",
+      "code": "LD",
       "active": true
     },
     {
@@ -556,6 +847,12 @@
       "slug": "odisha",
       "name": "Odisha",
       "code": "OD",
+      "active": true
+    },
+    {
+      "slug": "puducherry",
+      "name": "Puducherry",
+      "code": "PY",
       "active": true
     },
     {
@@ -611,54 +908,989 @@
       "name": "West Bengal",
       "code": "WB",
       "active": true
+    }
+  ],
+  "cities": [
+    {
+      "slug": "bangalore",
+      "name": "Bangalore",
+      "state": "Karnataka"
     },
     {
-      "slug": "andaman-nicobar",
-      "name": "Andaman and Nicobar Islands",
-      "code": "AN",
-      "active": true
-    },
-    {
-      "slug": "chandigarh",
-      "name": "Chandigarh",
-      "code": "CH",
-      "active": true
-    },
-    {
-      "slug": "dadra-nagar-haveli-daman-diu",
-      "name": "Dadra and Nagar Haveli and Daman and Diu",
-      "code": "DH",
-      "active": true
+      "slug": "chennai",
+      "name": "Chennai",
+      "state": "Tamil Nadu"
     },
     {
       "slug": "delhi",
       "name": "Delhi",
-      "code": "DL",
-      "active": true
+      "state": "Delhi"
     },
     {
-      "slug": "jammu-kashmir",
-      "name": "Jammu and Kashmir",
-      "code": "JK",
-      "active": true
+      "slug": "hyderabad",
+      "name": "Hyderabad",
+      "state": "Telangana"
     },
     {
-      "slug": "ladakh",
-      "name": "Ladakh",
-      "code": "LA",
-      "active": true
+      "slug": "kochi",
+      "name": "Kochi",
+      "state": "Kerala"
     },
     {
-      "slug": "lakshadweep",
-      "name": "Lakshadweep",
-      "code": "LD",
-      "active": true
+      "slug": "kolkata",
+      "name": "Kolkata",
+      "state": "West Bengal"
     },
     {
-      "slug": "puducherry",
-      "name": "Puducherry",
-      "code": "PY",
-      "active": true
+      "slug": "mumbai",
+      "name": "Mumbai",
+      "state": "Maharashtra"
+    },
+    {
+      "slug": "pune",
+      "name": "Pune",
+      "state": "Maharashtra"
     }
-  ]
+  ],
+  "lawyers": [
+    {
+      "id": "14",
+      "slug": "adv-amit-verma",
+      "name": "Adv. Amit Verma",
+      "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
+      "rating": 4.5,
+      "reviews": 92,
+      "experience": 10,
+      "fee": 2000,
+      "currency": "INR",
+      "location": "Mumbai",
+      "address": null,
+      "practice": "tax",
+      "citySlug": "mumbai",
+      "specialization": [
+        "Tax Law"
+      ],
+      "online": true,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Amit Verma — experienced advocate in Mumbai.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "5",
+      "slug": "adv-anita-menon",
+      "name": "Adv. Anita Menon",
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
+      "rating": 4.8,
+      "reviews": 156,
+      "experience": 12,
+      "fee": 2200,
+      "currency": "INR",
+      "location": "Kochi",
+      "address": null,
+      "practice": "family",
+      "citySlug": "kochi",
+      "specialization": [
+        "Family Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Anita Menon — experienced advocate in Kochi.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "professional",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "8",
+      "slug": "adv-arjun-mehta",
+      "name": "Adv. Arjun Mehta",
+      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+      "rating": 4.4,
+      "reviews": 62,
+      "experience": 8,
+      "fee": 1500,
+      "currency": "INR",
+      "location": "Pune",
+      "address": null,
+      "practice": "cyber",
+      "citySlug": "pune",
+      "specialization": [
+        "Cyber Law"
+      ],
+      "online": true,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Arjun Mehta — experienced advocate in Pune.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "20",
+      "slug": "adv-deepak-rao",
+      "name": "Adv. Deepak Rao",
+      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+      "rating": 4.5,
+      "reviews": 88,
+      "experience": 12,
+      "fee": 2200,
+      "currency": "INR",
+      "location": "Bangalore",
+      "address": null,
+      "practice": "startup",
+      "citySlug": "bangalore",
+      "specialization": [
+        "Startup Law"
+      ],
+      "online": true,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Deepak Rao — experienced advocate in Bangalore.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "15",
+      "slug": "adv-divya-krishnan",
+      "name": "Adv. Divya Krishnan",
+      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
+      "rating": 4.9,
+      "reviews": 301,
+      "experience": 19,
+      "fee": 2900,
+      "currency": "INR",
+      "location": "Chennai",
+      "address": null,
+      "practice": "corporate",
+      "citySlug": "chennai",
+      "specialization": [
+        "Corporate Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Divya Krishnan — experienced advocate in Chennai.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "premium",
+      "featured": false,
+      "topRated": true
+    },
+    {
+      "id": "4",
+      "slug": "adv-fatima-hassan",
+      "name": "Adv. Fatima Hassan",
+      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
+      "rating": 4.7,
+      "reviews": 201,
+      "experience": 14,
+      "fee": 1800,
+      "currency": "INR",
+      "location": "Hyderabad",
+      "address": null,
+      "practice": "tax",
+      "citySlug": "hyderabad",
+      "specialization": [
+        "Tax Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Fatima Hassan — experienced advocate in Hyderabad.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "professional",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "12",
+      "slug": "adv-karan-singh",
+      "name": "Adv. Karan Singh",
+      "image": "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=400&fit=crop",
+      "rating": 4.3,
+      "reviews": 45,
+      "experience": 7,
+      "fee": 1200,
+      "currency": "INR",
+      "location": "Delhi",
+      "address": null,
+      "practice": "criminal",
+      "citySlug": "delhi",
+      "specialization": [
+        "Criminal Law"
+      ],
+      "online": false,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Karan Singh — experienced advocate in Delhi.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "9",
+      "slug": "adv-lakshmi-nair",
+      "name": "Adv. Lakshmi Nair",
+      "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+      "rating": 4.7,
+      "reviews": 178,
+      "experience": 15,
+      "fee": 2400,
+      "currency": "INR",
+      "location": "Kochi",
+      "address": null,
+      "practice": "immigration",
+      "citySlug": "kochi",
+      "specialization": [
+        "Immigration Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Lakshmi Nair — experienced advocate in Kochi.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "professional",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "3",
+      "slug": "adv-maria-santos",
+      "name": "Adv. Maria Santos",
+      "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
+      "rating": 4.6,
+      "reviews": 98,
+      "experience": 10,
+      "fee": 2000,
+      "currency": "INR",
+      "location": "Bangalore",
+      "address": null,
+      "practice": "property",
+      "citySlug": "bangalore",
+      "specialization": [
+        "Property Law"
+      ],
+      "online": false,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Maria Santos — experienced advocate in Bangalore.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "13",
+      "slug": "adv-meera-joshi",
+      "name": "Adv. Meera Joshi",
+      "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop",
+      "rating": 4.7,
+      "reviews": 167,
+      "experience": 14,
+      "fee": 2300,
+      "currency": "INR",
+      "location": "Pune",
+      "address": null,
+      "practice": "property",
+      "citySlug": "pune",
+      "specialization": [
+        "Property Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Meera Joshi — experienced advocate in Pune.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "professional",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "17",
+      "slug": "adv-nisha-agarwal",
+      "name": "Adv. Nisha Agarwal",
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
+      "rating": 4.6,
+      "reviews": 112,
+      "experience": 11,
+      "fee": 2100,
+      "currency": "INR",
+      "location": "Delhi",
+      "address": null,
+      "practice": "divorce",
+      "citySlug": "delhi",
+      "specialization": [
+        "Divorce Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Nisha Agarwal — experienced advocate in Delhi.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "professional",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "11",
+      "slug": "adv-pooja-reddy",
+      "name": "Adv. Pooja Reddy",
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop",
+      "rating": 4.8,
+      "reviews": 289,
+      "experience": 20,
+      "fee": 3200,
+      "currency": "INR",
+      "location": "Hyderabad",
+      "address": null,
+      "practice": "family",
+      "citySlug": "hyderabad",
+      "specialization": [
+        "Family Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Pooja Reddy — experienced advocate in Hyderabad.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "premium",
+      "featured": false,
+      "topRated": true
+    },
+    {
+      "id": "1",
+      "slug": "adv-priya-sharmaa",
+      "name": "Adv. Priya Sharmaa",
+      "image": "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=400&fit=crop",
+      "rating": 4.9,
+      "reviews": 312,
+      "experience": 18,
+      "fee": 2500,
+      "currency": "INR",
+      "location": "Mumbai",
+      "address": null,
+      "practice": "family",
+      "citySlug": "mumbai",
+      "specialization": [
+        "Family Law"
+      ],
+      "online": true,
+      "verified": true,
+      "email": "priya.sharma@example.com",
+      "emailVerified": true,
+      "phone": "+91 98765 43210",
+      "phoneVerified": true,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Priya Sharmaa — experienced advocate in Mumbai.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "premium",
+      "featured": false,
+      "topRated": true
+    },
+    {
+      "id": "18",
+      "slug": "adv-rahul-menon",
+      "name": "Adv. Rahul Menon",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "rating": 4.7,
+      "reviews": 198,
+      "experience": 17,
+      "fee": 2600,
+      "currency": "INR",
+      "location": "Kochi",
+      "address": null,
+      "practice": "property",
+      "citySlug": "kochi",
+      "specialization": [
+        "Property Law"
+      ],
+      "online": true,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Rahul Menon — experienced advocate in Kochi.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "professional",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "2",
+      "slug": "adv-rajesh-kumar",
+      "name": "Adv. Rajesh Kumar",
+      "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop",
+      "rating": 4.8,
+      "reviews": 428,
+      "experience": 25,
+      "fee": 3000,
+      "currency": "INR",
+      "location": "Delhi",
+      "address": null,
+      "practice": "criminal",
+      "citySlug": "delhi",
+      "specialization": [
+        "Criminal Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Rajesh Kumar — experienced advocate in Delhi.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "premium",
+      "featured": false,
+      "topRated": true
+    },
+    {
+      "id": "10",
+      "slug": "adv-rohan-das",
+      "name": "Adv. Rohan Das",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop",
+      "rating": 4.6,
+      "reviews": 134,
+      "experience": 13,
+      "fee": 1900,
+      "currency": "INR",
+      "location": "Bangalore",
+      "address": null,
+      "practice": "startup",
+      "citySlug": "bangalore",
+      "specialization": [
+        "Startup Law"
+      ],
+      "online": true,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Rohan Das — experienced advocate in Bangalore.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "professional",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "16",
+      "slug": "adv-sanjay-gupta",
+      "name": "Adv. Sanjay Gupta",
+      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
+      "rating": 4.4,
+      "reviews": 78,
+      "experience": 9,
+      "fee": 1700,
+      "currency": "INR",
+      "location": "Kolkata",
+      "address": null,
+      "practice": "criminal",
+      "citySlug": "kolkata",
+      "specialization": [
+        "Criminal Law"
+      ],
+      "online": true,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Sanjay Gupta — experienced advocate in Kolkata.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "7",
+      "slug": "adv-sneha-patel",
+      "name": "Adv. Sneha Patel",
+      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+      "rating": 4.9,
+      "reviews": 245,
+      "experience": 16,
+      "fee": 2800,
+      "currency": "INR",
+      "location": "Mumbai",
+      "address": null,
+      "practice": "divorce",
+      "citySlug": "mumbai",
+      "specialization": [
+        "Divorce Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Sneha Patel — experienced advocate in Mumbai.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "premium",
+      "featured": false,
+      "topRated": true
+    },
+    {
+      "id": "19",
+      "slug": "adv-tanya-shah",
+      "name": "Adv. Tanya Shah",
+      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+      "rating": 4.8,
+      "reviews": 220,
+      "experience": 15,
+      "fee": 2700,
+      "currency": "INR",
+      "location": "Mumbai",
+      "address": null,
+      "practice": "cyber",
+      "citySlug": "mumbai",
+      "specialization": [
+        "Cyber Law"
+      ],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Tanya Shah — experienced advocate in Mumbai.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "premium",
+      "featured": false,
+      "topRated": true
+    },
+    {
+      "id": "6",
+      "slug": "adv-vikram-iyer",
+      "name": "Adv. Vikram Iyer",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "rating": 4.5,
+      "reviews": 87,
+      "experience": 11,
+      "fee": 2100,
+      "currency": "INR",
+      "location": "Chennai",
+      "address": null,
+      "practice": "corporate",
+      "citySlug": "chennai",
+      "specialization": [
+        "Corporate Law"
+      ],
+      "online": true,
+      "verified": false,
+      "emailVerified": false,
+      "phone": null,
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Adv. Vikram Iyer — experienced advocate in Chennai.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "lawyer-1783332032412-a38aaa63",
+      "slug": "adv-zeenath-e-a",
+      "name": "ZEENATH E A",
+      "image": "/uploads/lawyers/default.jpg",
+      "rating": 0,
+      "reviews": 0,
+      "experience": 0,
+      "fee": null,
+      "currency": null,
+      "location": "WADAKKANCHERRY",
+      "address": null,
+      "practice": "general",
+      "citySlug": null,
+      "specialization": [],
+      "online": true,
+      "verified": true,
+      "emailVerified": false,
+      "phone": "9562829282",
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": null,
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    },
+    {
+      "id": "lawyer-1784286495968",
+      "slug": "adv-test-lawyer-2",
+      "name": "test lawyer",
+      "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop",
+      "rating": 4.5,
+      "reviews": 0,
+      "experience": 1,
+      "fee": 2000,
+      "currency": "INR",
+      "location": "Kolkata",
+      "address": null,
+      "practice": "immigration",
+      "citySlug": "kolkata",
+      "specialization": [
+        "immigration"
+      ],
+      "online": true,
+      "verified": false,
+      "email": "testlawyerss@gmail.com",
+      "emailVerified": false,
+      "phone": "8989898989",
+      "phoneVerified": false,
+      "languages": null,
+      "firm": null,
+      "bio": "Bar enrollment: 12212. Profile created via lawyer signup.",
+      "education": null,
+      "timeline": null,
+      "practiceGroups": null,
+      "courts": null,
+      "awards": null,
+      "clientReviews": null,
+      "profileFaq": null,
+      "subscriptionPlanId": "basic",
+      "featured": false,
+      "topRated": false
+    }
+  ],
+  "defaultProfileReviews": [
+    {
+      "author": "Rahul M.",
+      "rating": 5,
+      "text": "Exceptional guidance on my family matter. Highly professional and responsive.",
+      "date": "",
+      "verified": false,
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop"
+    },
+    {
+      "author": "Priya S.",
+      "rating": 5,
+      "text": "Clear advice and transparent fee structure. Would recommend to anyone.",
+      "date": "",
+      "verified": false,
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=48&h=48&fit=crop"
+    },
+    {
+      "author": "Arjun K.",
+      "rating": 4,
+      "text": "Very knowledgeable. Consultation was worth every penny.",
+      "date": "",
+      "verified": false,
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop"
+    }
+  ],
+  "qaPosts": [
+    {
+      "id": "2",
+      "slug": "gst-notice-response",
+      "title": "What to do after receiving a GST notice?",
+      "excerpt": "Step-by-step guide to respond within the statutory deadline...",
+      "category": "Tax Law",
+      "answers": 8,
+      "views": 3200,
+      "status": "published"
+    },
+    {
+      "id": "3",
+      "slug": "rera-delayed-possession",
+      "title": "RERA complaint against delayed possession",
+      "excerpt": "Rights of homebuyers when builder delays project handover...",
+      "category": "Property Law",
+      "answers": 15,
+      "views": 6100,
+      "status": "published"
+    },
+    {
+      "id": "1",
+      "slug": "divorce-without-mutual-consent",
+      "title": "Can I file divorce without mutual consent?",
+      "excerpt": "Understanding contested divorce procedure and timeline in India...",
+      "category": "Family Law",
+      "answers": 12,
+      "views": 4500,
+      "status": "published"
+    }
+  ],
+  "articles": [
+    {
+      "slug": "divorce-mutual-consent-guide",
+      "title": "Divorce by Mutual Consent: Complete Guide 2026",
+      "excerpt": "Everything you need to know about filing mutual consent divorce in India.",
+      "category": "Family Law",
+      "author": "Legal Team",
+      "date": "May 15, 2026",
+      "readTime": "8 min",
+      "image": "https://images.unsplash.com/photo-1589829545855-d10d557cf95f?w=800&h=500&fit=crop",
+      "trending": true,
+      "status": "published",
+      "assignedLawyerIds": []
+    },
+    {
+      "slug": "gst-notice-response",
+      "title": "Understanding GST Notice: How to Respond",
+      "excerpt": "<p><strong><em>Types </em></strong>of notices, deadlines, and drafting an effective legal response.</p><table style=\"min-width: 50px;\"><colgroup><col style=\"min-width: 25px;\"><col style=\"min-width: 25px;\"></colgroup><tbody><tr><th colspan=\"1\" rowspan=\"1\"><p>hhh</p></th><th colspan=\"1\" rowspan=\"1\"><p>jj</p></th></tr><tr><td colspan=\"1\" rowspan=\"1\"><p>fff</p></td><td colspan=\"1\" rowspan=\"1\"><p>ddddd</p></td></tr></tbody></table><p></p>",
+      "category": "Tax Law",
+      "author": "Adv. Fatima Hassan",
+      "date": "May 10, 2026",
+      "readTime": "6 min",
+      "image": "/api/uploads/articles/article-admin-1783920721390.png",
+      "trending": true,
+      "status": "published",
+      "assignedLawyerIds": []
+    },
+    {
+      "slug": "startup-funding-legal-checklist",
+      "title": "Startup Funding: Legal Checklist for Founders",
+      "excerpt": "<p><em>From </em>incorporation to term sheets —essential steps before raising capital</p>",
+      "category": "Startup Law",
+      "author": "Adv. David Okonkwo",
+      "date": "May 8, 2026",
+      "readTime": "10 min",
+      "image": "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=500&fit=crop",
+      "trending": false,
+      "status": "published",
+      "content": "",
+      "assignedLawyerIds": []
+    },
+    {
+      "slug": "article-1783921148168",
+      "title": "Received a Section 138 Notice? A Step-by-Step Guide to Protecting Your Legal Rights",
+      "excerpt": "<p>Receiving a legal notice under <strong>Section 138 of the Negotiable Instruments Act, 1881</strong>, can be a source of significant stress. This provision deals specifically with the dishonor of cheques due to insufficient funds or other technical discrepancies.</p><p>If you have received such a notice, it is crucial to remain calm and act strategically. Ignoring the notice will not make the problem disappear; in fact, it can lead to severe legal consequences, including criminal prosecution.</p><p>Here is a comprehensive guide on how to handle a Section 138 notice effectively.</p><h2><strong>1. Do Not Ignore the Notice</strong></h2><p>The most common mistake individuals make is discarding or ignoring the legal notice. Under the law, the sender of the notice is required to provide you with <strong>15 days</strong> from the date of receipt to make the payment.</p><p>If you fail to respond or pay within this window, the complainant gains the legal right to file a criminal complaint against you in a Magistrate's court.</p><h2><strong>2. Verify the Facts Immediately</strong></h2><p>Before taking any action, conduct a thorough internal review of the allegations:</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Check the Cheque Details:</strong> Verify the cheque number, the amount mentioned, and the date.</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Consult Your Bank:</strong> Contact your bank to confirm the specific reason for the dishonor. Was it truly \"Insufficient Funds,\" or was it a technical error like \"Signature Mismatch\" or \"Account Closed\"?</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Assess the Debt:</strong> Determine if the debt is legally enforceable. A cheque issued for an illegal activity or a time-barred debt may have different legal standing.</p><h2><strong>3. Consult a Legal Professional</strong></h2><p>A Section 138 notice is a precursor to criminal litigation. <strong>Consulting an experienced criminal lawyer is non-negotiable.</strong> A lawyer will help you:</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Identify flaws in the notice (such as procedural delays or incorrect dates).</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draft a formal reply that protects your rights without admitting liability inadvertently.</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Negotiate a settlement with the complainant if the debt is legitimate.</p><h2><strong>4. Drafting the Reply Notice</strong></h2><p>Even if you do not pay the amount immediately, you should generally send a <strong>formal reply notice</strong> within the 15-day timeframe. Your response should:</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>State your version of the facts:</strong> Explain why the cheque was dishonored or why you dispute the debt.</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Address technicalities:</strong> If the notice itself is defective (e.g., sent beyond the statutory limitation period), your lawyer will highlight this.</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Avoid self-incrimination:</strong> Be careful with the language used to ensure you do not inadvertently admit to a liability that you do not owe.</p><h2><strong>5. Explore Settlement Options</strong></h2><p>Section 138 is a \"compoundable\" offense, meaning the law encourages the parties to settle the matter outside of court.</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Negotiation:</strong> If the debt is genuine, it is often cheaper and faster to negotiate a repayment plan or a \"full and final\" settlement rather than facing a long-drawn-out criminal trial.</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Mediation:</strong> Many courts offer mediation services to resolve such disputes amicably.</p><h2><strong>6. Prepare for Court Proceedings</strong></h2><p>If a settlement is not reached, the complainant may file a complaint. At this stage, ensure you are prepared for:</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Summons:</strong> You will receive a summons from the court. Do not skip court dates, as this can lead to the issuance of a <strong>bailable or non-bailable warrant</strong>.</p><p>●&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Bail:</strong> In most Section 138 cases, the offense is bailable. Your lawyer will help you secure bail once you appear before the magistrate.</p><h3><strong>Key Takeaways for Quick Action</strong></h3><table style=\"min-width: 50px;\"><colgroup><col style=\"min-width: 25px;\"><col style=\"min-width: 25px;\"></colgroup><tbody><tr><td colspan=\"1\" rowspan=\"1\"><p><strong>Step</strong></p></td><td colspan=\"1\" rowspan=\"1\"><p><strong>Action</strong></p></td></tr><tr><td colspan=\"1\" rowspan=\"1\"><p><strong>Receipt</strong></p></td><td colspan=\"1\" rowspan=\"1\"><p>Note the date of receipt accurately (this starts your 15-day clock).</p></td></tr><tr><td colspan=\"1\" rowspan=\"1\"><p><strong>Review</strong></p></td><td colspan=\"1\" rowspan=\"1\"><p>Check your bank statements and the original transaction details.</p></td></tr><tr><td colspan=\"1\" rowspan=\"1\"><p><strong>Legal Counsel</strong></p></td><td colspan=\"1\" rowspan=\"1\"><p>Contact a lawyer immediately to draft your response.</p></td></tr><tr><td colspan=\"1\" rowspan=\"1\"><p><strong>Deadline</strong></p></td><td colspan=\"1\" rowspan=\"1\"><p>Do not exceed the 15-day window to send a response or make payment.</p></td></tr></tbody></table><p><em>&nbsp;</em></p><p><strong>Would you like to know more about the specific legal defenses typically used in Section 138 cases?</strong><br><br>Read More <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://thesouthfirst.com/kerala/justice-anytime-anywhere-kerala-launches-indias-first-24x7-on-court/#:~:text=The%20ON%20Court%20project%20is,an%20online%20dispute%20resolution%20system\">https://thesouthfirst.com/kerala/justice-anytime-anywhere-kerala-launches-indias-first-24x7-on-court/#:~:text=The%20ON%20Court%20project%20is,an%20online%20dispute%20resolution%20system</a>.</p><p></p>",
+      "category": "General",
+      "author": "Legal Team",
+      "date": "13 Jul 2026",
+      "readTime": "5 min",
+      "image": "/api/uploads/articles/article-admin-1783921153800.png",
+      "trending": false,
+      "status": "published",
+      "assignedLawyerIds": [
+        "lawyer-1784278421638"
+      ]
+    }
+  ],
+  "trendingTopics": [
+    "Mutual Consent Divorce",
+    "GST Notice Reply",
+    "RERA Complaint",
+    "Cyber Crime FIR",
+    "Startup Term Sheet",
+    "Bail Application"
+  ],
+  "adminUsers": [
+    {
+      "id": "1",
+      "name": "Super Admin",
+      "email": "admin@lawyerspot.com",
+      "role": "super_admin",
+      "lastLogin": null
+    }
+  ],
+  "bookings": [
+    {
+      "id": "b1",
+      "userId": null,
+      "lawyerId": "advocate-yuganshu-sharma",
+      "lawyerName": "Advocate Yuganshu Sharma",
+      "clientName": "Amit Verma",
+      "clientEmail": "amit@email.com",
+      "date": "2026-05-28",
+      "time": "10:00 AM",
+      "type": "Video Call",
+      "status": "confirmed"
+    }
+  ],
+  "updatedAt": "2026-07-17T11:12:26.406Z"
 }
