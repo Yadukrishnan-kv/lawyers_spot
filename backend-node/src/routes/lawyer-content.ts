@@ -254,6 +254,106 @@ lawyerContentRouter.delete('/articles/:slug', requireUser(['lawyer']), async (re
   }
 });
 
+lawyerContentRouter.post('/qa/questions', requireUser(['lawyer']), async (req, res) => {
+  try {
+    const { userId } = (req as AuthedRequest).user;
+    const account = await resolveLawyerAccount(userId);
+    if (!account) {
+      res.status(404).json({ detail: 'Lawyer not found' });
+      return;
+    }
+
+    const body = req.body as Record<string, unknown>;
+    const title = typeof body.title === 'string' ? sanitizeText(body.title, 512) : '';
+    const excerpt = typeof body.excerpt === 'string' ? sanitizeText(body.excerpt, 2000) : '';
+    const category = typeof body.category === 'string' ? sanitizeText(body.category, 128) : '';
+    const content = typeof body.content === 'string' ? sanitizeText(body.content, 50000) : '';
+    if (!title || !excerpt || !category) {
+      res.status(400).json({ detail: 'Title, excerpt, and category are required' });
+      return;
+    }
+
+    let slug =
+      typeof body.slug === 'string' && body.slug.trim()
+        ? sanitizeText(body.slug, 255).replace(/[^a-z0-9-]/gi, '-').toLowerCase()
+        : slugifyTitle(title);
+
+    const existing = await query('SELECT slug FROM qa_posts WHERE slug = $1', [slug]);
+    if (existing.rows.length > 0) {
+      slug = `${slug}-${Date.now().toString(36)}`;
+    }
+
+    const id = `lawyer-qa-${Date.now()}`;
+    const status = body.status === 'draft' ? 'draft' : 'published';
+    const lawyerName = (account.lawyer as { name: string }).name;
+
+    await query(
+      `INSERT INTO qa_posts (id, slug, title, excerpt, category, answers, views, status, content, lawyer_id, lawyer_name)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+      [id, slug, title, excerpt, category, 0, 0, status, content || null, account.user.lawyer_id, lawyerName],
+    );
+    await touchCmsTimestamp();
+
+    res.status(201).json({
+      success: true,
+      question: { id, slug, title, excerpt, category, answers: 0, views: 0, status, content, lawyerId: account.user.lawyer_id, lawyerName },
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to create question' });
+  }
+});
+
+lawyerContentRouter.get('/qa/my-questions', requireUser(['lawyer']), async (req, res) => {
+  try {
+    const { userId } = (req as AuthedRequest).user;
+    const account = await resolveLawyerAccount(userId);
+    if (!account) {
+      res.status(404).json({ detail: 'Lawyer not found' });
+      return;
+    }
+
+    const rows = await query(
+      `SELECT q.id, q.slug, q.title, q.excerpt, q.category, q.answers, q.views, q.status, q.content, q.lawyer_id, q.lawyer_name
+       FROM qa_posts q
+       WHERE q.lawyer_id = $1
+       ORDER BY q.views DESC, q.title`,
+      [account.user.lawyer_id],
+    );
+
+    const questions = [];
+    for (const row of rows.rows) {
+      const answersRes = await query(
+        `SELECT id, qa_post_id, lawyer_id, lawyer_name, body, status, created_at, updated_at
+         FROM qa_answers WHERE qa_post_id = $1 AND status = 'published'
+         ORDER BY created_at ASC`,
+        [row.id],
+      );
+      questions.push({
+        id: row.id,
+        slug: row.slug,
+        title: row.title,
+        excerpt: row.excerpt,
+        category: row.category,
+        answers: row.answers,
+        views: row.views,
+        status: row.status,
+        content: (row.content as string | null) ?? undefined,
+        lawyerId: (row.lawyer_id as string | null) ?? undefined,
+        lawyerName: (row.lawyer_name as string | null) ?? undefined,
+        replies: answersRes.rows.map((a) => ({
+          ...answerRowToJson(a as Record<string, unknown>),
+        })),
+      });
+    }
+
+    res.json({ questions });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to load my questions' });
+  }
+});
+
 lawyerContentRouter.get('/qa/questions', requireUser(['lawyer']), async (req, res) => {
   try {
     const { userId } = (req as AuthedRequest).user;

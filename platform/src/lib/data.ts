@@ -56,7 +56,7 @@ export async function getTopRatedLawyers(limit = 4) {
 }
 
 export async function getQaPosts() {
-  return (await getCmsData()).qaPosts;
+  return (await getCmsData()).qaPosts.filter((q) => q.status !== 'draft');
 }
 
 export async function getArticles() {

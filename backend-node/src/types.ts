@@ -28,6 +28,9 @@ export type CmsData = {
     views: number;
     slug: string;
     status?: string;
+    content?: string;
+    lawyerId?: string;
+    lawyerName?: string;
   }[];
   articles: {
     slug: string;

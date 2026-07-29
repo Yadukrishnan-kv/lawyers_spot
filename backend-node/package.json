@@ -24,6 +24,7 @@
     "db:migrate:messaging": "tsx scripts/run-migrate-v11.ts",
     "db:migrate:pending-lawyers": "tsx scripts/run-migrate-v12.ts",
     "db:migrate:article-lawyers": "tsx scripts/run-migrate-v13.ts",
+    "db:migrate:lawyer-qa-posts": "tsx scripts/run-migrate-v14.ts",
     "db:setup": "npm run db:schema && npm run db:migrate && npm run db:migrate:security && npm run db:migrate:profile && npm run db:migrate:subscriptions && npm run db:migrate:verification && npm run db:seed"
   },
   "dependencies": {

@@ -180,9 +180,45 @@ export type LawyerQaQuestion = {
   answeredByMe: boolean;
 };
 
+export type LawyerMyQuestion = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  answers: number;
+  views: number;
+  status: string;
+  content?: string;
+  lawyerId?: string;
+  lawyerName?: string;
+  replies: QaAnswer[];
+};
+
 export async function fetchLawyerQaQuestions() {
   const res = await fetch('/api/lawyer/qa/questions', { credentials: 'include' });
   return parseJson<{ questions: LawyerQaQuestion[] }>(res);
+}
+
+export async function createLawyerQaPost(body: {
+  title: string;
+  excerpt: string;
+  category: string;
+  content?: string;
+  status?: string;
+}) {
+  const res = await fetch('/api/lawyer/qa/questions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    credentials: 'include',
+  });
+  return parseJson<{ success: boolean; question: LawyerQaQuestion }>(res);
+}
+
+export async function fetchLawyerMyQuestions() {
+  const res = await fetch('/api/lawyer/qa/my-questions', { credentials: 'include' });
+  return parseJson<{ questions: LawyerMyQuestion[] }>(res);
 }
 
 export async function fetchLawyerQaAnswers() {

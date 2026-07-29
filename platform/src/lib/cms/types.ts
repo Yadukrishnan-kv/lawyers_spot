@@ -188,6 +188,8 @@ export type QaPost = {
   status?: 'published' | 'draft';
   content?: string;
   createdAt?: string;
+  lawyerId?: string;
+  lawyerName?: string;
 };
 
 export type Article = {
