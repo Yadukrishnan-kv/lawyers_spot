@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import type { QaAnswer } from '@/lib/cms/types';
 import {
   deleteLawyerQaAnswer,
+  deleteLawyerQaPost,
   fetchLawyerQaAnswers,
   fetchLawyerQaQuestions,
   fetchLawyerMyQuestions,
@@ -50,6 +51,16 @@ export function LawyerQaManager() {
     if (!confirm('Remove your answer?')) return;
     try {
       await deleteLawyerQaAnswer(id);
+      await load();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Delete failed');
+    }
+  }
+
+  async function onDeleteQuestion(id: string) {
+    if (!confirm('Delete this question and all its replies?')) return;
+    try {
+      await deleteLawyerQaPost(id);
       await load();
     } catch (e) {
       alert(e instanceof Error ? e.message : 'Delete failed');
@@ -144,15 +155,24 @@ export function LawyerQaManager() {
                           {q.answers} answers · {q.views} views · Status: {q.status}
                         </p>
                       </div>
-                      {q.slug && (
-                        <Link
-                          href={`/qa/${q.slug}`}
-                          className="shrink-0 rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200 dark:bg-navy-700 dark:text-slate-300"
-                          target="_blank"
+                      <div className="flex shrink-0 gap-2">
+                        {q.slug && (
+                          <Link
+                            href={`/qa/${q.slug}`}
+                            className="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200 dark:bg-navy-700 dark:text-slate-300"
+                            target="_blank"
+                          >
+                            View public
+                          </Link>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => onDeleteQuestion(q.id)}
+                          className="rounded-lg bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-100 dark:bg-red-950/30 dark:text-red-400"
                         >
-                          View public
-                        </Link>
-                      )}
+                          Delete
+                        </button>
+                      </div>
                     </div>
 
                     {q.replies.length > 0 && (

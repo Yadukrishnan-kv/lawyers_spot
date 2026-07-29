@@ -304,6 +304,34 @@ lawyerContentRouter.post('/qa/questions', requireUser(['lawyer']), async (req, r
   }
 });
 
+lawyerContentRouter.delete('/qa/questions/:id', requireUser(['lawyer']), async (req, res) => {
+  try {
+    const { userId } = (req as AuthedRequest).user;
+    const account = await resolveLawyerAccount(userId);
+    if (!account) {
+      res.status(404).json({ detail: 'Lawyer not found' });
+      return;
+    }
+
+    const del = await query(
+      'DELETE FROM qa_posts WHERE id = $1 AND lawyer_id = $2 RETURNING id',
+      [req.params.id, account.user.lawyer_id],
+    );
+    if (!del.rows[0]) {
+      res.status(404).json({ detail: 'Question not found or not owned by you' });
+      return;
+    }
+
+    await query('DELETE FROM qa_answers WHERE qa_post_id = $1', [req.params.id]);
+    await touchCmsTimestamp();
+
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to delete question' });
+  }
+});
+
 lawyerContentRouter.get('/qa/my-questions', requireUser(['lawyer']), async (req, res) => {
   try {
     const { userId } = (req as AuthedRequest).user;

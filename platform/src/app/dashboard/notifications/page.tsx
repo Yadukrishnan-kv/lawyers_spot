@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Bell, CheckCheck, Info, CalendarCheck, CalendarX, UserCheck, UserX, Megaphone } from 'lucide-react';
-import { fetchNotifications, markNotificationRead, markAllNotificationsRead } from '@/lib/user-auth';
+import { Bell, CheckCheck, Info, CalendarCheck, CalendarX, UserCheck, UserX, Megaphone, Trash2 } from 'lucide-react';
+import { fetchNotifications, markNotificationRead, markAllNotificationsRead, deleteNotification } from '@/lib/user-auth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -60,6 +60,12 @@ export default function NotificationsPage() {
   async function handleMarkAllRead() {
     await markAllNotificationsRead();
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  }
+
+  async function handleDelete(id: number) {
+    if (!confirm('Delete this notification?')) return;
+    await deleteNotification(id);
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   }
 
   if (loading) {
@@ -143,9 +149,19 @@ export default function NotificationsPage() {
                   </div>
                   <p className="mt-1 text-sm text-slate-500">{n.message}</p>
                 </div>
-                {!n.read && (
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-royal-500" />
-                )}
+                <div className="flex flex-col items-center gap-1">
+                  {!n.read && (
+                    <span className="h-2 w-2 shrink-0 rounded-full bg-royal-500" />
+                  )}
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); handleDelete(n.id); }}
+                    className="text-slate-400 hover:text-red-500"
+                    title="Delete notification"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </button>
             );
           })}

@@ -63,6 +63,27 @@ adminRouter.get('/articles/:slug/lawyers', requireAdmin, async (req, res) => {
   }
 });
 
+adminRouter.patch('/bookings/:id', requireAdmin, async (req, res) => {
+  try {
+    const { status } = req.body as { status?: string };
+    if (!status || !['pending', 'confirmed', 'cancelled'].includes(status)) {
+      res.status(400).json({ detail: 'Invalid status' });
+      return;
+    }
+    const booking = await query('SELECT id FROM bookings WHERE id = $1', [req.params.id]);
+    if (!booking.rows[0]) {
+      res.status(404).json({ detail: 'Booking not found' });
+      return;
+    }
+    await query('UPDATE bookings SET status = $1 WHERE id = $2', [status, req.params.id]);
+    await query('UPDATE site_config SET updated_at = NOW() WHERE id = 1');
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to update booking' });
+  }
+});
+
 adminRouter.put('/articles/:slug/lawyers', requireAdmin, async (req, res) => {
   try {
     const { lawyerIds } = req.body as { lawyerIds?: string[] };

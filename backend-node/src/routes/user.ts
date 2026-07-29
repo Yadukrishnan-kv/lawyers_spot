@@ -3,10 +3,10 @@ import { writeFile, unlink, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { requireUser, findUserById } from '../platform-auth.js';
+import { requireUser, findUserById, hashPassword, verifyPassword } from '../platform-auth.js';
 import { loadCms } from '../cms.js';
 import { query } from '../db.js';
-import { sanitizeText } from '../security/validate.js';
+import { sanitizeText, validatePassword } from '../security/validate.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const UPLOADS_DIR = path.join(__dirname, '../../uploads');
@@ -199,6 +199,66 @@ userRouter.delete('/saved-lawyers/:lawyerId', requireUser(), async (req, res) =>
   }
 });
 
+userRouter.patch('/bookings/:id', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as typeof req & { user: { userId: string } }).user;
+    const { status } = req.body as { status?: string };
+    if (!status || !['pending', 'confirmed', 'cancelled'].includes(status)) {
+      res.status(400).json({ detail: 'Invalid status' });
+      return;
+    }
+    const booking = await query(
+      'SELECT id, user_id FROM bookings WHERE id = $1',
+      [req.params.id],
+    );
+    if (!booking.rows[0]) {
+      res.status(404).json({ detail: 'Booking not found' });
+      return;
+    }
+    if (booking.rows[0].user_id !== userId) {
+      res.status(403).json({ detail: 'Forbidden' });
+      return;
+    }
+    await query('UPDATE bookings SET status = $1 WHERE id = $2', [status, req.params.id]);
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to update booking' });
+  }
+});
+
+userRouter.post('/change-password', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as typeof req & { user: { userId: string } }).user;
+    const { currentPassword, newPassword } = req.body as {
+      currentPassword?: string;
+      newPassword?: string;
+    };
+    const pwd = newPassword ? validatePassword(newPassword) : null;
+    if (!currentPassword || !pwd) {
+      res.status(400).json({ detail: 'Valid current and new password required (min 6 characters)' });
+      return;
+    }
+    const row = await query<{ password_hash: string }>(
+      'SELECT password_hash FROM platform_users WHERE id = $1',
+      [userId],
+    );
+    const user = row.rows[0];
+    if (!user || !(await verifyPassword(currentPassword, user.password_hash))) {
+      res.status(401).json({ detail: 'Current password is incorrect' });
+      return;
+    }
+    await query('UPDATE platform_users SET password_hash = $2 WHERE id = $1', [
+      userId,
+      await hashPassword(pwd),
+    ]);
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to change password' });
+  }
+});
+
 userRouter.get('/saved-lawyers', requireUser(), async (req, res) => {
   try {
     const { userId } = (req as typeof req & { user: { userId: string } }).user;
@@ -302,6 +362,22 @@ userRouter.patch('/notifications/:id/read', requireUser(), async (req, res) => {
   }
 });
 
+userRouter.delete('/notifications/:id', requireUser(), async (req, res) => {
+  try {
+    const { userId } = (req as typeof req & { user: { userId: string } }).user;
+    const id = Number(req.params.id);
+    if (!id) {
+      res.status(400).json({ detail: 'Invalid notification ID' });
+      return;
+    }
+    await query('DELETE FROM notifications WHERE id = $1 AND user_id = $2', [id, userId]);
+    res.json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ detail: 'Failed to delete notification' });
+  }
+});
+
 userRouter.patch('/notifications/read-all', requireUser(), async (req, res) => {
   try {
     const { userId } = (req as typeof req & { user: { userId: string } }).user;
@@ -332,6 +408,19 @@ userRouter.get('/conversations', requireUser(), async (req, res) => {
     );
     const cms = await loadCms();
     const lawyerMap = new Map(cms.lawyers.map((l) => [l.id, l]));
+    const unreadRes = await query<{ conv_id: number; count: string }>(
+      `SELECT m.conversation_id AS conv_id, COUNT(*)::text AS count
+       FROM messages m
+       JOIN conversations c ON c.id = m.conversation_id
+       WHERE c.user_id = $1 AND m.sender_type = 'lawyer' AND m.is_read = FALSE
+       GROUP BY m.conversation_id`,
+      [userId],
+    );
+    const unreadMap = new Map<number, number>();
+    for (const row of unreadRes.rows) {
+      unreadMap.set(Number(row.conv_id), parseInt(row.count, 10));
+    }
+
     const conversations = r.rows.map((row) => {
       const lawyer = lawyerMap.get(row.lawyer_id) as Record<string, unknown> | undefined;
       return {
@@ -342,7 +431,7 @@ userRouter.get('/conversations', requireUser(), async (req, res) => {
         lawyerPractice: (lawyer?.practice as string) ?? '',
         lastMessage: row.last_message,
         lastMessageAt: row.last_message_at ?? row.created_at,
-        unreadCount: 0,
+        unreadCount: unreadMap.get(row.id) ?? 0,
       };
     });
     res.json({ conversations });

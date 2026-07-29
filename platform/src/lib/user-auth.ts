@@ -221,6 +221,14 @@ export async function fetchLawyerMyQuestions() {
   return parseJson<{ questions: LawyerMyQuestion[] }>(res);
 }
 
+export async function deleteLawyerQaPost(questionId: string) {
+  const res = await fetch(`/api/lawyer/qa/questions/${encodeURIComponent(questionId)}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+  return parseJson<{ success: boolean }>(res);
+}
+
 export async function fetchLawyerQaAnswers() {
   const res = await fetch('/api/lawyer/qa/answers', { credentials: 'include' });
   return parseJson<{ answers: QaAnswer[] }>(res);
@@ -292,6 +300,36 @@ export async function fetchUserProfile() {
     profileImage: string | null;
     address: string | null;
   }>;
+}
+
+export async function cancelUserBooking(bookingId: string) {
+  const res = await fetch(`/api/user/bookings/${encodeURIComponent(bookingId)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'cancelled' }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to cancel booking');
+  return data as { success: boolean };
+}
+
+export async function changeUserPassword(currentPassword: string, newPassword: string) {
+  const res = await fetch('/api/user/change-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ currentPassword, newPassword }),
+    credentials: 'include',
+  });
+  return parseJson<{ success: boolean }>(res);
+}
+
+export async function deleteNotification(id: number) {
+  const res = await fetch(`/api/user/notifications/${id}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+  return parseJson<{ success: boolean }>(res);
 }
 
 export async function updateUserProfile(body: {

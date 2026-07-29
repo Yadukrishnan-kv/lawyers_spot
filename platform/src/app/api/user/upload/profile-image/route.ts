@@ -17,10 +17,8 @@ export async function POST(request: Request) {
     const cookie = request.headers.get('cookie') ?? '';
     const meRes = await fetch(new URL('/api/auth/me', request.url), { headers: { cookie } });
     if (!meRes.ok) return NextResponse.json({ detail: 'Unauthorized' }, { status: 401 });
-    const user = (await meRes.json()) as { id?: string; role?: string; lawyerId?: string };
-    if (user.role !== 'lawyer' || !user.lawyerId) {
-      return NextResponse.json({ detail: 'Lawyer account required' }, { status: 403 });
-    }
+    const user = (await meRes.json()) as { id?: string; role?: string };
+    if (!user.id) return NextResponse.json({ detail: 'Unauthorized' }, { status: 401 });
 
     let formData: FormData;
     try {
@@ -41,19 +39,19 @@ export async function POST(request: Request) {
     }
 
     const ext = EXT_BY_TYPE[file.type] ?? 'jpg';
-    const safeId = user.lawyerId.replace(/[^a-zA-Z0-9-_]/g, '').slice(0, 64) || 'lawyer';
+    const safeId = user.id.replace(/[^a-zA-Z0-9-_]/g, '').slice(0, 64) || 'user';
     const filename = `${safeId}-${Date.now()}.${ext}`;
-    const dir = path.join(process.cwd(), 'data', 'uploads', 'lawyers');
+    const dir = path.join(process.cwd(), 'data', 'uploads', 'profiles');
 
     await mkdir(dir, { recursive: true });
     const bytes = Buffer.from(await file.arrayBuffer());
     await writeFile(path.join(dir, filename), bytes);
 
-    const url = `/api/uploads/lawyers/${filename}`;
+    const url = `/api/uploads/profiles/${filename}`;
     return NextResponse.json({ url });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
-    console.error('Lawyer image upload error:', message);
+    console.error('Profile image upload error:', message);
     return NextResponse.json({ detail: message }, { status: 500 });
   }
 }

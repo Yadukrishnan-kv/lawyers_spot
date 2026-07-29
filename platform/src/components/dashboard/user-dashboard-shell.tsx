@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { fetchCurrentUser, logoutUser } from '@/lib/user-auth';
 import { Button } from '@/components/ui/button';
 
 export function UserDashboardShell({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
 
   useEffect(() => {
@@ -18,8 +16,7 @@ export function UserDashboardShell({ children }: { children: React.ReactNode }) 
 
   async function onLogout() {
     await logoutUser();
-    router.push('/');
-    router.refresh();
+    window.location.replace('/');
   }
 
   return (

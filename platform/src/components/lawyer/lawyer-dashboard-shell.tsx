@@ -41,8 +41,7 @@ export function LawyerDashboardShell({ children }: { children: React.ReactNode }
 
   async function onLogout() {
     await logoutUser();
-    router.push('/');
-    router.refresh();
+    window.location.replace('/');
   }
 
   if (loading) {

@@ -441,6 +441,19 @@ lawyerRouter.get('/conversations', requireUser(), async (req, res) => {
     );
     const userMap = new Map(usersRes.rows.map((u) => [u.id, u]));
 
+    const unreadRes = await query<{ conv_id: number; count: string }>(
+      `SELECT m.conversation_id AS conv_id, COUNT(*)::text AS count
+       FROM messages m
+       JOIN conversations c ON c.id = m.conversation_id
+       WHERE c.lawyer_id = $1 AND m.sender_type = 'user' AND m.is_read = FALSE
+       GROUP BY m.conversation_id`,
+      [lawyerId],
+    );
+    const unreadMap = new Map<number, number>();
+    for (const row of unreadRes.rows) {
+      unreadMap.set(Number(row.conv_id), parseInt(row.count, 10));
+    }
+
     const conversations = r.rows.map((row) => {
       const u = userMap.get(row.user_id);
       return {
@@ -450,7 +463,7 @@ lawyerRouter.get('/conversations', requireUser(), async (req, res) => {
         userEmail: u?.email ?? '',
         lastMessage: row.last_message,
         lastMessageAt: row.last_message_at ?? row.created_at,
-        unreadCount: 0,
+        unreadCount: unreadMap.get(row.id) ?? 0,
       };
     });
     res.json({ conversations });

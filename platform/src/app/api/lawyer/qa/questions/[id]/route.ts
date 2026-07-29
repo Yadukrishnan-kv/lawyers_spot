@@ -6,3 +6,10 @@ export async function GET(request: Request, { params }: Params) {
   const { id } = await params;
   return proxyToBackend(`/api/v1/lawyer/qa/questions/${encodeURIComponent(id)}`, request);
 }
+
+export async function DELETE(request: Request, { params }: Params) {
+  const { id } = await params;
+  return proxyToBackend(`/api/v1/lawyer/qa/questions/${encodeURIComponent(id)}`, request, {
+    method: 'DELETE',
+  });
+}

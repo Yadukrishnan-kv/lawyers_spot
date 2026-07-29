@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Clock, Phone, Video, MapPin, Scale } from 'lucide-react';
-import { fetchUserBookings } from '@/lib/user-auth';
+import { Calendar, Clock, Phone, Video, MapPin, Scale, XCircle } from 'lucide-react';
+import { fetchUserBookings, cancelUserBooking } from '@/lib/user-auth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -49,11 +49,27 @@ export default function ConsultationsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUserBookings()
-      .then((data) => setBookings(data.bookings))
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    load();
   }, []);
+
+  async function load() {
+    setLoading(true);
+    try {
+      const data = await fetchUserBookings();
+      setBookings(data.bookings);
+    } catch {}
+    setLoading(false);
+  }
+
+  async function onCancel(id: string) {
+    if (!confirm('Cancel this consultation?')) return;
+    try {
+      await cancelUserBooking(id);
+      await load();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Cancel failed');
+    }
+  }
 
   const upcoming = bookings.filter((b) => b.status === 'pending' || b.status === 'confirmed');
   const completed = bookings.filter((b) => b.status === 'completed');
@@ -108,7 +124,19 @@ export default function ConsultationsPage() {
                         </span>
                       </div>
                     </div>
-                    <Badge variant={cfg.variant}>{cfg.label}</Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={cfg.variant}>{cfg.label}</Badge>
+                      {(b.status === 'pending' || b.status === 'confirmed') && (
+                        <button
+                          type="button"
+                          onClick={() => onCancel(b.id)}
+                          className="text-red-500 hover:text-red-700"
+                          title="Cancel consultation"
+                        >
+                          <XCircle className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}

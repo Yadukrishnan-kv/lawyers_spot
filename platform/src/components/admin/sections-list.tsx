@@ -38,14 +38,14 @@ export function SectionsList({ type }: Props) {
   }, [fetchSections]);
 
   async function handleDelete(s: SectionRecord) {
-    if (!confirm(`Delete ${s.title}? This will set it to inactive.`)) return;
+    if (!confirm(`Deactivate ${s.title}?`)) return;
     try {
       const res = await fetch(`/api/admin/sections/${s.id}`, { method: 'DELETE' });
       if (!res.ok) {
         const err = await res.json();
         throw new Error(err.detail || 'Delete failed');
       }
-      setSections((prev) => prev.filter((x) => x.id !== s.id));
+      setSections((prev) => prev.map((x) => (x.id === s.id ? { ...x, status: 'inactive' as const } : x)));
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Delete failed');
     }
