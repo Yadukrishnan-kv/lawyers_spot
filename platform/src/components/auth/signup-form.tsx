@@ -24,7 +24,7 @@ export function SignupForm() {
       return;
     }
     try {
-      await signupUser(String(fd.get('name')), String(fd.get('email')), password);
+      await signupUser(String(fd.get('name')), String(fd.get('email')), password, String(fd.get('phone')));
       router.push('/dashboard');
       router.refresh();
     } catch (err) {
@@ -41,19 +41,23 @@ export function SignupForm() {
       <form className="mt-8 space-y-4" onSubmit={onSubmit}>
         <div>
           <label className="text-sm font-semibold">Full Name</label>
-          <input name="name" required className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
+          <input name="name" required placeholder="e.g. John Doe" className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
         </div>
         <div>
           <label className="text-sm font-semibold">Email</label>
-          <input name="email" type="email" required className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
+          <input name="email" type="email" required placeholder="you@example.com" className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
+        </div>
+        <div>
+          <label className="text-sm font-semibold">Phone Number</label>
+          <input name="phone" type="tel" inputMode="tel" autoComplete="tel" required placeholder="e.g. 9876543210" className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
         </div>
         <div>
           <label className="text-sm font-semibold">Password</label>
-          <input name="password" type="password" required minLength={6} className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
+          <input name="password" type="password" required minLength={6} placeholder="At least 6 characters" className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
         </div>
         <div>
           <label className="text-sm font-semibold">Confirm Password</label>
-          <input name="confirm" type="password" required minLength={6} className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
+          <input name="confirm" type="password" required minLength={6} placeholder="Re-enter your password" className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800" />
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
         <Button type="submit" size="lg" className="w-full" disabled={loading}>

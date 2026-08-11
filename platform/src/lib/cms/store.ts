@@ -103,6 +103,40 @@ export const getAdminCmsData = cache(async (): Promise<CmsData> => {
   return readCmsFromFile();
 });
 
+export type AdminClient = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  status: string;
+  created_at: string;
+  bookings_count: number;
+};
+
+/** Registered clients (role = 'client') for the admin Clients page. */
+export const getAdminClients = cache(async (): Promise<AdminClient[]> => {
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((c) => `${c.name}=${c.value}`)
+    .join('; ');
+
+  try {
+    const res = await fetch(`${getBackendUrl()}/api/v1/admin/clients`, {
+      headers: { cookie: cookieHeader },
+      cache: 'no-store',
+      signal: AbortSignal.timeout(5000),
+    });
+    if (res.ok) {
+      const data = (await res.json()) as { clients?: AdminClient[] };
+      return data.clients ?? [];
+    }
+  } catch {
+    /* fallback */
+  }
+  return [];
+});
+
 export function saveCmsData(data: CmsData): CmsData {
   ensureDir();
   const next = { ...data, updatedAt: new Date().toISOString() };

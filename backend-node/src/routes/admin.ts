@@ -63,6 +63,33 @@ adminRouter.get('/articles/:slug/lawyers', requireAdmin, async (req, res) => {
   }
 });
 
+// List all registered clients (role = 'client') with their booking counts.
+adminRouter.get('/clients', requireAdmin, async (_req, res) => {
+  try {
+    const r = await query<{
+      id: string;
+      name: string;
+      email: string;
+      phone: string | null;
+      status: string;
+      created_at: string;
+      bookings_count: number;
+    }>(
+      `SELECT u.id, u.name, u.email, u.phone, u.status, u.created_at,
+              COUNT(b.id)::int AS bookings_count
+         FROM platform_users u
+         LEFT JOIN bookings b ON b.user_id = u.id
+        WHERE u.role = 'client'
+        GROUP BY u.id
+        ORDER BY u.created_at DESC`,
+    );
+    res.json({ clients: r.rows });
+  } catch (e) {
+    console.error('admin list clients failed', e);
+    res.status(500).json({ detail: 'Failed to load clients' });
+  }
+});
+
 adminRouter.patch('/bookings/:id', requireAdmin, async (req, res) => {
   try {
     const { status } = req.body as { status?: string };

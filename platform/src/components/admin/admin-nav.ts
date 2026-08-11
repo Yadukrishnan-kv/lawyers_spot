@@ -23,6 +23,7 @@ export const adminNav: AdminNavItem[] = [
   { href: '/admin/states', label: 'State Master', icon: 'fe-flag' },
   { href: '/admin/cities', label: 'Cities', icon: 'fe-map-pin' },
   { href: '/admin/bookings', label: 'Bookings', icon: 'fe-calendar' },
+  { href: '/admin/clients', label: 'Clients', icon: 'fe-user' },
   { href: '/admin/users', label: 'Admin Users', icon: 'fe-users' },
   { href: '/admin/analytics', label: 'Analytics', icon: 'fe-bar-chart-2' },
   {

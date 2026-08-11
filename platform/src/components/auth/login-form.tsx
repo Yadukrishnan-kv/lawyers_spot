@@ -40,16 +40,19 @@ export function LoginForm({ role, title, signupHref, dashboardHref }: Props) {
     }
   }
 
+  const isLawyer = role === 'lawyer';
+
   return (
     <>
       <h1 className="font-display text-3xl font-bold text-navy-900 dark:text-white">{title}</h1>
       <form className="mt-8 space-y-4" onSubmit={onSubmit}>
         <div>
-          <label className="text-sm font-semibold">Email</label>
+          <label className="text-sm font-semibold">Email or phone number</label>
           <input
             name="email"
-            type="email"
+            type="text"
             required
+            autoComplete="username"
             className="mt-1 h-11 w-full rounded-xl border px-3 dark:border-navy-700 dark:bg-navy-800"
           />
         </div>
@@ -68,12 +71,20 @@ export function LoginForm({ role, title, signupHref, dashboardHref }: Props) {
           {loading ? 'Signing in…' : 'Sign In'}
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-slate-500">
-        No account?{' '}
-        <Link href={signupHref} className="font-semibold text-royal-600">
-          Sign up
+      <div className="mt-4 flex items-center justify-between text-sm">
+        <span className="text-slate-500">
+          No account?{' '}
+          <Link href={signupHref} className="font-semibold text-royal-600">
+            Sign up
+          </Link>
+        </span>
+        <Link
+          href={isLawyer ? '/lawyer-login/forgot-password' : '/login/forgot-password'}
+          className="font-semibold text-royal-600"
+        >
+          Forgot password
         </Link>
-      </p>
+      </div>
     </>
   );
 }

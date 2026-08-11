@@ -4,6 +4,7 @@ import { loadCms, saveCms } from '../cms.js';
 import {
   clearUserCookie,
   findUserByEmail,
+  findUserByPhone,
   findUserById,
   hashPassword,
   setUserCookie,
@@ -11,7 +12,7 @@ import {
   requireUser,
 } from '../platform-auth.js';
 import { query } from '../db.js';
-import { normalizeEmail, sanitizeText, validatePassword } from '../security/validate.js';
+import { normalizeEmail, phoneDigits, sanitizeText, validatePassword } from '../security/validate.js';
 import { slugifyName } from '../lawyer-slug.js';
 
 export const authRouter = Router();
@@ -26,7 +27,12 @@ const sensitiveLimiter = rateLimit({
 
 authRouter.post('/signup', sensitiveLimiter, async (req, res) => {
   try {
-    const { name, email, password } = req.body as { name?: string; email?: string; password?: string };
+    const { name, email, password, phone } = req.body as {
+      name?: string;
+      email?: string;
+      password?: string;
+      phone?: string;
+    };
     const normalized = email ? normalizeEmail(email) : null;
     const pwd = password ? validatePassword(password) : null;
     const cleanName = name ? sanitizeText(name, 120) : '';
@@ -34,15 +40,27 @@ authRouter.post('/signup', sensitiveLimiter, async (req, res) => {
       res.status(400).json({ detail: 'Invalid name, email, or password (min 6 characters)' });
       return;
     }
+    const digits = phone ? phoneDigits(phone) : null;
+    if (!digits) {
+      res.status(400).json({ detail: 'Enter a valid phone number (at least 10 digits).' });
+      return;
+    }
     const existing = await findUserByEmail(normalized);
     if (existing) {
       res.status(409).json({ detail: 'Unable to create account with this email' });
       return;
     }
+    // Phone must be unique so it can be used to sign in / reset the password.
+    const phoneOwner = await findUserByPhone(digits);
+    if (phoneOwner) {
+      res.status(409).json({ detail: 'Unable to create account with this phone number' });
+      return;
+    }
+    const cleanPhone = sanitizeText(phone as string, 20);
     const id = `user-${Date.now()}`;
     await query(
-      `INSERT INTO platform_users (id, email, password_hash, name, role, status) VALUES ($1,$2,$3,$4,'client','active')`,
-      [id, normalized, await hashPassword(pwd), cleanName],
+      `INSERT INTO platform_users (id, email, password_hash, name, role, phone, status) VALUES ($1,$2,$3,$4,'client',$5,'active')`,
+      [id, normalized, await hashPassword(pwd), cleanName, cleanPhone],
     );
     setUserCookie(res, id, 'client');
     res.json({ success: true, role: 'client', userId: id });
@@ -124,15 +142,29 @@ authRouter.post('/lawyer-signup', sensitiveLimiter, async (req, res) => {
 
 authRouter.post('/login', sensitiveLimiter, async (req, res) => {
   try {
-    const { email, password, role } = req.body as { email?: string; password?: string; role?: string };
-    const normalized = email ? normalizeEmail(email) : null;
-    if (!normalized || !password) {
-      res.status(400).json({ detail: 'Email and password required' });
+    const { email, identifier, password, role } = req.body as {
+      email?: string;
+      identifier?: string;
+      password?: string;
+      role?: string;
+    };
+    // Accept either an explicit `identifier` or the legacy `email` field, and
+    // treat it as an email address or a phone number.
+    const rawIdentifier = (identifier ?? email ?? '').trim();
+    if (!rawIdentifier || !password) {
+      res.status(400).json({ detail: 'Email or phone number and password required' });
       return;
     }
-    const user = await findUserByEmail(normalized);
+    let user: Awaited<ReturnType<typeof findUserByEmail>> | null = null;
+    if (rawIdentifier.includes('@')) {
+      const normalized = normalizeEmail(rawIdentifier);
+      if (normalized) user = await findUserByEmail(normalized);
+    } else {
+      const digits = phoneDigits(rawIdentifier);
+      if (digits) user = await findUserByPhone(digits);
+    }
     if (!user || !(await verifyPassword(password, user.password_hash))) {
-      res.status(401).json({ detail: 'Invalid email or password' });
+      res.status(401).json({ detail: 'Invalid credentials' });
       return;
     }
     if (role && user.role !== role) {

@@ -25,6 +25,9 @@
     "db:migrate:pending-lawyers": "tsx scripts/run-migrate-v12.ts",
     "db:migrate:article-lawyers": "tsx scripts/run-migrate-v13.ts",
     "db:migrate:lawyer-qa-posts": "tsx scripts/run-migrate-v14.ts",
+    "db:migrate:password-resets": "tsx scripts/run-migrate-v15.ts",
+    "db:migrate:client-password-resets": "tsx scripts/run-migrate-v16.ts",
+    "test": "node --import tsx --test tests/phone.test.ts",
     "db:setup": "npm run db:schema && npm run db:migrate && npm run db:migrate:security && npm run db:migrate:profile && npm run db:migrate:subscriptions && npm run db:migrate:verification && npm run db:seed"
   },
   "dependencies": {

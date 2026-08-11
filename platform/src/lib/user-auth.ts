@@ -9,11 +9,12 @@ async function parseJson<T>(res: Response): Promise<T> {
   return data as T;
 }
 
-export async function loginUser(email: string, password: string, role?: 'client' | 'lawyer') {
+export async function loginUser(identifier: string, password: string, role?: 'client' | 'lawyer') {
   const res = await fetch('/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, role }),
+    // `identifier` may be an email or a phone number; `email` kept for back-compat.
+    body: JSON.stringify({ identifier, email: identifier, password, role }),
     credentials: 'include',
   });
   const data = await res.json().catch(() => ({}));
@@ -21,11 +22,88 @@ export async function loginUser(email: string, password: string, role?: 'client'
   return data as { success: boolean; role: string; name?: string };
 }
 
-export async function signupUser(name: string, email: string, password: string) {
+export async function requestLawyerPasswordOtp(phone: string) {
+  const res = await fetch('/api/auth/forgot-password/request-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to send OTP');
+  return data as { success: boolean; message?: string };
+}
+
+export async function verifyLawyerPasswordOtp(phone: string, code: string) {
+  const res = await fetch('/api/auth/forgot-password/verify-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, code }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to verify OTP');
+  return data as { success: boolean; resetToken: string };
+}
+
+export async function setLawyerNewPassword(resetToken: string, password: string, confirmPassword: string) {
+  const res = await fetch('/api/auth/forgot-password/set-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ resetToken, password, confirmPassword }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to set password');
+  return data as { success: boolean; message?: string };
+}
+
+export type ResetChannel = 'email' | 'phone';
+
+export async function requestClientPasswordOtp(channel: ResetChannel, identifier: string) {
+  const body = channel === 'email' ? { channel, email: identifier } : { channel, phone: identifier };
+  const res = await fetch('/api/auth/client-forgot-password/request-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to send code');
+  return data as { success: boolean; message?: string };
+}
+
+export async function verifyClientPasswordOtp(channel: ResetChannel, identifier: string, code: string) {
+  const body =
+    channel === 'email' ? { channel, email: identifier, code } : { channel, phone: identifier, code };
+  const res = await fetch('/api/auth/client-forgot-password/verify-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to verify code');
+  return data as { success: boolean; resetToken: string };
+}
+
+export async function setClientNewPassword(resetToken: string, password: string, confirmPassword: string) {
+  const res = await fetch('/api/auth/client-forgot-password/set-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ resetToken, password, confirmPassword }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to set password');
+  return data as { success: boolean; message?: string };
+}
+
+export async function signupUser(name: string, email: string, password: string, phone: string) {
   const res = await fetch('/api/auth/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, password }),
+    body: JSON.stringify({ name, email, password, phone }),
     credentials: 'include',
   });
   const data = await res.json().catch(() => ({}));

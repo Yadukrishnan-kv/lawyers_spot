@@ -15,4 +15,12 @@ export const config = {
   sessionDays: Number(process.env.SESSION_DAYS ?? 7),
   bcryptRounds: Number(process.env.BCRYPT_ROUNDS ?? 12),
   cmsCacheSeconds: Number(process.env.CMS_CACHE_SECONDS ?? 60),
+  twilioAccountSid: process.env.TWILIO_ACCOUNT_SID ?? '',
+  twilioAuthToken: process.env.TWILIO_AUTH_TOKEN ?? '',
+  twilioVerifyServiceSid: process.env.TWILIO_VERIFY_SERVICE_SID ?? '',
+  otpDefaultCountryCode: process.env.OTP_DEFAULT_COUNTRY_CODE ?? '+91',
+  resendApiKey: process.env.RESEND_API_KEY ?? '',
+  emailFrom: process.env.EMAIL_FROM ?? '',
+  otpResendCooldownSeconds: Number(process.env.OTP_RESEND_COOLDOWN_SECONDS ?? 60),
+  passwordResetTtlMinutes: Number(process.env.PASSWORD_RESET_TTL_MINUTES ?? 15),
 };

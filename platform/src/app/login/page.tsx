@@ -19,7 +19,7 @@ export default function LoginPage() {
           signupHref="/signup"
           dashboardHref="/dashboard"
         />
-        <p className="mt-4 text-center text-sm text-slate-500">
+        <p className="mt-4 text-left text-sm text-slate-500">
           Advocate account?{' '}
           <Link href="/lawyer-login" className="font-semibold text-royal-600">
             Lawyer sign in
