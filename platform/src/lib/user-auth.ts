@@ -99,19 +99,48 @@ export async function setClientNewPassword(resetToken: string, password: string,
   return data as { success: boolean; message?: string };
 }
 
-export async function signupUser(name: string, email: string, password: string, phone: string) {
+export async function startClientSignup(body: {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+}) {
   const res = await fetch('/api/auth/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, password, phone }),
+    body: JSON.stringify(body),
     credentials: 'include',
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Signup failed');
-  return data;
+  return data as { success: boolean; pendingId: string };
 }
 
-export async function lawyerSignup(body: {
+export async function verifyClientSignupPhone(pendingId: string, code: string) {
+  const res = await fetch('/api/auth/signup/verify-phone', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pendingId, code }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to verify OTP');
+  return data as { success: boolean; role: string; userId: string };
+}
+
+export async function resendClientSignupPhoneOtp(pendingId: string) {
+  const res = await fetch('/api/auth/signup/resend-phone', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pendingId }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to resend OTP');
+  return data as { success: boolean };
+}
+
+export async function startLawyerSignup(body: {
   name: string;
   email: string;
   password: string;
@@ -128,7 +157,55 @@ export async function lawyerSignup(body: {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Signup failed');
-  return data;
+  return data as { success: boolean; pendingId: string };
+}
+
+export async function verifyLawyerSignupPhone(pendingId: string, code: string) {
+  const res = await fetch('/api/auth/lawyer-signup/verify-phone', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pendingId, code }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to verify OTP');
+  return data as { success: boolean; stage: string };
+}
+
+export async function verifyLawyerSignupEmail(pendingId: string, code: string) {
+  const res = await fetch('/api/auth/lawyer-signup/verify-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pendingId, code }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to verify code');
+  return data as { success: boolean; role: string; userId: string; lawyerId: string };
+}
+
+export async function resendLawyerSignupPhoneOtp(pendingId: string) {
+  const res = await fetch('/api/auth/lawyer-signup/resend-phone', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pendingId }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to resend OTP');
+  return data as { success: boolean };
+}
+
+export async function resendLawyerSignupEmailOtp(pendingId: string) {
+  const res = await fetch('/api/auth/lawyer-signup/resend-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pendingId }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to resend code');
+  return data as { success: boolean };
 }
 
 export async function logoutUser() {
@@ -176,6 +253,50 @@ export async function fetchLawyerDashboardStats() {
     rating: number;
     unreadMessages: number;
   }>(res);
+}
+
+export async function requestLawyerEmailVerifyOtp() {
+  const res = await fetch('/api/lawyer/verify-email/request-otp', {
+    method: 'POST',
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to send code');
+  return data as { success: boolean };
+}
+
+export async function confirmLawyerEmailVerifyOtp(code: string) {
+  const res = await fetch('/api/lawyer/verify-email/confirm', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to verify code');
+  return data as { success: boolean };
+}
+
+export async function requestLawyerPhoneVerifyOtp() {
+  const res = await fetch('/api/lawyer/verify-phone/request-otp', {
+    method: 'POST',
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to send OTP');
+  return data as { success: boolean };
+}
+
+export async function confirmLawyerPhoneVerifyOtp(code: string) {
+  const res = await fetch('/api/lawyer/verify-phone/confirm', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code }),
+    credentials: 'include',
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { detail?: string }).detail ?? 'Failed to verify OTP');
+  return data as { success: boolean };
 }
 
 export async function changeLawyerPassword(currentPassword: string, newPassword: string) {

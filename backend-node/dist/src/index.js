@@ -11,6 +11,8 @@ import { publicRouter } from './routes/public.js';
 import { sectionsRouter } from './routes/sections.js';
 import { userRouter } from './routes/user.js';
 import { pendingLawyersRouter } from './routes/admin-pending-lawyers.js';
+import { lawyerPasswordResetRouter } from './routes/lawyer-password-reset.js';
+import { clientPasswordResetRouter } from './routes/client-password-reset.js';
 import { securityHeaders, requireJsonContentType } from './security/middleware.js';
 import { query } from './db.js';
 const app = express();
@@ -52,6 +54,8 @@ app.get('/health', (_req, res) => {
 });
 app.use('/api/v1', publicRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/auth/forgot-password', lawyerPasswordResetRouter);
+app.use('/api/v1/auth/client-forgot-password', clientPasswordResetRouter);
 app.use('/api/v1/bookings', bookingLimiter, bookingsRouter);
 app.use('/api/v1/lawyer', lawyerRouter);
 app.use('/api/v1/admin/auth/login', adminLoginLimiter);
@@ -70,8 +74,71 @@ try {
 catch (e) {
     console.error('Database migration failed:', e);
 }
-app.listen(config.port, () => {
-    console.log(`LawyerSpot API (Node.js) http://127.0.0.1:${config.port}`);
-    console.log(`  Health: http://127.0.0.1:${config.port}/health`);
-    console.log(`  CMS:    http://127.0.0.1:${config.port}/api/v1/cms`);
-});
+// Ensure the lawyer password-reset table exists (forgot/create password flow).
+try {
+    await query(`
+    CREATE TABLE IF NOT EXISTS lawyer_password_resets (
+      id VARCHAR(64) PRIMARY KEY,
+      user_id VARCHAR(64) NOT NULL,
+      lawyer_id VARCHAR(128),
+      phone VARCHAR(20) NOT NULL,
+      phone_key VARCHAR(10) NOT NULL,
+      otp_sent_at TIMESTAMPTZ,
+      otp_verified BOOLEAN NOT NULL DEFAULT FALSE,
+      token_hash VARCHAR(128),
+      token_used BOOLEAN NOT NULL DEFAULT FALSE,
+      expires_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS idx_lawyer_password_resets_phone_key ON lawyer_password_resets(phone_key)');
+    await query('CREATE INDEX IF NOT EXISTS idx_lawyer_password_resets_token ON lawyer_password_resets(token_hash)');
+    console.log('Database migration successful: lawyer_password_resets ready.');
+}
+catch (e) {
+    console.error('Database migration failed (lawyer_password_resets):', e);
+}
+// Ensure the client password-reset table exists (client forgot-password flow).
+try {
+    await query(`
+    CREATE TABLE IF NOT EXISTS client_password_resets (
+      id VARCHAR(64) PRIMARY KEY,
+      user_id VARCHAR(64) NOT NULL,
+      channel VARCHAR(10) NOT NULL,
+      email VARCHAR(255),
+      phone VARCHAR(20),
+      phone_key VARCHAR(10),
+      otp_hash VARCHAR(128),
+      otp_attempts INT NOT NULL DEFAULT 0,
+      otp_sent_at TIMESTAMPTZ,
+      otp_verified BOOLEAN NOT NULL DEFAULT FALSE,
+      token_hash VARCHAR(128),
+      token_used BOOLEAN NOT NULL DEFAULT FALSE,
+      expires_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS idx_client_password_resets_user ON client_password_resets(user_id)');
+    await query('CREATE INDEX IF NOT EXISTS idx_client_password_resets_token ON client_password_resets(token_hash)');
+    console.log('Database migration successful: client_password_resets ready.');
+}
+catch (e) {
+    console.error('Database migration failed (client_password_resets):', e);
+}
+const startServer = (port) => {
+    const server = app.listen(port, () => {
+        console.log(`LawyerSpot API (Node.js) http://127.0.0.1:${port}`);
+        console.log(`  Health: http://127.0.0.1:${port}/health`);
+        console.log(`  CMS:    http://127.0.0.1:${port}/api/v1/cms`);
+    });
+    server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            const nextPort = port + 1;
+            console.warn(`Port ${port} is already in use. Trying ${nextPort} instead.`);
+            startServer(nextPort);
+            return;
+        }
+        throw err;
+    });
+};
+startServer(config.port);

@@ -11,9 +11,11 @@ import { normalizeEmail, sanitizeText, validatePassword } from '../security/vali
 import { applyPlanFlagsToLawyer } from '../subscription-features.js';
 import type { SubscriptionPlan } from '../types.js';
 import { lawyerContentRouter } from './lawyer-content.js';
+import { lawyerVerifyRouter } from './lawyer-verify.js';
 
 export const lawyerRouter = Router();
 lawyerRouter.use(lawyerContentRouter);
+lawyerRouter.use(lawyerVerifyRouter);
 
 type AuthedRequest = Request & { user: { userId: string; role: string } };
 

@@ -144,8 +144,23 @@ try {
   console.error('Database migration failed (client_password_resets):', e);
 }
 
-app.listen(config.port, () => {
-  console.log(`LawyerSpot API (Node.js) http://127.0.0.1:${config.port}`);
-  console.log(`  Health: http://127.0.0.1:${config.port}/health`);
-  console.log(`  CMS:    http://127.0.0.1:${config.port}/api/v1/cms`);
-});
+const startServer = (port: number) => {
+  const server = app.listen(port, () => {
+    console.log(`LawyerSpot API (Node.js) http://127.0.0.1:${port}`);
+    console.log(`  Health: http://127.0.0.1:${port}/health`);
+    console.log(`  CMS:    http://127.0.0.1:${port}/api/v1/cms`);
+  });
+
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      const nextPort = port + 1;
+      console.warn(`Port ${port} is already in use. Trying ${nextPort} instead.`);
+      startServer(nextPort);
+      return;
+    }
+
+    throw err;
+  });
+};
+
+startServer(config.port);

@@ -5,8 +5,10 @@ import { query } from '../db.js';
 import { normalizeEmail, sanitizeText, validatePassword } from '../security/validate.js';
 import { applyPlanFlagsToLawyer } from '../subscription-features.js';
 import { lawyerContentRouter } from './lawyer-content.js';
+import { lawyerVerifyRouter } from './lawyer-verify.js';
 export const lawyerRouter = Router();
 lawyerRouter.use(lawyerContentRouter);
+lawyerRouter.use(lawyerVerifyRouter);
 async function resolveLawyerAccount(userId) {
     const user = await findUserById(userId);
     if (!user || user.role !== 'lawyer' || !user.lawyer_id)
@@ -380,6 +382,15 @@ lawyerRouter.get('/conversations', requireUser(), async (req, res) => {
         const userIds = [...new Set(r.rows.map((row) => row.user_id))];
         const usersRes = await query('SELECT id, name, email FROM platform_users WHERE id = ANY($1)', [userIds]);
         const userMap = new Map(usersRes.rows.map((u) => [u.id, u]));
+        const unreadRes = await query(`SELECT m.conversation_id AS conv_id, COUNT(*)::text AS count
+       FROM messages m
+       JOIN conversations c ON c.id = m.conversation_id
+       WHERE c.lawyer_id = $1 AND m.sender_type = 'user' AND m.is_read = FALSE
+       GROUP BY m.conversation_id`, [lawyerId]);
+        const unreadMap = new Map();
+        for (const row of unreadRes.rows) {
+            unreadMap.set(Number(row.conv_id), parseInt(row.count, 10));
+        }
         const conversations = r.rows.map((row) => {
             const u = userMap.get(row.user_id);
             return {
@@ -389,7 +400,7 @@ lawyerRouter.get('/conversations', requireUser(), async (req, res) => {
                 userEmail: u?.email ?? '',
                 lastMessage: row.last_message,
                 lastMessageAt: row.last_message_at ?? row.created_at,
-                unreadCount: 0,
+                unreadCount: unreadMap.get(row.id) ?? 0,
             };
         });
         res.json({ conversations });

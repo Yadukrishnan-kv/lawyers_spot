@@ -73,6 +73,20 @@ export async function findUserByEmail(email) {
     const r = await query('SELECT * FROM platform_users WHERE email = $1', [email.toLowerCase()]);
     return r.rows[0] ?? null;
 }
+/**
+ * Finds a user by phone number, matching on the last 10 digits so that raw
+ * (un-normalized) stored phone values still match E.164 / spaced input.
+ * `digits` must be exactly the last 10 digits (see phoneDigits()).
+ * Returns null when there is no match or the match is ambiguous.
+ */
+export async function findUserByPhone(digits) {
+    const r = await query(`SELECT * FROM platform_users
+     WHERE phone IS NOT NULL
+       AND right(regexp_replace(phone, '\\D', '', 'g'), 10) = $1`, [digits]);
+    if (r.rows.length !== 1)
+        return null;
+    return r.rows[0];
+}
 export async function findUserById(id) {
     const r = await query('SELECT id, email, name, role, lawyer_id, status FROM platform_users WHERE id = $1', [id]);
     return r.rows[0] ?? null;

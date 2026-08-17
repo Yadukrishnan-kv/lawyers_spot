@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import {
   Calendar,
   Heart,
@@ -17,7 +17,7 @@ import {
   Scale,
   ChevronRight,
 } from 'lucide-react';
-import { fetchCurrentUser, logoutUser } from '@/lib/user-auth';
+import { useUserSession } from '@/components/auth/user-session-provider';
 import { cn } from '@/lib/utils';
 
 const nav = [
@@ -32,26 +32,11 @@ const nav = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading, logout } = useUserSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    fetchCurrentUser().then((u) => {
-      if (!u) {
-        router.replace('/login?from=' + encodeURIComponent(pathname));
-        return;
-      }
-      setUser({ name: u.name, email: u.email, role: u.role });
-      setLoading(false);
-    });
-  }, [pathname, router]);
-
   async function onLogout() {
-    await logoutUser();
-    router.push('/');
-    router.refresh();
+    await logout();
   }
 
   function getInitials(name: string) {

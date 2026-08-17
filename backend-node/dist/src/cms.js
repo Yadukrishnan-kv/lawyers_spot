@@ -84,7 +84,7 @@ export async function loadCms() {
         query('SELECT slug, name, code, active FROM states ORDER BY name'),
         query('SELECT slug, name, state_name FROM cities ORDER BY name'),
         query('SELECT * FROM lawyers ORDER BY name'),
-        query('SELECT id, title, excerpt, category, answers, views, slug, status, content FROM qa_posts'),
+        query('SELECT id, title, excerpt, category, answers, views, slug, status, content, lawyer_id, lawyer_name FROM qa_posts'),
         query('SELECT slug, title, excerpt, category, author, date, read_time, image, trending, status, content, lawyer_id FROM articles'),
         query('SELECT article_slug, lawyer_id FROM article_lawyers'),
         query('SELECT topic FROM trending_topics ORDER BY sort_order'),
@@ -139,6 +139,8 @@ export async function loadCms() {
             views: q.views,
             status: q.status,
             content: q.content ?? undefined,
+            lawyerId: q.lawyer_id ?? undefined,
+            lawyerName: q.lawyer_name ?? undefined,
         })),
         articles: articles.rows.map((a) => ({
             slug: a.slug,
@@ -388,8 +390,8 @@ export async function saveCms(payload) {
             ]);
         }
         for (const q of data.qaPosts) {
-            await client.query(`INSERT INTO qa_posts (id, slug, title, excerpt, category, answers, views, status, content)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+            await client.query(`INSERT INTO qa_posts (id, slug, title, excerpt, category, answers, views, status, content, lawyer_id, lawyer_name)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
          ON CONFLICT (id) DO UPDATE SET
            slug = EXCLUDED.slug,
            title = EXCLUDED.title,
@@ -398,7 +400,9 @@ export async function saveCms(payload) {
            answers = EXCLUDED.answers,
            views = EXCLUDED.views,
            status = EXCLUDED.status,
-           content = EXCLUDED.content`, [
+           content = EXCLUDED.content,
+           lawyer_id = EXCLUDED.lawyer_id,
+           lawyer_name = EXCLUDED.lawyer_name`, [
                 q.id,
                 q.slug,
                 q.title,
@@ -408,6 +412,8 @@ export async function saveCms(payload) {
                 q.views,
                 q.status ?? 'published',
                 q.content ?? null,
+                q.lawyerId ?? null,
+                q.lawyerName ?? null,
             ]);
         }
         for (const a of data.articles) {
