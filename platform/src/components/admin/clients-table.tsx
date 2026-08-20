@@ -6,13 +6,12 @@ import { AdminDataTable } from '@/components/admin/admin-data-table';
 import { AdminFormModal } from '@/components/admin/admin-form-modal';
 import type { AdminClient } from '@/lib/cms/store';
 
-const STATUS_OPTIONS = ['active', 'blocked', 'deleted'] as const;
+const STATUS_OPTIONS = ['active', 'blocked'] as const;
 
 function StatusBadge({ status }: { status: string }) {
   const colorMap: Record<string, string> = {
     active: 'bg-success-transparent text-success',
     blocked: 'bg-danger-transparent text-danger',
-    deleted: 'bg-secondary-transparent text-secondary',
   };
   return (
     <span className={`badge capitalize ${colorMap[status] ?? 'bg-secondary-transparent text-secondary'}`}>
@@ -76,13 +75,13 @@ export function ClientsTable({ clients }: { clients: AdminClient[] }) {
   }
 
   async function remove(c: AdminClient) {
-    if (!confirm(`Delete ${c.name}? Their account will be deactivated.`)) return;
+    if (!confirm(`Delete ${c.name}? This will permanently remove their account.`)) return;
     setDeletingId(c.id);
     try {
       const res = await fetch(`/api/admin/clients/${c.id}`, { method: 'DELETE' });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.detail || 'Failed to delete client');
-      setRows((prev) => prev.map((row) => (row.id === c.id ? { ...row, status: 'deleted' } : row)));
+      setRows((prev) => prev.filter((row) => row.id !== c.id));
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to delete client');
     } finally {
@@ -139,7 +138,7 @@ export function ClientsTable({ clients }: { clients: AdminClient[] }) {
               type="button"
               className="btn btn-sm btn-outline-danger"
               title="Delete"
-              disabled={c.status === 'deleted' || deletingId === c.id}
+              disabled={deletingId === c.id}
               onClick={() => remove(c)}
             >
               <Trash2 className="h-4 w-4" />

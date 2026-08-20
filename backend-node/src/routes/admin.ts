@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { config } from '../config.js';
 import { clearSessionCookie, requireAdmin, setSessionCookie } from '../auth.js';
 import { loadCms, saveCms } from '../cms.js';
-import { query } from '../db.js';
+import { pool, query } from '../db.js';
 import type { CmsData } from '../types.js';
 import { safeCompareStrings } from '../security/safe-compare.js';
 import { normalizeEmail, sanitizeText } from '../security/validate.js';
@@ -90,7 +90,7 @@ adminRouter.get('/clients', requireAdmin, async (_req, res) => {
   }
 });
 
-const CLIENT_STATUSES = ['active', 'blocked', 'deleted'];
+const CLIENT_STATUSES = ['active', 'blocked'];
 
 adminRouter.patch('/clients/:id', requireAdmin, async (req, res) => {
   try {
@@ -169,19 +169,37 @@ adminRouter.patch('/clients/:id', requireAdmin, async (req, res) => {
 });
 
 adminRouter.delete('/clients/:id', requireAdmin, async (req, res) => {
+  const client = await pool.connect();
   try {
-    const r = await query(
-      `UPDATE platform_users SET status = 'deleted' WHERE id = $1 AND role = 'client'`,
+    await client.query('BEGIN');
+    // Remove FK-dependent rows before deleting the account itself.
+    await client.query(
+      `DELETE FROM messages WHERE conversation_id IN (
+         SELECT id FROM conversations WHERE user_id = $1
+       )`,
       [req.params.id],
     );
+    await client.query('DELETE FROM conversations WHERE user_id = $1', [req.params.id]);
+    await client.query('DELETE FROM saved_lawyers WHERE user_id = $1', [req.params.id]);
+    await client.query('DELETE FROM notifications WHERE user_id = $1', [req.params.id]);
+    await client.query('DELETE FROM user_documents WHERE user_id = $1', [req.params.id]);
+    await client.query('DELETE FROM bookings WHERE user_id = $1', [req.params.id]);
+    const r = await client.query(
+      `DELETE FROM platform_users WHERE id = $1 AND role = 'client'`,
+      [req.params.id],
+    );
+    await client.query('COMMIT');
     if (r.rowCount === 0) {
       res.status(404).json({ detail: 'Client not found' });
       return;
     }
     res.json({ success: true });
   } catch (e) {
+    await client.query('ROLLBACK');
     console.error('admin delete client failed', e);
     res.status(500).json({ detail: 'Failed to delete client' });
+  } finally {
+    client.release();
   }
 });
 

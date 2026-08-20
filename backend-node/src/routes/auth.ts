@@ -550,7 +550,11 @@ authRouter.post('/login', sensitiveLimiter, async (req, res) => {
       const digits = phoneDigits(rawIdentifier);
       if (digits) user = await findUserByPhone(digits);
     }
-    if (!user || !(await verifyPassword(password, user.password_hash))) {
+    if (!user) {
+      res.status(401).json({ detail: 'No account found with this email or phone number' });
+      return;
+    }
+    if (!(await verifyPassword(password, user.password_hash))) {
       res.status(401).json({ detail: 'Invalid credentials' });
       return;
     }
