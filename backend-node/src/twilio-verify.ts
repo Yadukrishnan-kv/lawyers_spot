@@ -41,8 +41,8 @@ export async function startVerification(phoneE164: string): Promise<TwilioResult
       signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) {
-      // Do not surface Twilio's raw response (may echo the number); log status only.
-      console.error(`Twilio start verification failed with status ${res.status}`);
+      const errBody = await res.text().catch(() => 'unreadable');
+      console.error(`Twilio start verification failed with status ${res.status}: ${errBody}`);
       return { ok: false, error: 'twilio_error' };
     }
     const data = (await res.json()) as { status?: string };
