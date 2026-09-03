@@ -29,7 +29,7 @@
     "db:migrate:client-password-resets": "tsx scripts/run-migrate-v16.ts",
     "db:migrate:signup-verifications": "tsx scripts/run-migrate-v17.ts",
     "db:migrate:lawyer-self-verify": "tsx scripts/run-migrate-v18.ts",
-    "test": "node --import tsx --test tests/phone.test.ts",
+    "test": "node --import tsx --test tests/phone.test.ts tests/twilio-verify.test.ts",
     "db:setup": "npm run db:schema && npm run db:migrate && npm run db:migrate:security && npm run db:migrate:profile && npm run db:migrate:subscriptions && npm run db:migrate:verification && npm run db:seed"
   },
   "dependencies": {

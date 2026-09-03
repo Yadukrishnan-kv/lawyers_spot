@@ -21,7 +21,25 @@ function verifyBaseUrl(): string {
   return `https://verify.twilio.com/v2/Services/${config.twilioVerifyServiceSid}`;
 }
 
-export type TwilioResult = { ok: boolean; status?: string; error?: string };
+type TwilioErrorDetails = { code?: number; message?: string; text: string };
+
+/**
+ * Extracts Twilio's { code, message, more_info } error fields from a failed
+ * response body so the real reason (e.g. 21608 = unverified number in trial
+ * mode) ends up in the server logs instead of a generic message.
+ */
+async function describeTwilioError(res: Response): Promise<TwilioErrorDetails> {
+  const raw = await res.text().catch(() => '');
+  try {
+    const parsed = JSON.parse(raw) as { code?: number; message?: string; more_info?: string };
+    const text = `code=${parsed.code ?? 'unknown'} message="${parsed.message ?? 'n/a'}" more_info=${parsed.more_info ?? 'n/a'}`;
+    return { code: parsed.code, message: parsed.message, text };
+  } catch {
+    return { text: raw || 'unreadable' };
+  }
+}
+
+export type TwilioResult = { ok: boolean; status?: string; error?: string; twilioCode?: number };
 
 /**
  * Starts an SMS verification for the given E.164 phone number.
@@ -41,9 +59,9 @@ export async function startVerification(phoneE164: string): Promise<TwilioResult
       signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) {
-      const errBody = await res.text().catch(() => 'unreadable');
-      console.error(`Twilio start verification failed with status ${res.status}: ${errBody}`);
-      return { ok: false, error: 'twilio_error' };
+      const details = await describeTwilioError(res);
+      console.error(`Twilio start verification failed (HTTP ${res.status}): ${details.text}`);
+      return { ok: false, error: 'twilio_error', twilioCode: details.code };
     }
     const data = (await res.json()) as { status?: string };
     return { ok: true, status: data.status };
@@ -75,8 +93,9 @@ export async function checkVerification(phoneE164: string, code: string): Promis
       return { ok: false, status: 'expired', error: 'invalid_or_expired' };
     }
     if (!res.ok) {
-      console.error(`Twilio verification check failed with status ${res.status}`);
-      return { ok: false, error: 'twilio_error' };
+      const details = await describeTwilioError(res);
+      console.error(`Twilio verification check failed (HTTP ${res.status}): ${details.text}`);
+      return { ok: false, error: 'twilio_error', twilioCode: details.code };
     }
     const data = (await res.json()) as { status?: string };
     return { ok: data.status === 'approved', status: data.status };
